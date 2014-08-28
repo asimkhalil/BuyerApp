@@ -5,7 +5,7 @@
 		xmlns:renderers="com.fashionapp.renderers.*"
 		actionBarVisible="false"
 		skinClass="assets.images.CustomViewWithBackButtonSkin"
-		creationComplete="view1_creationCompleteHandler(event)" xmlns:controllers="com.fashionapp.controllers.*">
+		creationComplete="view1_creationCompleteHandler(event);controller.creationCompleteHandler()" xmlns:controllers="com.fashionapp.controllers.*">
 	<fx:Declarations>
 		<!-- Place non-visual elements (e.g., services, value objects) here -->
 		<controllers:CurrentChatViewController id="controller" view="{this}"/>
@@ -56,9 +56,6 @@
 				chat.statusId = 0;
 				controller.send(chat);
 				txtMsg.text = '';
-				var toMsg:ToMessageRenderer = new ToMessageRenderer();
-				chatBox.addElement(toMsg);
-				toMsg.txtMsg.text = chat.content;
 			}
 			
 		]]>

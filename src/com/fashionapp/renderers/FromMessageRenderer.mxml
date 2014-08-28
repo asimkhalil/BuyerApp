@@ -36,7 +36,7 @@
 					<s:Label text="2:07 PM" fontSize="{BasicUtil.getFontSize(18)}"
 							 styleName="viewheading"/>	
 				</s:HGroup>
-				<s:RichText width="100%" text="Hello World To"
+				<s:RichText id="txtMsg" width="100%" text="Hello World To"
 							fontSize="{BasicUtil.getFontSize(30)}"
 							styleName="viewheading"/>
 			</s:Group>

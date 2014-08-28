@@ -5,6 +5,9 @@ package com.fashionapp.controllers
 	import com.fashionapp.model.BuyerAppModelLocator;
 	import com.fashionapp.model.ChatData;
 	import com.fashionapp.network.Network;
+	import com.fashionapp.renderers.FromMessageRenderer;
+	import com.fashionapp.renderers.ToMessageRenderer;
+	import com.fashionapp.views.CurrentChatView;
 	
 	import flash.events.Event;
 	import flash.utils.setTimeout;
@@ -21,10 +24,10 @@ package com.fashionapp.controllers
 		
 		public function creationCompleteHandler():void 
 		{
-			/*addListeners();*/
+			addListeners();
 		}
 		
-		
+		private var localChatCollection:ArrayCollection = new ArrayCollection();
 		/*private function listenForNewMessage():void {
 			checkNewMessageForMe();
 		} */
@@ -42,6 +45,8 @@ package com.fashionapp.controllers
 			/*if(FlexGlobals.topLevelApplication.hasEventListener(IntimateForNewChatMessagesForMeEvent.INTIMATE_FOR_NEW_MESSAGES)==false) {
 				FlexGlobals.topLevelApplication.addEventListener(IntimateForNewChatMessagesForMeEvent.INTIMATE_FOR_NEW_MESSAGES,chatMessagesForMeListRecieved,false,0,true);
 			}*/
+			
+			FlexGlobals.topLevelApplication.addEventListener('NEW_MESSAGES_ARRIVED',chatMessagesRecieved);
 		}
 		
 		/*private function chatMessagesForMeListRecieved(event:IntimateForNewChatMessagesForMeEvent):void {
@@ -60,6 +65,29 @@ package com.fashionapp.controllers
 		/*private function contactsRecieved(event:Event):void{
 			BuyerAppModelLocator.getInstance().users.refresh();
 		}*/
+		
+		private function chatMessagesRecieved(event:Event):void{
+			var currentChat:CurrentChatView = (view as CurrentChatView);
+			if(BuyerAppModelLocator.getInstance().chatCollection[currentChat.chat.toUserId]){
+				var c:ArrayCollection = BuyerAppModelLocator.getInstance().chatCollection[currentChat.chat.toUserId];
+				if(c.length > localChatCollection.length){
+					for(var i:int = localChatCollection.length ; i < c.length ; i++){
+						var chatObj:ChatData = c.getItemAt(i) as ChatData;
+						if(chatObj.toUserId == BuyerAppModelLocator.getInstance().loginData.id){
+							var toMsg:ToMessageRenderer = new ToMessageRenderer();
+							currentChat.chatBox.addElement(toMsg);
+							toMsg.txtMsg.text = chatObj.content;
+						}else{
+							var fromMsg:FromMessageRenderer = new FromMessageRenderer();
+							currentChat.chatBox.addElement(fromMsg);
+							fromMsg.txtMsg.text = chatObj.content;
+						}
+						localChatCollection.addItem(chatObj);
+					}
+					//localChatCollection = c;
+				}
+			}
+		}
 		
 		public function send(chat:ChatData):void{
 			var dc:DaoChat = new DaoChat();

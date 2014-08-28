@@ -75,7 +75,7 @@ package com.fashionapp.DAO
 		public function getChatsForMe():void {
 			var stmt1:SQLStatement = new SQLStatement();
 			var myUserId:Number = BuyerAppModelLocator.getInstance().loginData.id;
-			stmt1.text = "SELECT * FROM Chat WHERE toUserID="+BuyerAppModelLocator.getInstance().loginData.id;
+			stmt1.text = "SELECT * FROM Chat";// WHERE toUserID="+BuyerAppModelLocator.getInstance().loginData.id;
 			stmt1.sqlConnection = BuyerAppModelLocator.getInstance().dbConn;
 			stmt1.addEventListener(SQLEvent.RESULT, openHandler);
 			stmt1.addEventListener(SQLErrorEvent.ERROR, errorHandler);

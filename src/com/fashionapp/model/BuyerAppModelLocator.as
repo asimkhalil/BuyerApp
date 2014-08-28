@@ -32,6 +32,8 @@ package com.fashionapp.model
 		[Bindable]
 		public var chats:ArrayCollection = new ArrayCollection();
 		
+		public var chatCollection:Array = new Array();
+		
 		[Bindable]
 		public var chatMessagesForMe:ArrayCollection = new ArrayCollection();
 		

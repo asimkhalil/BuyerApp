@@ -19,13 +19,16 @@ package com.fashionapp.controllers
 	
 	import flash.events.Event;
 	import flash.events.MouseEvent;
+	import flash.events.TimerEvent;
 	import flash.filesystem.File;
 	import flash.net.URLVariables;
+	import flash.utils.Timer;
 	
 	import mx.collections.ArrayCollection;
 	import mx.core.FlexGlobals;
 	import mx.events.ValidationResultEvent;
 	import mx.validators.Validator;
+	
 
 	public class LoginViewController extends BaseController
 	{
@@ -54,6 +57,16 @@ package com.fashionapp.controllers
 			addListeners();	
 		}
 		
+		private function startTimerForRecievingChats():void{
+			var t:Timer = new Timer(5000);
+			t.addEventListener(TimerEvent.TIMER,chatCheckHandler);
+			t.start();
+		}
+		
+		private function chatCheckHandler(event:TimerEvent):void{
+			listenForNewMessage();
+		}
+		
 		private function addListeners():void
 		{
 			if(FlexGlobals.topLevelApplication.hasEventListener('LoginClickEvent')==false){
@@ -78,7 +91,7 @@ package com.fashionapp.controllers
 		} 
 		
 		private function chatListRecieved(event:Event):void {
-			listenForNewMessage();
+			startTimerForRecievingChats();
 		}
 		
 		private function contactsRecieved(event:Event):void {
@@ -86,12 +99,13 @@ package com.fashionapp.controllers
 		}
 		
 		private function chatMessagesForMeListRecieved(event:IntimateForNewChatMessagesForMeEvent):void {
-			if(event.newChatMessages.length > 0) {
+			/*if(event.newChatMessages.length > 0) {
 				//New chat messages are available		
 				var newMessages:ArrayCollection = new ArrayCollection(event.newChatMessages.source);
 				//intimate Views for new messages
 				FlexGlobals.topLevelApplication.dispatchEvent(new Event("NEW_MESSAGES_ARRIVED",true));
-			}
+			}*/
+			FlexGlobals.topLevelApplication.dispatchEvent(new Event("NEW_MESSAGES_ARRIVED",true));
 		}
 		
 		public function checkNewMessageForMe():void {
@@ -103,6 +117,7 @@ package com.fashionapp.controllers
 			}else{
 				dc.getChatsForMe();
 			}
+			dc.getChatsForMe();
 		}
 		
 		private function loginClickEventListener(event:LoginClickEvent):void
