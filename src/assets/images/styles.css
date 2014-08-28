@@ -1,0 +1,21 @@
+/* CSS file */
+@namespace s "library://ns.adobe.com/flex/spark";
+
+@font-face { 
+	src: url("assets/fonts/TIMESI.TTF"); 
+	fontFamily: TimesNewRomanItalic; 
+	 
+}
+
+.viewheading {
+	fontFamily:Arial;
+}
+
+.viewtext {
+	fontFamily:Times New Roman;
+}
+
+.viewtextitalic {
+	fontFamily: TimesNewRomanItalic;
+}
+

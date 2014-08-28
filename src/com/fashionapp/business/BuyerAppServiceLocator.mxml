@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<c:ServiceLocator 
+	xmlns:mx="http://www.adobe.com/2006/mxml"
+	xmlns:c="http://www.adobe.com/2006/cairngorm" xmlns:mx1="library://ns.adobe.com/flex/mx">
+	<mx1:HTTPService id="loginService"
+					resultFormat="e4x"/>
+</c:ServiceLocator>

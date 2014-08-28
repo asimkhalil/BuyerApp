@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:GridItemRenderer xmlns:fx="http://ns.adobe.com/mxml/2009" 
+				   xmlns:s="library://ns.adobe.com/flex/spark" width="100%" height="100%">
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+	</fx:Declarations>
+	<s:BorderContainer width="100%">
+		<s:layout>
+			<s:HorizontalLayout gap="0"/>
+		</s:layout>
+		<s:VGroup height="100%" width="100%" paddingTop="{BasicUtil.getComponentPadding(30)}" paddingLeft="{BasicUtil.getComponentPadding(30)}" 
+				  paddingRight="{BasicUtil.getComponentPadding(30)}" paddingBottom="{BasicUtil.getComponentPadding(30)}"
+				  click="{delete_button.includeInLayout = !delete_button.includeInLayout}">
+			<s:HGroup width="100%" verticalAlign="middle">
+				<s:Label  text="{data.name}" width="100%"
+						  styleName="viewheading"
+						  fontSize="{BasicUtil.getFontSize(30)}"
+						  fontWeight="bold"/>
+				<s:Label  text="{data.time}"
+						  fontSize="{BasicUtil.getFontSize(21)}"
+						  styleName="viewheading"/>
+				<s:Image source="{ARROW_BLACK}"
+						 width="{BasicUtil.getComponentHeight(13)}"
+						 scaleMode="stretch"
+						 height="{BasicUtil.getComponentHeight(24)}"
+						 smooth="true"/>
+			</s:HGroup>
+			<s:HGroup height="100%" width="100%" paddingBottom="20">
+				<s:Label  text="{data.message}" width="100%"
+						  styleName="viewheading"
+						  color="0xCCCCCC"
+						  fontSize="{BasicUtil.getFontSize(26)}"/>
+			</s:HGroup>
+		</s:VGroup>
+		<s:BorderContainer height="100%" width="{BasicUtil.getComponentHeight(100)}"
+						   borderVisible="false"
+						   backgroundColor="0x000000"
+						   includeInLayout="false"
+						   id="delete_button">
+			<s:Label height="100%" width="100%" color="0xFFFFFF"
+					 fontSize="{BasicUtil.getFontSize(34)}"
+					 styleName="viewtextitalic">
+				
+			</s:Label>
+		</s:BorderContainer>
+	</s:BorderContainer>
+	<fx:Script>
+		<![CDATA[
+			import com.fashionapp.utils.BasicUtil;
+			
+			[Embed(source="assets/images/arrowblack.png")]
+			[Bindable]
+			private var ARROW_BLACK:Class;
+		]]>
+	</fx:Script>
+</s:GridItemRenderer>

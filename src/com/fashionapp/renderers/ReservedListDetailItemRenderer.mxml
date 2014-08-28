@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:ItemRenderer xmlns:fx="http://ns.adobe.com/mxml/2009" 
+					xmlns:s="library://ns.adobe.com/flex/spark"
+					color="{currentState == 'selected'?0xffffff:0x000000}"
+					autoDrawBackground="false">
+	<fx:Script>
+		<![CDATA[
+			import com.fashionapp.utils.BasicUtil;
+			[Embed(source="assets/images/arrowwhite.png")]
+			[Bindable]
+			private var ARROW_WHITE:Class;
+			
+			[Embed(source="assets/images/arrowblack.png")]
+			[Bindable]
+			private var ARROW_BLACK:Class;
+		]]>
+	</fx:Script>
+	<s:states>
+		<s:State name="normal"/>
+		<s:State name="hovered"/>
+		<s:State name="selected"/>
+	</s:states>
+	<s:BorderContainer height="100%" width="100%" borderVisible="true">
+	<s:Group height="100%" width="100%">
+		<s:Rect height="100%" width="100%">
+			<s:fill>
+				<s:SolidColor color="{currentState == 'selected'?0x000000:0xffffff}"/>
+			</s:fill>
+		</s:Rect>
+	</s:Group>
+		<s:VGroup width="100%" gap="{BasicUtil.getComponentPadding(4)}" left="{BasicUtil.getComponentPadding(20)}"
+				  paddingTop="{BasicUtil.getComponentPadding(40)}"
+				  paddingBottom="{BasicUtil.getComponentPadding(40)}">
+			<s:Label text="Product Name 01" 
+					 fontSize="{BasicUtil.getFontSize(28)}"
+					 styleName="viewheading" width="100%"/>
+			<s:HGroup paddingBottom="{BasicUtil.getComponentPadding(20)}"
+					  width="100%">
+				<s:Label text="Sale ID"
+						 fontSize="{BasicUtil.getFontSize(21)}"
+						 styleName="viewtextitalic"
+						 />
+				<s:Label text="SKU 001122799"
+						 fontSize="{BasicUtil.getFontSize(21)}"
+						 styleName="viewtext"
+						 width="100%"/>
+			</s:HGroup>
+			
+			<s:HGroup width="100%" gap="2" paddingTop="10">
+				<s:Label text="Quantity" 
+						 styleName="viewtextitalic"
+						 fontSize="{BasicUtil.getFontSize(21)}"/>
+				<s:Label text="Blue"
+						 styleName="viewtext"
+						 fontSize="{BasicUtil.getFontSize(21)}"/>				
+				<s:Label text="| Colour" 
+						 fontSize="{BasicUtil.getFontSize(21)}"
+						 styleName="viewtextitalic"/>
+				<s:Label text="Blue" fontSize="{BasicUtil.getFontSize(21)}"
+						 styleName="viewtext"/>
+				<s:Label text="| Size" 
+						 fontSize="{BasicUtil.getFontSize(21)}"
+						 styleName="viewtextitalic"/>
+				<s:Label text="Blue"
+						 styleName="viewtext" fontSize="{BasicUtil.getFontSize(21)}"/>
+			</s:HGroup>
+			
+		</s:VGroup>
+	</s:BorderContainer>
+</s:ItemRenderer>

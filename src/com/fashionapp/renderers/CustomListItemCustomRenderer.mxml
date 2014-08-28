@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:ItemRenderer xmlns:fx="http://ns.adobe.com/mxml/2009" 
+					xmlns:s="library://ns.adobe.com/flex/spark"
+					color="{currentState == 'selected'?0xffffff:0x000000}"
+					autoDrawBackground="false">
+	<fx:Script>
+		<![CDATA[
+			import com.fashionapp.utils.BasicUtil;
+			[Embed(source="assets/images/arrowwhite.png")]
+			[Bindable]
+			private var ARROW_WHITE:Class;
+			
+			[Embed(source="assets/images/arrowblack.png")]
+			[Bindable]
+			private var ARROW_BLACK:Class;
+		]]>
+	</fx:Script>
+	<s:states>
+		<s:State name="normal"/>
+		<s:State name="hovered"/>
+		<s:State name="selected"/>
+	</s:states>
+	<s:Group height="100%" width="100%">
+		<s:Rect height="100%" width="100%">
+			<s:fill>
+				<s:SolidColor color="{currentState == 'selected'?0x000000:0xffffff}"/>
+			</s:fill>
+		</s:Rect>
+	</s:Group>
+	<s:HGroup width="100%" paddingRight="{BasicUtil.getComponentPadding(30)}"
+			  verticalAlign="middle"
+			  paddingLeft="{BasicUtil.getComponentPadding(30)}">
+		<s:Label text="{data.toString()}" 
+				 paddingLeft="{BasicUtil.getComponentPadding(24)}"
+				 paddingTop="{BasicUtil.getComponentPadding(20)}" paddingBottom="{BasicUtil.getComponentPadding(20)}"
+				 styleName="viewheader"
+				 fontSize="{BasicUtil.getFontSize(26)}" width="100%"/>
+		<s:Image source="{currentState=='selected'?ARROW_WHITE:ARROW_BLACK}"
+				 height="{BasicUtil.getComponentHeight(30)}"
+				 width="{BasicUtil.getComponentHeight(17)}"
+				 smooth="true"
+				 scaleMode="stretch"/>
+	</s:HGroup>
+</s:ItemRenderer>

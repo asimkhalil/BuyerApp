@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:View xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		xmlns:s="library://ns.adobe.com/flex/spark"
+		title="ALEXENDER MCQUEEN"
+		skinClass="assets.images.CustomViewWithBackButtonAndSubTitleNormalSkin"
+		actionBarVisible="false"
+		creationComplete="view1_creationCompleteHandler(event)" xmlns:components="com.fashionapp.views.components.*">
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+	</fx:Declarations>
+	<fx:Script>
+		<![CDATA[
+			import assets.images.CustomViewWithBackButtonAndSubTitleNormalSkin;
+			import assets.images.CustomViewWithBackButtonAndSubTitleSkin;
+			
+			import com.fashionapp.utils.BasicUtil;
+			import com.fashionapp.views.components.DeleteConfirmationDialogue;
+			
+			import mx.events.CloseEvent;
+			import mx.events.FlexEvent;
+			
+			import spark.events.IndexChangeEvent;
+			import spark.events.PopUpEvent;
+			[Embed(source="assets/images/openmenulogo.jpg")]
+			[Bindable]
+			private var OPEN_MENU_LOGO:Class;
+			
+			[Embed(source="assets/images/addbrandicon.png")]
+			[Bindable]
+			private var NEW_BRAND_ICON:Class;
+			
+			protected function view1_creationCompleteHandler(event:FlexEvent):void
+			{
+				(this.skin as CustomViewWithBackButtonAndSubTitleNormalSkin).subTitle.text = "FALL 2000 | WOMEN";
+				/* this.addEventListener('openMenuClicked',openMenuClickHandler); */
+			}
+			
+			/* private function openMenuClickHandler(event:Event):void {
+				list_menu.visible = !list_menu.visible;
+			} */
+			
+			protected function image1_clickHandler(event:MouseEvent):void
+			{
+				//navigator.pushView(BrandProductInfo);
+				var selectableImage:SelectableImage = event.currentTarget as SelectableImage;
+				if(selectableImage.selected) {
+					selectedItemsCount--;
+					selectableImage.selected = false;
+				} else {
+					selectedItemsCount++;
+					selectableImage.selected = true;
+				}
+			}
+			
+			protected function list_menu_changeHandler(event:IndexChangeEvent):void
+			{
+				if(list_menu.selectedIndex == 0) {
+					this.navigator.pushView(TakeNewPhotoView);
+				} else {
+					this.navigator.pushView(TakePhotoView);
+				}
+			}
+			
+			[Bindable]
+			private var selectedItemsCount:int = 0;
+			
+			protected function toptabbutton1_clickHandler(event:MouseEvent):void
+			{
+				var alertWindow:DeleteConfirmationDialogue = new DeleteConfirmationDialogue();
+				alertWindow.addEventListener(PopUpEvent.CLOSE,onDialogueClose);
+				alertWindow.width = this.width;
+				alertWindow.height = this.height;
+				alertWindow.x = 0;
+				alertWindow.y = 0;
+				alertWindow.open(this, true);
+				overLay.visible = true;
+			}
+			
+			private function onDialogueClose(event:PopUpEvent):void {
+				overLay.visible = false;
+			}
+			
+		]]>
+	</fx:Script>
+	<s:BorderContainer width="100%" height="1" borderVisible="false" backgroundColor="0x000000" top="0"/>
+	<s:Group height="100%" width="100%">
+		<s:layout>
+			<s:VerticalLayout gap="0"/>
+		</s:layout>
+		<s:BorderContainer width="100%" height="1" borderVisible="false" backgroundColor="0x000000" top="0"/>
+		<s:HGroup width="100%" verticalAlign="middle"
+				  top="0">
+			<components:TopTabButton icon="{NEW_BRAND_ICON}" label="{resourceManager.getString('resources','product')}" 
+									 height="{BasicUtil.getComponentHeight(100)}" 
+									 styleName="viewtext" width="100%"
+									 click="{list_menu.visible = !list_menu.visible}"/>
+			<!--<s:BorderContainer width="1" height="100%" borderVisible="false" backgroundColor="0x000000" top="0"/>-->
+			<s:Spacer width="100%"/>
+			<s:Label text="{'('+selectedItemsCount+')Selected'}" id="lbl_selectedItemsToDelete" fontSize="{BasicUtil.getFontSize(20)}"
+					 styleName="viewtextitalic"/>
+			<components:TopTabButton label="{resourceManager.getString('resources','delete')}" width="100%"
+									 styleName="viewtext"
+									 height="{BasicUtil.getComponentHeight(100)}"
+									 click="toptabbutton1_clickHandler(event)"/>
+		</s:HGroup>
+		<s:BorderContainer width="100%" height="1" borderVisible="false" backgroundColor="0x000000" top="0"/>
+		<s:Scroller height="100%" width="100%">
+			<s:Group horizontalCenter="0">
+				<s:layout>
+					<s:TileLayout verticalAlign="middle" horizontalAlign="center"
+								  columnAlign="justifyUsingWidth"
+								  rowAlign="justifyUsingHeight"/>
+				</s:layout>
+				<components:SelectableImage source="{OPEN_MENU_LOGO}" 
+						height="{BasicUtil.getComponentHeight(300)}" 
+						width="{BasicUtil.getComponentHeight(300)}"
+						 horizontalCenter="0"
+						 verticalCenter="0"
+						 click="image1_clickHandler(event)"/>
+				<components:SelectableImage source="{OPEN_MENU_LOGO}" 
+											height="{BasicUtil.getComponentHeight(300)}" 
+											width="{BasicUtil.getComponentHeight(300)}"
+						 horizontalCenter="0"
+						 verticalCenter="0"
+						 click="image1_clickHandler(event)"/>
+				<components:SelectableImage source="{OPEN_MENU_LOGO}" 
+											height="{BasicUtil.getComponentHeight(300)}" 
+											width="{BasicUtil.getComponentHeight(300)}"
+						 horizontalCenter="0"
+						 verticalCenter="0"
+						 click="image1_clickHandler(event)"/>
+				<components:SelectableImage source="{OPEN_MENU_LOGO}" 
+											height="{BasicUtil.getComponentHeight(300)}" 
+											width="{BasicUtil.getComponentHeight(300)}"
+						 horizontalCenter="0"
+						 verticalCenter="0"
+						 click="image1_clickHandler(event)"/>
+				<components:SelectableImage source="{OPEN_MENU_LOGO}" 
+											height="{BasicUtil.getComponentHeight(300)}" 
+											width="{BasicUtil.getComponentHeight(300)}"
+						 horizontalCenter="0"
+						 verticalCenter="0"
+						 click="image1_clickHandler(event)"/>
+				
+			</s:Group>		
+		</s:Scroller>
+	</s:Group>
+	<s:BorderContainer width="100%" height="100%" borderVisible="false" backgroundColor="0x000000"
+					   visible="{list_menu.visible}" backgroundAlpha="0.6" top="{BasicUtil.getComponentPadding(100)}"/>
+	<s:List width="100%" id="list_menu" visible="false"
+			skinClass="com.fashionapp.skins.MenuListSkin"
+			top="{BasicUtil.getComponentPadding(100)+1}"
+			change="list_menu_changeHandler(event)"
+			itemRenderer="com.fashionapp.views.components.ListItemRendererWithSep">
+		<s:dataProvider>
+			<s:ArrayList>
+				<fx:String>TAKE PHOTO</fx:String>
+				<fx:String>GALLERY</fx:String>
+			</s:ArrayList>
+		</s:dataProvider>
+	</s:List>
+	<s:BorderContainer height="100%" width="100%" backgroundColor="0x000000" backgroundAlpha="0.6" visible="false"
+					   id="overLay"/>
+</s:View>

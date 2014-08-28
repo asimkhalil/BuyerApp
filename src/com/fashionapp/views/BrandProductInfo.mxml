@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:View xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		xmlns:s="library://ns.adobe.com/flex/spark" title="ALEXENDER MCQUEEN"
+		skinClass="assets.images.CustomViewWithBackButtonAndSubTitleSkin"
+		actionBarVisible="false"
+		creationComplete="view1_creationCompleteHandler(event)">
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+	</fx:Declarations>
+	<fx:Script>
+		<![CDATA[
+			import assets.images.CustomViewWithBackButtonAndSubTitleSkin;
+			
+			import com.fashionapp.utils.BasicUtil;
+			
+			import mx.events.FlexEvent;
+			[Embed(source="assets/images/openmenulogo.jpg")]
+			[Bindable]
+			private var OPEN_MENU_LOGO:Class;
+			
+			[Embed(source="assets/images/backarrow.png")]
+			[Bindable]
+			private var BACK_ARROW:Class;
+			
+			[Embed(source="assets/images/nextarrow.png")]
+			[Bindable]
+			private var NEXT_ARROW:Class;
+			
+			[Embed(source="assets/images/crop.png")]
+			[Bindable]
+			private var CROP:Class;
+			
+			protected function view1_creationCompleteHandler(event:FlexEvent):void
+			{
+				(this.skin as CustomViewWithBackButtonAndSubTitleSkin).subTitle.text = "FALL 2000 | WOMEN";
+				this.addEventListener('openMenuClicked',openMenuClickHandler);
+			}
+			
+			private function openMenuClickHandler(event:Event):void {
+				list_menu.visible = !list_menu.visible;
+			}
+			
+		]]>
+	</fx:Script>
+	<s:BorderContainer width="100%" height="1" borderVisible="false" backgroundColor="0x000000" top="0"/>
+	<s:Group width="100%" height="100%">
+		<s:layout>
+			<s:VerticalLayout gap="0" 
+							  paddingLeft="{BasicUtil.getComponentPadding(30)}" paddingRight="{BasicUtil.getComponentPadding(30)}"/>
+		</s:layout>
+		
+		<s:VGroup height="50%" width="100%" horizontalAlign="center"
+				  verticalAlign="middle"
+				  gap="0">
+			<s:HGroup width="100%" verticalAlign="middle">
+				<s:Image source="{BACK_ARROW}" height="{BasicUtil.getComponentHeight(30)}"
+										width="{BasicUtil.getComponentHeight(17)}"
+										smooth="true"
+										scaleMode="stretch"/>
+				<s:Spacer width="100%"/>
+				<s:Image source="{OPEN_MENU_LOGO}" 
+						 height="{BasicUtil.getComponentHeight(280)}" width="{BasicUtil.getComponentHeight(230)}"
+						 horizontalCenter="0"
+						 verticalCenter="0"/>
+				<s:Spacer width="100%"/>
+				<s:Group height="100%">
+					<s:Image verticalCenter="0" horizontalCenter="0"
+							 source="{NEXT_ARROW}" height="{BasicUtil.getComponentHeight(30)}"
+							 width="{BasicUtil.getComponentHeight(17)}"
+							 smooth="true"
+							 scaleMode="stretch"/>
+					<s:Image bottom="5" horizontalCenter="0"
+							 source="{CROP}" height="{BasicUtil.getComponentHeight(45)}"
+							 width="{BasicUtil.getComponentHeight(45)}"
+							 smooth="true"
+							 scaleMode="stretch"/>
+				</s:Group>
+			</s:HGroup>
+			<s:TextInput width="100%" height="{BasicUtil.getComponentHeight(80)}" skinClass="com.fashionapp.skins.ImageNameTextInputSkin"
+						 text="IMG_0123.png" textAlign="center"
+						 focusAlpha="0"
+						 styleName="viewheader" fontSize="{BasicUtil.getFontSize(26)}"/>
+		</s:VGroup>
+		<s:BorderContainer width="100%" height="1" borderVisible="false" backgroundColor="0xCCCCCC"/>
+		<s:HGroup width="100%" verticalAlign="middle">
+			<s:Label text="CAPTION" width="{BasicUtil.getComponentHeight(130)}"
+					 styleName="viewheader"
+					 fontSize="{BasicUtil.getFontSize(21)}"/>
+			<s:TextInput skinClass="com.fashionapp.skins.ImageNameTextInputSkin" width="100%" text="Puffy Cost"
+						 height="{BasicUtil.getComponentHeight(80)}"
+						 styleName="viewheader"
+						 fontSize="{BasicUtil.getFontSize(26)}"/>
+		</s:HGroup>
+		<s:BorderContainer width="100%" height="1" borderVisible="false" backgroundColor="0xCCCCCC"/>
+		<s:HGroup width="100%" verticalAlign="middle">
+			<s:Label text="PRICE" width="{BasicUtil.getComponentHeight(130)}"
+					 styleName="viewheader"
+					 fontSize="{BasicUtil.getFontSize(21)}"/>
+			<s:TextInput skinClass="com.fashionapp.skins.ImageNameTextInputSkin" width="100%" text="HDK 200,000"
+						 height="{BasicUtil.getComponentHeight(80)}"
+						 styleName="viewheader"
+						 fontSize="{BasicUtil.getFontSize(26)}"/>
+		</s:HGroup>
+		<s:BorderContainer width="100%" height="1" borderVisible="false" backgroundColor="0xCCCCCC"/>
+		<s:HGroup width="100%" verticalAlign="middle">
+			<s:Label text="REMARKS" width="{BasicUtil.getComponentHeight(130)}"
+					 styleName="viewheader"
+					 fontSize="{BasicUtil.getFontSize(21)}"/>
+			<s:TextInput skinClass="com.fashionapp.skins.ImageNameTextInputSkin" width="100%" text="Sample Remarks"
+						 height="{BasicUtil.getComponentHeight(80)}"
+						 styleName="viewheader"
+						 fontSize="{BasicUtil.getFontSize(26)}"/>
+		</s:HGroup>
+		<s:HGroup width="100%" verticalAlign="middle">
+			<s:Label text="GROUPS" width="{BasicUtil.getComponentHeight(130)}"
+					 styleName="viewheader"
+					 fontSize="{BasicUtil.getFontSize(21)}"/>
+			<s:TextInput skinClass="com.fashionapp.skins.ImageNameTextInputSkin" width="100%" text="RTV"
+						 height="{BasicUtil.getComponentHeight(80)}"
+						 styleName="viewheader"
+						 fontSize="{BasicUtil.getFontSize(26)}"/>
+		</s:HGroup>
+		<s:BorderContainer width="100%" height="1" borderVisible="false" backgroundColor="0xCCCCCC"/>	
+	</s:Group>
+	<s:BorderContainer width="100%" height="100%" borderVisible="false" backgroundColor="0x000000"
+					   visible="{list_menu.visible}" backgroundAlpha="0.6"/>
+	<s:List width="100%" id="list_menu" visible="false"
+			skinClass="com.fashionapp.skins.MenuListSkin">
+		<s:dataProvider>
+			<s:ArrayList>
+				<fx:String>MOVE</fx:String>
+				<fx:String>CHAT</fx:String>
+				<fx:String>DELETE</fx:String>
+				<fx:String>CLEAR</fx:String>
+			</s:ArrayList>
+		</s:dataProvider>
+	</s:List>
+</s:View>

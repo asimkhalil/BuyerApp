@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:View xmlns:fx="http://ns.adobe.com/mxml/2009"
+		xmlns:s="library://ns.adobe.com/flex/spark"
+		actionBarVisible="false" title="HomeView" xmlns:controllers="com.fashionapp.controllers.*"
+		creationComplete="{controller.creationCompleteHandler();}" xmlns:views="com.fashionapp.views.*">
+	<fx:Script>
+		<![CDATA[
+			import com.fashionapp.utils.BasicUtil;
+		]]>
+	</fx:Script>
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+		<controllers:LoginViewController id="controller" view="{this}"/>
+	</fx:Declarations>
+	<fx:Metadata>
+		[ResourceBundle("resources")]
+	</fx:Metadata> 
+	<s:Group height="100%" width="100%">
+		<s:layout>
+			<s:VerticalLayout/>
+		</s:layout>
+		<s:VGroup width="100%" height="100%" horizontalAlign="center" verticalAlign="middle"
+				  verticalCenter="0"
+				  gap="{BasicUtil.getComponentPadding(50)}">
+			<s:VGroup width="100%" gap="{BasicUtil.getComponentPadding(60)}"
+					  top="160"
+					  horizontalAlign="center">
+				<s:Image top="160" width="60%" height="50" smooth="true"
+						 smoothingQuality="high"
+						 horizontalCenter="0"/>
+				<s:BorderContainer height="1" backgroundColor="0x000000" width="18%"/>
+				<s:Label text="{resourceManager.getString('resources','title')}" fontSize="{BasicUtil.getFontSize(28)}"
+						 styleName="viewheading"/>
+			</s:VGroup>
+			<s:TextInput width="95%" prompt="{resourceManager.getString('resources','username')}"
+						 skinClass="com.fashionapp.skins.LoginTextInputSkin"
+						 id="txt_username"
+						 styleName="viewtext"
+						 fontSize="{BasicUtil.getFontSize(26)}"
+						 height="{BasicUtil.getComponentHeight(60)}"/>
+			<s:TextInput width="95%" prompt="{resourceManager.getString('resources','password')}" displayAsPassword="true"
+						 skinClass="com.fashionapp.skins.LoginTextInputSkin"
+						 id="txt_password"
+						 styleName="viewtext"
+						 fontSize="{BasicUtil.getFontSize(26)}"
+						 height="{BasicUtil.getComponentHeight(60)}"/>
+			<s:VGroup width="100%" horizontalAlign="center"
+					  gap="25">
+				<s:Button label="{resourceManager.getString('resources','login')}" click="controller.doLogin(txt_username.text,txt_password.text)"
+						  skinClass="com.fashionapp.skins.LoginButtonSkin" width="95%"
+						  height="{BasicUtil.getComponentHeight(60)}"
+						  fontSize="{BasicUtil.getFontSize(30)}"
+						  styleName="viewtext"/>
+				<s:VGroup gap="0">
+					<s:Label text="{resourceManager.getString('resources','forgotpassword')}"
+							 fontSize="{BasicUtil.getFontSize(24)}"
+							 styleName="viewtextitalic"/>
+					<s:BorderContainer width="100%" borderVisible="false"
+									   backgroundColor="0x000000" height="1"/>
+				</s:VGroup>
+				
+			</s:VGroup>
+		</s:VGroup>	
+	</s:Group>
+</s:View>

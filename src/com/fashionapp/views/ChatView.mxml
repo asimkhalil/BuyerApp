@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:View xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		xmlns:s="library://ns.adobe.com/flex/spark" title="{resourceManager.getString('resources','chattitle')}" 
+		creationComplete="{contactList.visible = true;controller.creationCompleteHandler()}"
+		actionBarVisible="false" xmlns:components="com.fashionapp.views.components.*"
+		skinClass="assets.images.CustomViewSkin" xmlns:controllers="com.fashionapp.controllers.*">
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+		<controllers:ChatViewController id="controller" view="{this}"/>
+	</fx:Declarations>
+	<fx:Script>
+		<![CDATA[
+			import com.fashionapp.model.BuyerAppModelLocator;
+			import com.fashionapp.model.ChatData;
+			import com.fashionapp.model.LoginData;
+			import com.fashionapp.utils.BasicUtil;
+			import com.fashionapp.views.components.NewBrand;
+			
+			import mx.collections.ArrayCollection;
+			import mx.managers.PopUpManager;
+			
+			
+			protected function button2_clickHandler(event:MouseEvent):void
+			{
+				contactList.visible = true;
+				
+			}
+			
+			protected function button3_clickHandler(event:MouseEvent):void
+			{
+				chatList.visible = true;
+				
+			}
+			
+			protected function chatList_clickHandler(event:MouseEvent):void
+			{
+				// TODO Auto-generated method stub
+				var chat:ChatData = new ChatData();
+				chat.createdBy = BuyerAppModelLocator.getInstance().loginData.id;
+				chat.toUserId = (contactList.selectedItem as LoginData).id;
+				navigator.pushView(CurrentChatView,chat);
+			}
+			
+		]]>
+	</fx:Script>
+	<s:BorderContainer width="100%" height="100%"
+					   borderVisible="false">
+		<s:layout>
+			<s:VerticalLayout gap="0"/>
+		</s:layout>
+		<s:BorderContainer width="100%" height="1" borderVisible="false" backgroundColor="0x000000"/>
+			<s:HGroup width="100%" top="0" gap="0">
+				<components:TopTabButton label="Contacts" height="{BasicUtil.getComponentHeight(100)}" 
+										 width="50%" 
+										 click="button2_clickHandler(event)"/>
+				<s:BorderContainer width="1" height="100%" 
+								   backgroundColor="0x000000"
+								   borderVisible="false"/>
+				<components:TopTabButton label="Chat" 
+										 height="{BasicUtil.getComponentHeight(100)}" 
+										 width="50%" click="button3_clickHandler(event)"/>
+			</s:HGroup>
+		<s:TextInput prompt="Search" width="100%" 
+					 skinClass="com.fashionapp.skins.SearchTextInputSkin"
+					 height="{BasicUtil.getComponentHeight(100)}"
+					 focusAlpha="0"
+					 focusColor="0xffffff"
+					 fontSize="{BasicUtil.getFontSize(30)}" 
+					 styleName="viewtextitalic"/>
+		<s:Group width="100%"
+				 includeInLayout="{contactList.visible}"
+				 visible="{contactList.visible}">
+			<s:Rect width="100%" height="100%">
+				<s:fill>
+					<s:SolidColor color="0x000000"/>
+				</s:fill>
+			</s:Rect>
+			<s:Label width="100%" color="0xffffff" text="Staff"
+					 styleName="viewtext"
+					 fontSize="{BasicUtil.getFontSize(21)}" paddingTop="{BasicUtil.getComponentPadding(20)}" 
+					 paddingBottom="{BasicUtil.getComponentPadding(20)}" paddingLeft="{BasicUtil.getComponentPadding(30)}" 
+					 paddingRight="{BasicUtil.getComponentPadding(30)}"/>
+		</s:Group>
+		<s:Group height="100%" width="100%">
+			<s:List id="contactList" visible="{!chatList.visible}"  click="chatList_clickHandler(event)" dataProvider="{BuyerAppModelLocator.getInstance().users}" width="100%" height="100%" labelField="data"
+					skinClass="com.fashionapp.skins.MenuListSkin"
+					itemRenderer="com.fashionapp.views.components.ListItemRendererWithSep">
+				<!--<s:dataProvider>
+					<s:ArrayCollection>
+						<fx:String>Ann Smith</fx:String>
+						<fx:String>Ann Smith</fx:String>
+						<fx:String>Ann Smith</fx:String>
+						<fx:String>Ann Smith</fx:String>
+						<fx:String>Ann Smith</fx:String>
+						<fx:String>Ann Smith</fx:String>
+						<fx:String>Ann Smith</fx:String>
+						<fx:String>Ann Smith</fx:String>
+					</s:ArrayCollection>
+				</s:dataProvider>-->
+			</s:List>
+			<s:List id="chatList" visible="{!contactList.visible}" width="100%" height="100%" 
+					itemRenderer="com.fashionapp.views.ChatItemRenderer">
+				<s:dataProvider>
+					<s:ArrayCollection>
+						<fx:Object name="Ann Smith" message="Latest message goes here" time="14:27 PM"/>
+						<fx:Object name="Ann Smith" message="Latest message goes here" time="14:27 PM"/>
+						<fx:Object name="Ann Smith" message="Latest message goes here" time="14:27 PM"/>
+					</s:ArrayCollection>
+				</s:dataProvider>
+			</s:List>
+		</s:Group>
+	</s:BorderContainer>
+</s:View>

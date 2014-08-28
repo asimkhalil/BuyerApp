@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:View xmlns:fx="http://ns.adobe.com/mxml/2009"
+		xmlns:s="library://ns.adobe.com/flex/spark"
+		creationComplete="onCreComp()"
+		actionBarVisible="false"
+		backgroundAlpha="0">
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+	</fx:Declarations>
+	<fx:Script>
+		<![CDATA[
+			import com.fashionapp.utils.BasicUtil;
+			
+			import mx.core.FlexGlobals;
+			import mx.effects.Move;
+			import mx.events.EffectEvent;
+			[Embed(source="assets/images/sidemenubackground.png")]
+			[Bindable]
+			private var BG:Class;
+			
+			import mx.collections.ArrayCollection;
+			
+			private function onCreComp():void {
+				menuList.dataProvider = loadData();
+				menuList.selectedIndex = 0;
+			}
+			
+			private function loadData():ArrayCollection {
+				var listData:ArrayCollection = new ArrayCollection;
+				listData.addItem("HOME");
+				listData.addItem("BRANDS");
+				listData.addItem("CHATS");
+				listData.addItem("RESERVED PRODUCTS");
+				listData.addItem("SETTINGS");
+				return listData;
+			}
+			
+			private function onItemSelect():void {
+				if(menuList.selectedItem) {
+					switch(menuList.selectedIndex){
+						case 0:
+						{
+							FlexGlobals.topLevelApplication.navigator.pushView(HomeView);
+							closeMenu(false);
+							break;
+						}
+						case 1:
+						{	
+							FlexGlobals.topLevelApplication.navigator.pushView(BrandsView);
+							closeMenu(false);
+							break;
+						}
+						case 2:
+						{	
+							FlexGlobals.topLevelApplication.navigator.pushView(ChatView);
+							closeMenu(false);
+							break;
+						}	
+						case 4:
+						{	
+							FlexGlobals.topLevelApplication.navigator.pushView(SettingsView);
+							closeMenu(false);
+							break;
+						}
+						case 3:
+						{	
+							FlexGlobals.topLevelApplication.navigator.pushView(ReservedProductsView);
+							closeMenu(false);
+							break;
+						}
+					}
+				}
+			}  
+			
+			protected function button1_clickHandler(event:MouseEvent):void
+			{
+				closeMenu();
+			}
+			
+			public function closeMenu(animate:Boolean = true):void {
+				if(animate) {
+					var move:Move = new Move();
+					move.xTo = width;
+					move.xFrom = 0;
+					move.addEventListener(EffectEvent.EFFECT_END,function(event:EffectEvent):void {
+						this.visible = false;
+					});
+					move.play([this]);
+				} else {
+					this.visible = false;
+				}
+			}
+			
+		]]>
+	</fx:Script>
+	
+	<s:HGroup width="100%" height="100%" gap="0">
+		<s:Group height="100%" width="{BasicUtil.getComponentHeight(100)}">
+			<s:Group width="100%" height="100%">
+				<!--<s:Image height="100%" width="100%" scaleMode="stretch" source="{BG}"/>-->
+				<s:Group height="100%" width="100%">
+					<s:layout>
+						<s:VerticalLayout/>
+					</s:layout>
+				</s:Group>
+			</s:Group>
+			<s:BorderContainer height="100%" width="100%" backgroundAlpha="0.6" backgroundColor="0x000000"
+							   borderVisible="false"/>
+			<s:Button skinClass="com.fashionapp.skins.IconMenuButtonSkin"
+					  width="100%" click="button1_clickHandler(event)"/>
+		</s:Group>
+		<s:BorderContainer borderVisible="false" height="100%" width="100%">
+			<s:layout>
+				<s:VerticalLayout paddingTop="{BasicUtil.getComponentPadding(60)}"/>
+			</s:layout>
+			<s:List id="menuList" click="onItemSelect()" width="100%" height="100%"
+					skinClass="com.fashionapp.skins.MenuListSkin">
+			</s:List>	
+		</s:BorderContainer>
+	</s:HGroup>
+</s:View>

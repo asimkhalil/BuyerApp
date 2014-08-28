@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+
+	InformationBox Component
+	
+	Copyright (c) 2010 by DigitalRetro Productions, Inc.  All Rights Reserved.
+	
+	You are free to use this in your commercial or non-commercial code, but please
+	keep this notice in-place.
+
+-->
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009"
+		 xmlns:s="library://ns.adobe.com/flex/spark"
+		 xmlns:components="spark.components.*"
+		 width="100%" height="133" left="15" right="15">
+
+	<fx:Script>
+		<![CDATA[
+			
+			import mx.managers.PopUpManager;
+			
+			
+			[Bindable]
+			public var message:String	= "Default Message";
+			
+			public static function show(parent:DisplayObject, message:String):void
+			{
+				var infoBox:Alert = new Alert();
+				infoBox.message	= message;
+				PopUpManager.addPopUp(infoBox, parent, true);
+				PopUpManager.centerPopUp(infoBox);
+			}
+
+			protected function okayBtn_clickHandler(event:MouseEvent):void
+			{
+				PopUpManager.removePopUp(this);
+			}
+			
+		]]>
+	</fx:Script>
+
+	<s:BorderContainer backgroundColor="0xffffff" width="100%" borderColor="0x000000" borderWeight="4" cornerRadius="10">
+		<s:VGroup width="100%">
+			<s:Label maxDisplayedLines="6" maxHeight="300" width="100%" fontSize="15" fontWeight="normal" paddingTop="12" paddingBottom="12" paddingLeft="15" paddingRight="15" text="{this.message}"/>
+			<s:Group width="100%" height="70">
+				<s:HGroup bottom="0" width="100%" height="100%" horizontalAlign="center" verticalAlign="middle" paddingLeft="10" paddingRight="10">
+					<s:Button id="okayBtn" width="100%" height="35" label="OK" fontSize="18" chromeColor="#ECECEC"
+							  click="okayBtn_clickHandler(event)" color="#000000" 
+							  fontFamily="_sans" fontWeight="normal"/>
+				</s:HGroup>
+			</s:Group>
+		</s:VGroup>
+	</s:BorderContainer>
+	
+</s:Group>

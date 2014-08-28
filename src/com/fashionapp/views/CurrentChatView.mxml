@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:View xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		xmlns:s="library://ns.adobe.com/flex/spark" title="ANN SMITH" 
+		xmlns:components="com.fashionapp.views.components.*" 
+		xmlns:renderers="com.fashionapp.renderers.*"
+		actionBarVisible="false"
+		skinClass="assets.images.CustomViewWithBackButtonSkin"
+		creationComplete="view1_creationCompleteHandler(event)" xmlns:controllers="com.fashionapp.controllers.*">
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+		<controllers:CurrentChatViewController id="controller" view="{this}"/>
+	</fx:Declarations>
+	<fx:Script>
+		<![CDATA[
+			import com.fashionapp.model.ChatData;
+			import com.fashionapp.renderers.ToMessageRenderer;
+			import com.fashionapp.utils.BasicUtil;
+			
+			import mx.core.FlexGlobals;
+			
+			import spark.events.IndexChangeEvent;
+			[Embed(source="assets/images/addbrandicon.png")]
+			[Bindable]
+			private var NEW_BRAND_ICON:Class;
+			import mx.events.FlexEvent;
+			
+			public var chat:ChatData;
+			
+			protected function button1_clickHandler(event:MouseEvent):void
+			{
+				// TODO Auto-generated method stub
+				menuList.visible = !menuList.visible;
+			}
+			
+			protected function view1_creationCompleteHandler(event:FlexEvent):void
+			{
+				this.addEventListener('backClicked',onBackClick);
+				chat = data as ChatData;
+				trace((data as ChatData).toUserId +'||'+ (data as ChatData).createdBy);
+				
+			}
+			
+			private function onBackClick(event:Event):void {
+				this.navigator.popView();
+			}
+			
+			protected function list1_changeHandler(event:IndexChangeEvent):void
+			{
+				navigator.pushView(TakePhotoView);
+			}
+			
+			private function sendClick():void{
+				chat.content = txtMsg.text;
+				chat.createDate = new Date();
+				chat.type = "text";
+				chat.statusId = 0;
+				controller.send(chat);
+				txtMsg.text = '';
+				var toMsg:ToMessageRenderer = new ToMessageRenderer();
+				chatBox.addElement(toMsg);
+				toMsg.txtMsg.text = chat.content;
+			}
+			
+		]]>
+	</fx:Script>
+	<s:Group width="100%" height="100%">
+		<s:layout>
+			<s:VerticalLayout gap="0"
+							  horizontalAlign="center"/>
+		</s:layout>
+		<s:BorderContainer width="100%" borderVisible="false" 
+						   backgroundColor="0x000000" height="1"/>
+		<s:Spacer height="{BasicUtil.getComponentHeight(10)}"/>
+		<s:Group>
+			<s:Rect height="100%" width="100%">
+				<s:fill>
+					<s:SolidColor color="0x000000"/>
+				</s:fill>
+			</s:Rect>
+			<s:Label text="20 Aug, 2014" color="0xffffff"
+					 fontSize="{BasicUtil.getFontSize(18)}"
+					 styleName="viewtext"
+					 paddingLeft="{BasicUtil.getComponentPadding(10)}" paddingRight="{BasicUtil.getComponentPadding(10)}" 
+					 paddingTop="{BasicUtil.getComponentPadding(10)}" paddingBottom="{BasicUtil.getComponentPadding(10)}"/>
+		</s:Group>
+		<s:Group width="100%" height="100%" id="chatBox">
+			<s:Scroller height="100%" width="100%">
+				<s:Group width="100%">
+					<s:layout>
+						<s:VerticalLayout paddingLeft="{BasicUtil.getComponentPadding(30)}" 
+										  paddingRight="{BasicUtil.getComponentPadding(30)}"/>
+					</s:layout>
+					<!--<renderers:FromMessageRenderer/>
+					<renderers:ToMessageRenderer/>
+					<renderers:ToMessageRenderer/>
+					<renderers:FromMessageRenderer/>-->
+				</s:Group>	
+			</s:Scroller>
+			<s:BorderContainer id="menuList" visible="false" height="{BasicUtil.getComponentHeight(120)}" 
+							   width="{BasicUtil.getComponentHeight(400)}" bottom="0">
+				<s:List  width="100%" height="{BasicUtil.getComponentHeight(140)}" itemRenderer="com.fashionapp.views.components.SearchItemRenderer"
+						 change="list1_changeHandler(event)">
+					<s:dataProvider>
+						<s:ArrayCollection>
+							<fx:Object name="View Photo"/>
+							<fx:Object name="Take Photo"/>
+						</s:ArrayCollection>
+					</s:dataProvider>
+				</s:List>
+			</s:BorderContainer>
+		</s:Group>
+		<s:BorderContainer width="100%" borderVisible="false" backgroundColor="0x000000" height="1"/>
+		<s:HGroup width="100%" bottom="{BasicUtil.getComponentPadding(10)}" horizontalAlign="center"
+				  verticalAlign="middle"
+				  paddingTop="{BasicUtil.getComponentPadding(10)}"
+				  paddingBottom="{BasicUtil.getComponentPadding(10)}"
+				  paddingLeft="{BasicUtil.getComponentPadding(30)}" 
+				  paddingRight="{BasicUtil.getComponentPadding(30)}">
+			<s:Image source="{NEW_BRAND_ICON}" scaleMode="stretch" smooth="true"
+					 height="{BasicUtil.getComponentHeight(36)}"
+					 width="{BasicUtil.getComponentHeight(36)}"
+					 click="button1_clickHandler(event)"/>
+			<s:TextInput id="txtMsg" width="100%" skinClass="com.fashionapp.skins.SendChatMessageTextInputSkin"
+						 styleName="viewtext"
+						 fontSize="{BasicUtil.getFontSize(34)}"/>
+			<s:Label text="{resourceManager.getString('resources','send')}" click="sendClick()" fontSize="{BasicUtil.getFontSize(34)}"
+					 styleName="viewtextitalic"/>
+		</s:HGroup>
+	</s:Group>
+</s:View>

@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		xmlns:s="library://ns.adobe.com/flex/spark">
+	<fx:Script>
+		<![CDATA[
+			import com.fashionapp.utils.BasicUtil;
+			[Embed(source="assets/images/searchicon.png")]
+			[Bindable]
+			private var SEARCH_ICON:Class;
+			
+			[Embed(source="assets/images/openmenuicon.png")]
+			[Bindable]
+			private var OPEN_MENU_ICON:Class;
+			
+			[Bindable]
+			public var showSearchOpener:Boolean = true;
+		]]>
+	</fx:Script>
+	<s:Rect height="100%" width="100%">
+		<s:fill>
+			<s:SolidColor color="0xFFFFFF"/>
+		</s:fill>
+	</s:Rect>
+	<s:Group height="100%" width="100%">
+		<s:layout>
+			<s:VerticalLayout gap="0"/>
+		</s:layout>
+		<s:Rect height="1" width="100%">
+			<s:fill>
+				<s:SolidColor color="0x000000"/>
+			</s:fill>
+		</s:Rect>
+		<s:Group height="100%" width="100%">
+			<s:layout>
+				<s:HorizontalLayout paddingLeft="{BasicUtil.getComponentPadding(30)}" 
+									paddingRight="{BasicUtil.getComponentPadding(30)}"
+									verticalAlign="middle"/>
+			</s:layout>
+			<s:Image source="{SEARCH_ICON}" scaleMode="stretch" 
+					 smooth="true"
+					 width="{BasicUtil.getComponentHeight(43)}"
+					 height="{BasicUtil.getComponentHeight(44)}"/>
+			<!--<s:Label text="Search" fontSize="{BasicUtil.getFontSize(30)}" 
+					 styleName="viewtextitalic" width="100%"/>-->
+			<s:TextInput width="100%" 
+						 skinClass="com.fashionapp.skins.SearchTextInputWithoutBordersSkin"
+						 height="100%"
+						 focusAlpha="0"
+						 focusColor="0xffffff"
+						 prompt="Search"
+						 fontSize="{BasicUtil.getFontSize(30)}" 
+						 styleName="viewtextitalic"/>
+			<s:Image source="{OPEN_MENU_ICON}" scaleMode="stretch" 
+					 smooth="true" 
+					 visible="{showSearchOpener}"
+					 width="{BasicUtil.getComponentHeight(30)}"
+					 height="{BasicUtil.getComponentHeight(15)}"/>
+		</s:Group>
+		<s:Rect height="1" width="100%">
+			<s:fill>
+				<s:SolidColor color="0x000000"/>
+			</s:fill>
+		</s:Rect>
+	</s:Group>
+</s:Group>

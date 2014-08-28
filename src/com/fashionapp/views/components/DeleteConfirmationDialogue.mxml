@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:SkinnablePopUpContainer xmlns:fx="http://ns.adobe.com/mxml/2009" 
+						   xmlns:s="library://ns.adobe.com/flex/spark" xmlns:components="com.fashionapp.views.components.*"
+						   height="100%"
+						   width="100%"
+						   backgroundAlpha="0">
+	
+	<fx:Script>
+		<![CDATA[
+			protected function toptabbutton1_clickHandler(event:MouseEvent):void
+			{
+				this.close();
+				
+			}
+		]]>
+	</fx:Script>
+	
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+	</fx:Declarations>
+	<s:BorderContainer horizontalCenter="0" verticalCenter="0"
+					   cornerRadius="7"
+					   borderColor="0xffffff">
+		<s:layout>
+			<s:VerticalLayout gap="0" verticalAlign="middle" horizontalAlign="center"/>
+		</s:layout>
+		<s:Group>
+			<s:layout>
+				<s:VerticalLayout paddingTop="15" paddingBottom="15" paddingLeft="20" paddingRight="20"/>
+			</s:layout>
+			<s:Label width="100%" height="100%" text="{resourceManager.getString('resources','deleteproducts')}" textAlign="center"/>
+			<s:Label width="100%" height="100%" text="{resourceManager.getString('resources','deleteconfirmation')}" fontSize="10" textAlign="center"
+					 fontStyle="italic"/>
+			<s:Label width="100%" height="100%" text=" the selected items?" fontSize="10" textAlign="center"
+					 fontStyle="italic"/>
+		</s:Group>
+		<s:BorderContainer width="100%" height="1" backgroundColor="0x000000"/>
+		<s:HGroup width="100%" height="45">
+			<components:TopTabButton height="100%" width="100%" label="{resourceManager.getString('resources','cancel')}" click="toptabbutton1_clickHandler(event)"/>
+			<components:TopTabButton height="100%" width="100%" label="{resourceManager.getString('resources','yes')}" click="toptabbutton1_clickHandler(event)"/>
+		</s:HGroup>	
+	</s:BorderContainer>
+</s:SkinnablePopUpContainer>

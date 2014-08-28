@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:View xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		xmlns:s="library://ns.adobe.com/flex/spark" title="{resourceManager.getString('resources','brandtitle')}"
+		creationComplete="onCreComp()"
+		skinClass="assets.images.CustomViewSkin"
+		actionBarVisible="false" xmlns:components="com.fashionapp.views.components.*">
+	
+	<fx:Script>
+		<![CDATA[
+			import com.fashionapp.utils.BasicUtil;
+			
+			import spark.events.IndexChangeEvent;
+			
+			[Embed(source="assets/images/searchicon.png")]
+			[Bindable]
+			private var SEARCH_ICON:Class;
+			
+			[Embed(source="assets/images/addbrandicon.png")]
+			[Bindable]
+			private var NEW_BRAND_ICON:Class;
+			
+			import com.fashionapp.views.components.NewBrand;
+			
+			import mx.collections.ArrayCollection;
+			import mx.managers.PopUpManager;
+			private function onCreComp():void {
+				list.dataProvider = loadData();
+			}
+			
+			private function loadData():ArrayCollection {
+				var listData:ArrayCollection = new ArrayCollection;
+				listData.addItem("Help");
+				listData.addItem("Support");
+				listData.addItem("About");
+				listData.addItem("Change Password");
+				listData.addItem("Logout");
+				return listData;
+			}
+			
+			protected function button1_clickHandler(event:MouseEvent):void
+			{
+				// TODO Auto-generated method stub
+				searchList.visible = !searchList.visible;
+			}
+			
+			protected function button2_clickHandler(event:MouseEvent):void
+			{
+				// TODO Auto-generated method stub
+				/* var brand:NewBrand = new NewBrand();
+				PopUpManager.addPopUp(brand,this);
+				brand.percentHeight = 100;
+				brand.percentWidth = 100; */
+				this.navigator.pushView(NewBrand);
+			}
+			
+			protected function list_changeHandler(event:IndexChangeEvent):void
+			{
+				navigator.pushView(BrandProductsView);
+			}
+			
+		]]>
+	</fx:Script>
+	<s:BorderContainer width="100%" height="100%"
+					   borderVisible="false">
+		<s:layout>
+			<s:VerticalLayout gap="0"/>
+		</s:layout>
+		<s:BorderContainer width="100%" height="1" borderVisible="false" backgroundColor="0x000000"/>
+		<s:HGroup width="100%" top="0"
+				  gap="0">
+			<components:TopTabButton label="{resourceManager.getString('resources','newBrand')}" width="100%" click="button2_clickHandler(event)"
+									 icon="{NEW_BRAND_ICON}"
+									 height="{BasicUtil.getComponentHeight(100)}"/>
+			<!--<s:BorderContainer width="1" height="100%" backgroundColor="0x000000"
+							   borderVisible="false"/>-->
+			<s:Spacer width="100%"/>
+			<components:TopTabButton label="{resourceManager.getString('resources','search')}" width="100%" click="button1_clickHandler(event)"
+									 icon="{SEARCH_ICON}"
+									 height="{BasicUtil.getComponentHeight(100)}"/>
+		</s:HGroup>
+		<s:BorderContainer width="100%" height="1" borderVisible="false" backgroundColor="0x000000"/>
+		<s:Group height="100%" width="100%">
+			<s:List id="list" width="100%" height="100%" skinClass="com.fashionapp.skins.MenuListSkin"
+					itemRenderer="com.fashionapp.views.components.BrandItemRenderer"
+					change="list_changeHandler(event)">
+			</s:List>
+			<s:BorderContainer id="searchList" visible="false" width="100%"
+							   borderVisible="false">
+				<s:List  width="100%" height="100%" 
+						 itemRenderer="com.fashionapp.views.components.SearchItemRenderer"
+						 skinClass="com.fashionapp.skins.MenuListSkin">
+					<s:dataProvider>
+						<s:ArrayCollection>
+							<fx:Object name="By Brand"/>
+							<fx:Object name="By Season"/>
+							<fx:Object name="By Dept"/>
+							<fx:Object name="By Date"/>
+							<fx:Object name="By Price"/>
+						</s:ArrayCollection>
+					</s:dataProvider>
+				</s:List>
+			</s:BorderContainer>	
+		</s:Group>
+	</s:BorderContainer>
+</s:View>
