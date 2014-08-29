@@ -36,8 +36,6 @@
 			{
 				this.addEventListener('backClicked',onBackClick);
 				chat = data as ChatData;
-				trace((data as ChatData).toUserId +'||'+ (data as ChatData).createdBy);
-				
 			}
 			
 			private function onBackClick(event:Event):void {
@@ -80,17 +78,13 @@
 					 paddingLeft="{BasicUtil.getComponentPadding(10)}" paddingRight="{BasicUtil.getComponentPadding(10)}" 
 					 paddingTop="{BasicUtil.getComponentPadding(10)}" paddingBottom="{BasicUtil.getComponentPadding(10)}"/>
 		</s:Group>
-		<s:Group width="100%" height="100%" id="chatBox">
+		<s:Group width="100%" height="100%">
 			<s:Scroller height="100%" width="100%">
-				<s:Group width="100%">
+				<s:Group width="100%" id="chatBox">
 					<s:layout>
 						<s:VerticalLayout paddingLeft="{BasicUtil.getComponentPadding(30)}" 
 										  paddingRight="{BasicUtil.getComponentPadding(30)}"/>
 					</s:layout>
-					<!--<renderers:FromMessageRenderer/>
-					<renderers:ToMessageRenderer/>
-					<renderers:ToMessageRenderer/>
-					<renderers:FromMessageRenderer/>-->
 				</s:Group>	
 			</s:Scroller>
 			<s:BorderContainer id="menuList" visible="false" height="{BasicUtil.getComponentHeight(120)}" 

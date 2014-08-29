@@ -58,6 +58,24 @@ package com.fashionapp.DAO
 			}
 		}
 		
+		public function deleteChat(chat:ChatData):void{
+			this.chat = chat;
+			var stmt1:SQLStatement = new SQLStatement();
+			var uniqueId:int = DBUtils.getUniqueID();
+			
+			stmt1.text = "update Chat set type = 'delete' where id = " + chat.id.toString();
+			stmt1.sqlConnection = BuyerAppModelLocator.getInstance().dbConn;
+			stmt1.addEventListener(SQLEvent.RESULT, openHandler);
+			stmt1.addEventListener(SQLErrorEvent.ERROR, errorHandler);
+			stmt1.execute();
+			
+			var result:SQLResult = stmt1.getResult();
+			if (result != null){
+				trace(result);
+			}
+		}
+		
+		
 		private function getAllCurrentChats(username:String=""):void {
 			var stmt1:SQLStatement = new SQLStatement();
 			stmt1.text = "SELECT * FROM Chat";

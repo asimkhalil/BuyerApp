@@ -2,8 +2,8 @@
 {
 	import air.net.URLMonitor;
 	
-	import com.fashionapp.event.APIEvent;
-	import com.fashionapp.util.Base64;
+	//import com.fashionapp.event.APIEvent;
+	//import com.fashionapp.util.Base64;
 	
 	import com.fashionapp.model.LoginData;
 	import com.fashionapp.util.Test;
@@ -95,7 +95,7 @@
 			myURLLoader.removeEventListener(SecurityErrorEvent.SECURITY_ERROR,SECURITY_ERRORHanlder);
 			myURLLoader.removeEventListener(Event.COMPLETE, callComplete);
 			
-			objParent.dispatchEvent(new APIEvent(APIEvent.API_ERROR));			
+			//objParent.dispatchEvent(new APIEvent(APIEvent.API_ERROR));			
 			//Alert.show(objParent,event.target.data);
 			//CursorManager.removeBusyCursor();			
 		}
@@ -105,7 +105,7 @@
 			myURLLoader.removeEventListener(SecurityErrorEvent.SECURITY_ERROR,SECURITY_ERRORHanlder);
 			myURLLoader.removeEventListener(Event.COMPLETE, callComplete);
 			
-			objParent.dispatchEvent(new APIEvent(APIEvent.API_ERROR));			
+			//objParent.dispatchEvent(new APIEvent(APIEvent.API_ERROR));			
 			//Alert.show(objParent,event.target.data);
 			//CursorManager.removeBusyCursor();			
 		}
@@ -115,7 +115,7 @@
 			myURLLoader.removeEventListener(SecurityErrorEvent.SECURITY_ERROR,SECURITY_ERRORHanlder);
 			myURLLoader.removeEventListener(Event.COMPLETE, callComplete);
 			
-			objParent.dispatchEvent(new APIEvent(APIEvent.API_COMPLETE, Network.decrypt(myURLLoader.data)));			
+			//objParent.dispatchEvent(new APIEvent(APIEvent.API_COMPLETE, Network.decrypt(myURLLoader.data)));			
 			//Alert.show(objParent,event.target.data);
 			//CursorManager.removeBusyCursor();
 		}
@@ -144,11 +144,11 @@
                 char = String.fromCharCode(sum);
                 result = result + char;
             }	
-            return Base64.encode(result);
+            return "";//Base64.encode(result);
         }
    		private static function decrypt(str:String):String {
             var result:String = '';
-            var str:String = Base64.decode(str);   
+            //var str:String = Base64.decode(str);   
             for (var i:int = 0; i < str.length; i++) {
                 var char:String = str.substr(i, 1);
                 var keychar:String = key.substr((i % key.length) - 1, 1);

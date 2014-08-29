@@ -1,16 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
 <s:Group xmlns:fx="http://ns.adobe.com/mxml/2009"
 				   xmlns:s="library://ns.adobe.com/flex/spark"
-				   width="100%" xmlns:components="com.fashionapp.views.components.*"
+				   width="100%" xmlns:components="com.fashionapp.views.components.*" creationComplete="group1_creationCompleteHandler(event)"
 				   click="group1_clickHandler(event)">
 	
 	<fx:Script>
 		<![CDATA[
+			import com.fashionapp.DAO.DaoChat;
+			import com.fashionapp.model.ChatData;
+			import com.fashionapp.network.Network;
 			import com.fashionapp.utils.BasicUtil;
+			
+			import mx.events.FlexEvent;
+			public var chat:ChatData;
 			protected function group1_clickHandler(event:MouseEvent):void
 			{
 				chatActions.visible = !chatActions.visible;
 			}
+			
+			protected function group1_creationCompleteHandler(event:FlexEvent):void
+			{
+				this.addEventListener('deleteChat',deleteChatHandler);
+				this.addEventListener('copyChat',copyChatHandler);
+			}
+			
+			private function copyChatHandler(event:Event):void{
+				/* Clear any unwanted data in clipboard if exists */
+				Clipboard.generalClipboard.clear();
+				
+				/* Copy the textinput value to the clipboard */
+				
+				Clipboard.generalClipboard.setData(ClipboardFormats.TEXT_FORMAT, txtMsg.text);
+				
+			}
+			
+			private function deleteChatHandler(event:Event):void{
+				var dc:DaoChat = new DaoChat();
+				if(Network.checkInterNetAvailability() == true){
+					trace('internet available');
+				}else{
+					dc.deleteChat(chat);
+				}
+				
+				// for testing
+				//dc.deleteChat(chat);
+			}
+			
 		]]>
 	</fx:Script>
 	

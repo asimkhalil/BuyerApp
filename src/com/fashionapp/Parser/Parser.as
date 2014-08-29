@@ -116,15 +116,29 @@ package com.fashionapp.Parser
 					chat.lastUpdate = arrChats[i].lastUpdate;
 					chat.lastSync = arrChats[i].lastSync;
 					
+					var userId:String;
+					if(chat.toUserId == BuyerAppModelLocator.getInstance().loginData.id){
+						userId = chat.createdBy.toString();
+					}else{
+						userId = chat.toUserId.toString();
+					}
+					
 					if(!chatMessageAlreadyExists(chat.id)) {
 						BuyerAppModelLocator.getInstance().chats.addItem(chat);
 						//newChatMessagesForMe.addItem(chat);
-						if(BuyerAppModelLocator.getInstance().chatCollection[chat.toUserId] == null){
+						if(BuyerAppModelLocator.getInstance().chatCollection[userId] == null){
 							var ch:ArrayCollection = new ArrayCollection();
 							ch.addItem(chat);
-							BuyerAppModelLocator.getInstance().chatCollection[chat.toUserId] = ch;
+							BuyerAppModelLocator.getInstance().chatCollection[userId] = ch;
 						}else{
-							(BuyerAppModelLocator.getInstance().chatCollection[chat.toUserId] as ArrayCollection).addItem(chat);
+							(BuyerAppModelLocator.getInstance().chatCollection[userId] as ArrayCollection).addItem(chat);
+						}
+					}else if(chat.type == "delete"){
+						var delArray:ArrayCollection = (BuyerAppModelLocator.getInstance().chatCollection[userId] as ArrayCollection);
+						for(var j:int = 0 ; j < delArray.length ; j++){
+							if((delArray.getItemAt(j) as ChatData).id == chat.id){
+								(delArray.getItemAt(j) as ChatData).type = chat.type;
+							}
 						}
 					}
 				}

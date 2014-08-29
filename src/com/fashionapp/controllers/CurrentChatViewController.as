@@ -73,18 +73,46 @@ package com.fashionapp.controllers
 				if(c.length > localChatCollection.length){
 					for(var i:int = localChatCollection.length ; i < c.length ; i++){
 						var chatObj:ChatData = c.getItemAt(i) as ChatData;
-						if(chatObj.toUserId == BuyerAppModelLocator.getInstance().loginData.id){
-							var toMsg:ToMessageRenderer = new ToMessageRenderer();
-							currentChat.chatBox.addElement(toMsg);
-							toMsg.txtMsg.text = chatObj.content;
-						}else{
-							var fromMsg:FromMessageRenderer = new FromMessageRenderer();
-							currentChat.chatBox.addElement(fromMsg);
-							fromMsg.txtMsg.text = chatObj.content;
+						if(chatObj.type == "text" || chatObj.type == "image"){
+							if(chatObj.toUserId == BuyerAppModelLocator.getInstance().loginData.id){
+								var toMsg:ToMessageRenderer = new ToMessageRenderer();
+								currentChat.chatBox.addElement(toMsg);
+								toMsg.txtMsg.text = chatObj.content;
+								toMsg.chat  = chatObj;
+								toMsg.name = chatObj.id;
+							}else{
+								var fromMsg:FromMessageRenderer = new FromMessageRenderer();
+								currentChat.chatBox.addElement(fromMsg);
+								fromMsg.txtMsg.text = chatObj.content;
+								fromMsg.chat = chatObj;
+								fromMsg.name = chatObj.id;
+							}
 						}
 						localChatCollection.addItem(chatObj);
 					}
 					//localChatCollection = c;
+				}
+				for(var j:int = 0; j < c.length ; j++){
+					var ch:ChatData = c.getItemAt(j) as ChatData
+					if(ch.type == "delete"){
+						try{
+							for(var d:int = 0 ; d < currentChat.chatBox.numElements ; d++){
+								if(currentChat.chatBox.getElementAt(d) is ToMessageRenderer){
+									if((currentChat.chatBox.getElementAt(d) as ToMessageRenderer).name == ch.id){
+										currentChat.chatBox.removeElementAt(d);
+										d--;
+									}
+								}else if(currentChat.chatBox.getElementAt(d) is FromMessageRenderer){
+									if((currentChat.chatBox.getElementAt(d) as FromMessageRenderer).name == ch.id){
+										currentChat.chatBox.removeElementAt(d);
+										d--;
+									}
+								}
+							}
+						}catch(e:Error){
+						
+						}
+					}
 				}
 			}
 		}
@@ -98,7 +126,7 @@ package com.fashionapp.controllers
 			}
 			
 			// for testing
-			dc.sendChat(chat);
+			//dc.sendChat(chat);
 		}
 		
 		/*public function checkNewMessageForMe():void {

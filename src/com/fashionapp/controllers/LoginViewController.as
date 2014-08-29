@@ -117,7 +117,7 @@ package com.fashionapp.controllers
 			}else{
 				dc.getChatsForMe();
 			}
-			dc.getChatsForMe();
+			//dc.getChatsForMe();
 		}
 		
 		private function loginClickEventListener(event:LoginClickEvent):void
