@@ -1,12 +1,17 @@
-package com.fashionapp.network
+﻿package com.fashionapp.network
 {
 	import air.net.URLMonitor;
+	
+	import com.fashionapp.event.APIEvent;
+	import com.fashionapp.util.Base64;
 	
 	import com.fashionapp.model.LoginData;
 	import com.fashionapp.util.Test;
 	import com.fashionapp.util.Utils;
 	import com.fashionapp.views.LoginView;
 	import com.fashionapp.views.poups.Alert;
+	
+	import flash.utils.ByteArray;
 	
 	import flash.data.SQLConnection;
 	import flash.data.SQLResult;
@@ -19,120 +24,145 @@ package com.fashionapp.network
 	import flash.events.SecurityErrorEvent;
 	import flash.events.StatusEvent;
 	import flash.filesystem.File;
+	import flash.filesystem.FileStream;
+	import flash.filesystem.FileMode;
+	
 	import flash.net.URLLoader;
 	import flash.net.URLRequest;
 	import flash.net.URLRequestMethod;
 	import flash.net.URLVariables;
 	
+	
+	import mx.core.FlexGlobals;
 	import mx.managers.CursorManager;
 	
 	public class Network
 	{
 		private static var objParent:DisplayObject;
+		private static var myURLLoader:URLLoader;
+		private static var key:String = 'dSChAjgz36TTexeLODPYxleJndjVcOMVzsLJjSM8dLpXsTS4FCeMbhw2s2u';
 		
+		private static var app_key:String = 'Oo6CxOL'; 
+		private static var session_id:String = 'OoDulhq';
+		private static var user_id:String = '8'; // you can use this for update the localDB of the create user id
+
 		// Internet related.
 		private static var monitor:URLMonitor; 
 		[Bindable]  
 		private static var isOnline: Boolean = false;
-		private  var conn:SQLConnection;
-		private var insertLogin:SQLStatement;
-		
-		public static function call_API(parentObj:DisplayObject,url:String,
-										variables:URLVariables,method:String = "post"):void{
-			objParent  = parentObj;
-			CursorManager.setBusyCursor();
+
+		public static function call_API(parentObj:DisplayObject,api_name:String,
+										variables:URLVariables,file:String="",method:String = "post"):void{
+			objParent = parentObj;
+			//CursorManager.setBusyCursor();
 			var myVariables:URLVariables = new URLVariables();
 			myVariables = variables;
 			var myURLRequest:URLRequest = new URLRequest();
-			var myURLLoader:URLLoader = new URLLoader(); 
+			myURLLoader = new URLLoader(); 
 			if(method == "get".toLocaleLowerCase()){
 				myURLRequest.method = URLRequestMethod.GET;
-			}else if(method == "post".toLocaleLowerCase()){
+			}
+			else if(method == "post".toLocaleLowerCase()){
 				myURLRequest.method = URLRequestMethod.POST;
-			} 
-			myURLRequest.url = url;
-			if(variables != null){
-				myURLRequest.data = variables;
+			}
+			
+			
+			if(api_name != "login") {
+				variables.session_id = session_id;
+			}
+			var requestData:String = unescape(variables.toString());
+			
+			requestData = Network.encrypt(requestData);
+			
+			if(file != "" && variables != null){
+				myURLRequest.url = "http://59.188.218.19/api/1-0/"+api_name+"/";				
+				myURLRequest.data = new URLVariables();
+				myURLRequest.data.request = requestData;				
+
+				//myURLRequest.data.image = bytes;
+			}
+			else {					
+				myURLRequest.url = "http://59.188.218.19/api/1-0/"+api_name+"/"+requestData;
 			}
 			myURLLoader.load(myURLRequest);
 			myURLLoader.addEventListener(IOErrorEvent.IO_ERROR,IOErrorHanlder);
 			myURLLoader.addEventListener(SecurityErrorEvent.SECURITY_ERROR,SECURITY_ERRORHanlder);
-			myURLLoader.addEventListener(Event.COMPLETE, loginComplete);
+			myURLLoader.addEventListener(Event.COMPLETE, callComplete);
 		}
 		/*******************************************************************/
-		private static function IOErrorHanlder(event:Event):void{
-			Alert.show(objParent,event.target.data);
-			CursorManager.removeBusyCursor();
+		private static function IOErrorHanlder(event:Event):void{						
+			myURLLoader.removeEventListener(IOErrorEvent.IO_ERROR,IOErrorHanlder);
+			myURLLoader.removeEventListener(SecurityErrorEvent.SECURITY_ERROR,SECURITY_ERRORHanlder);
+			myURLLoader.removeEventListener(Event.COMPLETE, callComplete);
+			
+			objParent.dispatchEvent(new APIEvent(APIEvent.API_ERROR));			
+			//Alert.show(objParent,event.target.data);
+			//CursorManager.removeBusyCursor();			
 		}
 		/*******************************************************************/ 
-		private static function SECURITY_ERRORHanlder(event:Event):void{
-			Alert.show(objParent,event.target.data);
-			CursorManager.removeBusyCursor();
+		private static function SECURITY_ERRORHanlder(event:Event):void{						
+			myURLLoader.removeEventListener(IOErrorEvent.IO_ERROR,IOErrorHanlder);
+			myURLLoader.removeEventListener(SecurityErrorEvent.SECURITY_ERROR,SECURITY_ERRORHanlder);
+			myURLLoader.removeEventListener(Event.COMPLETE, callComplete);
+			
+			objParent.dispatchEvent(new APIEvent(APIEvent.API_ERROR));			
+			//Alert.show(objParent,event.target.data);
+			//CursorManager.removeBusyCursor();			
 		}
 		/*******************************************************************/ 
-		private static function loginComplete(event:Event):void{
-			Alert.show(objParent,event.target.data);
-			//updateDataBase(Test.getDummyLoginData());
-			/*if(event.target.data == 'Image upload sucessfull'){
-				navigateToURL(new URLRequest('http://smarttees.biz/printing?get_cart_url=1'), "_self");
-			}*/
-			CursorManager.removeBusyCursor();
-		}
-		
-		/*private function updateDataBase(ld:LoginData):void{
-		{
-			var appStorage:File = File.applicationStorageDirectory;
-			var dbFile:File = Utils.db_path;
-			conn = new SQLConnection();
-			conn.addEventListener(SQLErrorEvent.ERROR, errorHandler);
-			conn.addEventListener(SQLEvent.OPEN, openHandler);
-			conn.openAsync(dbFile);
-		}
-		private function openHandler(event:SQLEvent):void
-		{
-			conn.removeEventListener(SQLEvent.OPEN, openHandler);
-			conn.addEventListener(SQLEvent.BEGIN, beginHandler);
-			conn.begin();
-		}
-		private function beginHandler(event:SQLEvent):void
-		{
-			//stmt.text = "INSERT OR IGNORE INTO tbl_breed (breed_id,breed_breed)"+" VALUES ('1','test')";
+		private static function callComplete(event:Event):void{						
+			myURLLoader.removeEventListener(IOErrorEvent.IO_ERROR,IOErrorHanlder);
+			myURLLoader.removeEventListener(SecurityErrorEvent.SECURITY_ERROR,SECURITY_ERRORHanlder);
+			myURLLoader.removeEventListener(Event.COMPLETE, callComplete);
 			
-			conn.removeEventListener(SQLEvent.BEGIN, beginHandler);
-			insertLogin = new SQLStatement();
-			insertLogin.sqlConnection = conn;
-			//insertLogin.text = "INSERT INTO Users (id, username, fullname,password,tel,email,groupID,code,statusID,lastLogin,lastUpdate,lastSync) " + 'VALUES ('+ld.id+','+ld.userName+','+ld.fullName+','"sdf"','+ld.tel','+ld.email','',')";
-			insertLogin.addEventListener(SQLEvent.RESULT, insertLoginHandler);
-			insertLogin.addEventListener(SQLErrorEvent.ERROR, errorHandler);
-			insertLogin.execute();
+			objParent.dispatchEvent(new APIEvent(APIEvent.API_COMPLETE, Network.decrypt(myURLLoader.data)));			
+			//Alert.show(objParent,event.target.data);
+			//CursorManager.removeBusyCursor();
 		}
 		
-		// Called after the employee record is inserted
-		private function insertLoginHandler(event:SQLEvent):void
-		{
-			insertLogin.removeEventListener(SQLEvent.RESULT, insertLoginHandler);
-			insertLogin.removeEventListener(SQLErrorEvent.ERROR, errorHandler);
-			
-			var result:SQLResult = insertLogin.getResult();
-			var employeeId:Number = result.lastInsertRowID;
+		private static function updateServer(table:String):void{
+			/*
+			if there is network, 
+				select * from table where lastUpdate > lastSync
+				foreach row
+					send to the server
+					update table set lastSync = now where id = row.id
+				end
+			*/
 		}
 		
-		private function errorHandler(event:SQLErrorEvent):void
-		{
-			if (conn.inTransaction)
-			{
-				conn.addEventListener(SQLEvent.ROLLBACK, rollbackHandler);
-				conn.rollback();
-			}
-		}
-		private function rollbackHandler(event:SQLEvent):void
-		{
-			conn.removeEventListener(SQLEvent.ROLLBACK, rollbackHandler);
-		}*/
-		
-		
+		// encryption decryption
+		/**************************************************************/
+		private static function encrypt(str:String):String {
+            var result:String = '';
+            for (var i:int = 0; i < str.length; i++) {
+                var char:String = str.substr(i, 1);
+                var keychar:String = key.substr((i % key.length) - 1, 1);
+                var ordChar:int = char.charCodeAt(0);
+                var ordKeychar:int = keychar.charCodeAt(0);
+                var sum:int = ordChar + ordKeychar;
+                char = String.fromCharCode(sum);
+                result = result + char;
+            }	
+            return Base64.encode(result);
+        }
+   		private static function decrypt(str:String):String {
+            var result:String = '';
+            var str:String = Base64.decode(str);   
+            for (var i:int = 0; i < str.length; i++) {
+                var char:String = str.substr(i, 1);
+                var keychar:String = key.substr((i % key.length) - 1, 1);
+                var ordChar:int = char.charCodeAt(0);
+                var ordKeychar:int = keychar.charCodeAt(0);
+                var sum:int = ordChar - ordKeychar;
+                char = String.fromCharCode(sum);
+                result = result + char;
+            }
+            return result;
+        }
 		/*************************  Check internet  ******************************************/
-		public static function checkInterNetAvailability(url:String='http://www.google.com'):Boolean { 
+		
+		public static function checkInterNetAvailability(url:String='http://59.188.218.19/'):Boolean { 
 			monitor = new URLMonitor( new URLRequest(url)); 
 			monitor.addEventListener(StatusEvent.STATUS,announceStatus); 
 			monitor.start(); 
@@ -142,11 +172,24 @@ package com.fashionapp.network
 			trace("Status change. Current status: " + monitor.available); 
 			if(monitor.available) { 
 				isOnline = true; 
+				/*
+					try to upload all data back to the server
+					select * from database
+					foreach table
+						select * from table where lastUpdate > lastSync
+						foreach row
+							send to the server
+							update table set lastSync = now where id = row.id
+						end					
+					end
+				*/
 			} else { 
 				isOnline = false; 
 			} 
 		}
+		
 		/*******************************************************************/
+		
 	}
 		
 }
