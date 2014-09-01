@@ -28,7 +28,7 @@ package com.fashionapp.controllers
 //			}
 //			catch(e:Error)
 //			{
-				Alert.show(view, message );
+				//Alert.show(view, message );
 			//}
 		}
 		//private function getLog(e:LogEvent) : void
