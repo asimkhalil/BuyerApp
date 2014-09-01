@@ -1,12 +1,14 @@
 package com.fashionapp.controllers
 {
 	import com.fashionapp.DAO.DaoChat;
+	import com.fashionapp.events.ImageSelectedEvent;
 	import com.fashionapp.events.IntimateForNewChatMessagesForMeEvent;
 	import com.fashionapp.model.BuyerAppModelLocator;
 	import com.fashionapp.model.ChatData;
 	import com.fashionapp.network.Network;
 	import com.fashionapp.renderers.FromMessageRenderer;
 	import com.fashionapp.renderers.ToMessageRenderer;
+	import com.fashionapp.util.Base64;
 	import com.fashionapp.views.CurrentChatView;
 	
 	import flash.events.Event;
@@ -47,6 +49,12 @@ package com.fashionapp.controllers
 			}*/
 			
 			FlexGlobals.topLevelApplication.addEventListener('NEW_MESSAGES_ARRIVED',chatMessagesRecieved);
+			
+			FlexGlobals.topLevelApplication.addEventListener(ImageSelectedEvent.IMAGE_SELECTED,onImageSelected);
+		}
+		
+		private function onImageSelected(event:ImageSelectedEvent):void {
+			event.imagebytes;
 		}
 		
 		/*private function chatMessagesForMeListRecieved(event:IntimateForNewChatMessagesForMeEvent):void {
@@ -66,24 +74,30 @@ package com.fashionapp.controllers
 			BuyerAppModelLocator.getInstance().users.refresh();
 		}*/
 		
-		private function chatMessagesRecieved(event:Event):void{
+		private function chatMessagesRecieved(event:Event):void {
 			var currentChat:CurrentChatView = (view as CurrentChatView);
 			if(BuyerAppModelLocator.getInstance().chatCollection[currentChat.chat.toUserId]){
 				var c:ArrayCollection = BuyerAppModelLocator.getInstance().chatCollection[currentChat.chat.toUserId];
 				if(c.length > localChatCollection.length){
 					for(var i:int = localChatCollection.length ; i < c.length ; i++){
 						var chatObj:ChatData = c.getItemAt(i) as ChatData;
-						if(chatObj.type == "text" || chatObj.type == "image"){
+						if(chatObj.type == "text" || chatObj.type == "image") {
 							if(chatObj.toUserId == BuyerAppModelLocator.getInstance().loginData.id){
 								var toMsg:ToMessageRenderer = new ToMessageRenderer();
 								currentChat.chatBox.addElement(toMsg);
 								toMsg.txtMsg.text = chatObj.content;
+								if(chatObj.type == "image") {
+									toMsg.image_photo.source = Base64.decodeToByteArray(chatObj.content);
+								}
 								toMsg.chat  = chatObj;
 								toMsg.name = chatObj.id;
 							}else{
 								var fromMsg:FromMessageRenderer = new FromMessageRenderer();
 								currentChat.chatBox.addElement(fromMsg);
 								fromMsg.txtMsg.text = chatObj.content;
+								if(chatObj.type == "image") {
+									fromMsg.image_photo.source = Base64.decodeToByteArray(chatObj.content);
+								}
 								fromMsg.chat = chatObj;
 								fromMsg.name = chatObj.id;
 							}
@@ -119,8 +133,9 @@ package com.fashionapp.controllers
 		
 		public function send(chat:ChatData):void{
 			var dc:DaoChat = new DaoChat();
-			if(Network.checkInterNetAvailability() == true){
+			if(Network.checkInterNetAvailability() == true) {
 				trace('internet available');
+				dc.sendChat(chat);
 			}else{
 				dc.sendChat(chat);
 			}

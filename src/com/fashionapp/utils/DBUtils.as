@@ -1,5 +1,7 @@
 package com.fashionapp.utils
 {
+	import com.fashionapp.network.Network;
+	
 	public class DBUtils
 	{
 		public function DBUtils()

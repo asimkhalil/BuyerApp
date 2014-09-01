@@ -1,5 +1,6 @@
 package com.fashionapp.model
 {
+	[Bindable]
 	public class ChatData
 	{
 		public var id:String;

@@ -18,6 +18,7 @@ package com.fashionapp.util
 	public class Utils
 	{
 		public static var FORGOT_EMAIL:String;
-		public static var db_path:String = "D:/fashionDB.s3db";
+		public static var db_path:String = "assets/fashionDB.s3db";
+		public static var image_path:String ="images/";
 	}
 }

@@ -30,6 +30,15 @@ package com.fashionapp.model
 		public var users:ArrayCollection = new ArrayCollection();
 		
 		[Bindable]
+		public var usersBuyer:ArrayCollection = new ArrayCollection();
+		
+		[Bindable]
+		public var usersStaff:ArrayCollection = new ArrayCollection();
+		
+		[Bindable]
+		public var usersVip:ArrayCollection = new ArrayCollection();
+		
+		[Bindable]
 		public var chats:ArrayCollection = new ArrayCollection();
 		
 		public var chatCollection:Array = new Array();

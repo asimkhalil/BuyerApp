@@ -1,8 +1,10 @@
 package com.fashionapp.DAO
 {
 	import com.fashionapp.Parser.Parser;
+	import com.fashionapp.events.APIEvent;
 	import com.fashionapp.model.BuyerAppModelLocator;
 	import com.fashionapp.model.ChatData;
+	import com.fashionapp.network.Network;
 	import com.fashionapp.util.Utils;
 	import com.fashionapp.utils.BasicUtil;
 	import com.fashionapp.utils.DBUtils;
@@ -14,6 +16,7 @@ package com.fashionapp.DAO
 	import flash.events.SQLEvent;
 	import flash.filesystem.File;
 	import flash.filesystem.FileMode;
+	import flash.net.URLVariables;
 
 	public class DaoChat
 	{
@@ -30,12 +33,9 @@ package com.fashionapp.DAO
 			stmt1.execute();
 			
 			var result:SQLResult = stmt1.getResult();
-			if (result != null){
-				Parser.parseContactList(result);
+			if (result != null) {
+				Parser.parseContactList(result.data);
 			}
-			
-			getAllCurrentChats();
-			
 		}
 		
 		private var chat:ChatData;
@@ -76,7 +76,7 @@ package com.fashionapp.DAO
 		}
 		
 		
-		private function getAllCurrentChats(username:String=""):void {
+		public function getAllCurrentChats(username:String=""):void {
 			var stmt1:SQLStatement = new SQLStatement();
 			stmt1.text = "SELECT * FROM Chat";
 			stmt1.sqlConnection = BuyerAppModelLocator.getInstance().dbConn;
@@ -86,7 +86,7 @@ package com.fashionapp.DAO
 			
 			var result:SQLResult = stmt1.getResult();
 			if (result != null){
-				Parser.parseChatsList(result);
+				Parser.parseChatsList(result.data);
 			}
 		}
 		

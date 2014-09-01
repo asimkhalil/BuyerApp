@@ -16,11 +16,11 @@ package com.fashionapp.Parser
 		/**
 		* Parse login data
 		*/
-		public static function parseLoginData(results:SQLResult):LoginData{
+		public static function parseLoginData(results:Array):LoginData{
 			var ld:LoginData = new LoginData();
-			var arrLoginData:Array =  results.data;
+			var arrLoginData:Array =  results;
 			
-			ld.id = arrLoginData[0].groupID;
+			ld.id = arrLoginData[0].id;
 			ld.code = arrLoginData[0].code;
 			ld.userName = arrLoginData[0].username;
 			ld.fullName = arrLoginData[0].fullname;
@@ -32,10 +32,10 @@ package com.fashionapp.Parser
 		}
 		
 		
-		public static function parseContactList(results:SQLResult):void{
-			var arrLoginData:Array =  results.data;
+		public static function parseContactList(results:Array):void {
+			var arrLoginData:Array =  results;
 			
-			for(var i:int=0;i < arrLoginData.length; i++){
+			for(var i:int=0;i < arrLoginData.length; i++) {
 				var ld:LoginData = new LoginData();
 				ld.id = arrLoginData[i].id;
 				ld.code = arrLoginData[i].code;
@@ -44,16 +44,36 @@ package com.fashionapp.Parser
 				ld.email = arrLoginData[i].email;
 				ld.tel = arrLoginData[i].tel;
 				ld.status = arrLoginData[i].statusID;
-				if(ld.id != BuyerAppModelLocator.getInstance().loginData.id){
+				ld.groupID = Number(arrLoginData[i].group_id);
+				if(ld.id != BuyerAppModelLocator.getInstance().loginData.id) {
 					BuyerAppModelLocator.getInstance().users.addItem(ld)
 				}
+				
+				if(ld.groupID == 1) {
+					BuyerAppModelLocator.getInstance().usersBuyer.addItem(ld);
+				}
+				
+				if(ld.groupID == 2) {
+					BuyerAppModelLocator.getInstance().usersStaff.addItem(ld);
+				}
+				
+				if(ld.groupID == 3) {
+					BuyerAppModelLocator.getInstance().usersVip.addItem(ld);
+				}
 			}
+			
+			BuyerAppModelLocator.getInstance().usersBuyer.refresh();
+		
+			BuyerAppModelLocator.getInstance().usersStaff.refresh();
+		
+			BuyerAppModelLocator.getInstance().usersVip.refresh();
+			
 			FlexGlobals.topLevelApplication.dispatchEvent(new Event('ContactListRecieved',true));
 		}
 		
 		
-		public static function parseChatsList(results:SQLResult):void {
-			var arrChats:Array =  results.data;
+		public static function parseChatsList(results:Array):void {
+			var arrChats:Array =  results;
 			if(arrChats){
 				for(var i:int=0;i < arrChats.length; i++){
 					var chat:ChatData = new ChatData();
@@ -62,7 +82,7 @@ package com.fashionapp.Parser
 					chat.type = arrChats[i].type;
 					chat.content = arrChats[i].content;
 					chat.statusId = arrChats[i].statusID;
-					chat.createdBy = arrChats[i].createdBy;
+					chat.createdBy = arrChats[i].createBy;
 					chat.createDate = arrChats[i].createDate;
 					chat.lastUpdate = arrChats[i].lastUpdate;
 					chat.lastSync = arrChats[i].lastSync;
@@ -111,7 +131,7 @@ package com.fashionapp.Parser
 					chat.type = arrChats[i].type;
 					chat.content = arrChats[i].content;
 					chat.statusId = arrChats[i].statusID;
-					chat.createdBy = arrChats[i].createdBy;
+					chat.createdBy = arrChats[i].createBy;
 					chat.createDate = arrChats[i].createDate;
 					chat.lastUpdate = arrChats[i].lastUpdate;
 					chat.lastSync = arrChats[i].lastSync;

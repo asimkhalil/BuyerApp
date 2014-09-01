@@ -4,13 +4,17 @@ package com.fashionapp.controllers
 	import com.fashionapp.events.IntimateForNewChatMessagesForMeEvent;
 	import com.fashionapp.model.BuyerAppModelLocator;
 	import com.fashionapp.model.ChatData;
+	import com.fashionapp.model.LoginData;
 	import com.fashionapp.network.Network;
+	import com.fashionapp.views.ChatView;
 	
 	import flash.events.Event;
 	import flash.utils.setTimeout;
 	
 	import mx.collections.ArrayCollection;
 	import mx.core.FlexGlobals;
+	
+	import spark.events.TextOperationEvent;
 
 	public class ChatViewController extends BaseController
 	{
@@ -19,6 +23,62 @@ package com.fashionapp.controllers
 			super();
 		}
 		
+		public function search_changeHandler(event:TextOperationEvent):void
+		{
+			BuyerAppModelLocator.getInstance().usersBuyer.filterFunction = filterChatContacts;
+			BuyerAppModelLocator.getInstance().usersBuyer.refresh();
+			
+			BuyerAppModelLocator.getInstance().usersStaff.filterFunction = filterChatContacts;
+			BuyerAppModelLocator.getInstance().usersStaff.refresh();
+			
+			BuyerAppModelLocator.getInstance().usersVip.filterFunction = filterChatContacts;
+			BuyerAppModelLocator.getInstance().usersVip.refresh();
+		}
+		
+		private function filterChatContacts(item:Object):Boolean 
+		{
+			if(String(item.fullName).toLowerCase().indexOf((view as ChatView).txt_search.text.toLowerCase()) >= 0) 
+			{
+				return true;
+			}
+			return false;
+		}
+		
+		public function filterChatMsgs():void{
+			var chatList:ArrayCollection = new ArrayCollection();
+			for each(var chats:ArrayCollection in BuyerAppModelLocator.getInstance().chatCollection){
+				var chat:ChatData = chats.getItemAt(chats.length-1) as ChatData;
+				if(chat.createdBy != BuyerAppModelLocator.getInstance().loginData.id){
+					for each(var login:LoginData in BuyerAppModelLocator.getInstance().users){
+						if(login.id == chat.createdBy){
+							var obj:Object = new Object();
+							obj.name = login.fullName;
+							obj.message = chat.content;
+							obj.type = chat.type;
+							obj.time = chat.createDate;
+							obj.id = chat.toUserId;
+							chatList.addItem(obj);
+						}
+					}
+				}else{
+					for each(var login1:LoginData in BuyerAppModelLocator.getInstance().users){
+						if(login1.id == chat.toUserId){
+							var obj1:Object = new Object();
+							obj1.name = login1.fullName;
+							obj1.message = chat.content;
+							obj1.type = chat.type;
+							obj1.time = chat.createDate;
+							obj1.id = chat.createdBy;
+							chatList.addItem(obj1);
+						}
+					}
+				}
+			}
+			
+			(view as ChatView).chatList.dataProvider = chatList;
+			
+			(view as ChatView).chatList.visible = true;
+		}
 		public function creationCompleteHandler():void 
 		{
 			/*addListeners();*/

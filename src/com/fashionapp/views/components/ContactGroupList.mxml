@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:List xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		xmlns:s="library://ns.adobe.com/flex/spark">
+	<fx:Script>
+		<![CDATA[
+			import mx.collections.ArrayCollection;
+			private var _dp:ArrayCollection;
+			
+			private var _groupId:int = 0;
+			
+			public function set dp(col:ArrayCollection):void 
+			{
+				
+			}
+		]]>
+	</fx:Script>
+</s:List>

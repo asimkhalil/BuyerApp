@@ -10,6 +10,7 @@ package com.fashionapp.model
 		private var _email:String = "";
 		private var _code:String = "";
 		private var _status:String = "";
+		public var groupID:Number;
 
 		public function get status():String
 		{

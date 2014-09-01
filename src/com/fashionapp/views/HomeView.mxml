@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <s:View xmlns:fx="http://ns.adobe.com/mxml/2009" 
 		xmlns:s="library://ns.adobe.com/flex/spark" title="{resourceManager.getString('resources','hometitle')}"
-		skinClass="assets.images.CustomViewSkin"
+		skinClass="assets.images.CustomViewSkin" xmlns:controllers="com.fashionapp.controllers.*"
+		creationComplete="{controller.creationCompleteHandler();}" 
 		actionBarVisible="false" xmlns:views="com.fashionapp.views.*">
 	<fx:Declarations>
+		<!-- add by jack -->
 		<!-- Place non-visual elements (e.g., services, value objects) here -->
+		<controllers:HomeViewController id="controller" view="{this}"/>
 	</fx:Declarations>
 	<fx:Script>
 		<![CDATA[
