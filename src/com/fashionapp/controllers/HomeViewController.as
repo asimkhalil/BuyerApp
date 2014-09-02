@@ -71,9 +71,9 @@ package com.fashionapp.controllers
 			
 			var dc:DaoChat = new DaoChat();
 			if(Network.checkInterNetAvailability() == true){
-				dc.getContactsFromDB();
+				//dc.getContactsFromDB();
 			}else{
-				dc.getContactsFromDB();
+				//dc.getContactsFromDB();
 			}
 		}
 		

@@ -111,13 +111,12 @@ package com.fashionapp.controllers
 		}
 		
 		private function contactsRecieved(event:Event):void {
-			view.removeEventListener(APIEvent.API_COMPLETE, onLoginComplete);
 			BuyerAppModelLocator.getInstance().users.refresh();
 			
 			if(Network.checkInterNetAvailability() == true) {
 				var urlVariable:URLVariables  = new URLVariables;
 				urlVariable.last_update = "2014-01-01 00:00:00";
-				view.addEventListener(APIEvent.API_COMPLETE, function(event:APIEvent):void {
+				view.addEventListener(APIEvent.API_COMPLETE_CHATS, function(event:APIEvent):void {
 					var results:Array = event.data.chat;
 					Parser.parseChatsList(results);
 				});
@@ -194,7 +193,6 @@ package com.fashionapp.controllers
 		
 		public function onLoginComplete(e:APIEvent):void 
 		{
-			view.removeEventListener(APIEvent.API_COMPLETE, onLoginComplete);
 			var status:String = e.data.status;	
 			toast(status);
 			if(status == "OK") {
@@ -212,8 +210,7 @@ package com.fashionapp.controllers
 				if(Network.checkInterNetAvailability() == true) {
 					var urlVariable:URLVariables  = new URLVariables;
 					urlVariable.last_update = "2014-01-01 00:00:00";
-					view.addEventListener(APIEvent.API_COMPLETE, function(event:APIEvent):void {
-						view.removeEventListener(APIEvent.API_COMPLETE, function(event:APIEvent):void{});
+					view.addEventListener(APIEvent.API_COMPLETE_CONTACTS, function(event:APIEvent):void {
 						if(event.data.users != undefined) {
 							var results:Array = event.data.users;
 							Parser.parseContactList(results);

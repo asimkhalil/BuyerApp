@@ -12,11 +12,15 @@ package com.fashionapp.DAO
 	import flash.data.SQLConnection;
 	import flash.data.SQLResult;
 	import flash.data.SQLStatement;
+	import flash.display.DisplayObject;
 	import flash.events.SQLErrorEvent;
 	import flash.events.SQLEvent;
 	import flash.filesystem.File;
 	import flash.filesystem.FileMode;
 	import flash.net.URLVariables;
+	
+	import mx.charts.chartClasses.NumericAxis;
+	import mx.core.FlexGlobals;
 
 	public class DaoChat
 	{
@@ -93,7 +97,7 @@ package com.fashionapp.DAO
 		public function getChatsForMe():void {
 			var stmt1:SQLStatement = new SQLStatement();
 			var myUserId:Number = BuyerAppModelLocator.getInstance().loginData.id;
-			stmt1.text = "SELECT * FROM Chat";// WHERE toUserID="+BuyerAppModelLocator.getInstance().loginData.id;
+			stmt1.text = "SELECT * FROM Chat";
 			stmt1.sqlConnection = BuyerAppModelLocator.getInstance().dbConn;
 			stmt1.addEventListener(SQLEvent.RESULT, openHandler);
 			stmt1.addEventListener(SQLErrorEvent.ERROR, errorHandler);
@@ -102,6 +106,56 @@ package com.fashionapp.DAO
 			var result:SQLResult = stmt1.getResult();
 			if (result != null){
 				Parser.parseChatMessagesForMeList(result);
+			}
+		}
+		
+		
+		public function updateServer():void {
+			var recordsToSyncOnLiveServer:Array = getRecordsNeededToSyncOnLiveServer("Chat");
+			
+			var rowCount:int = 0;
+			
+			/*function syncRowWithServer():void {
+				var urlVariables:URLVariables = new URLVariables();
+				urlVariables.session_id;
+				urlVariables.chat_id;
+				urlVariables.to_user;
+				urlVariables.session_id;
+				Network.call_API(FlexGlobals.topLevelApplication as DisplayObject,'send_chat')
+			}*/
+		}
+		
+		public function getRecordsNeededToSyncOnLiveServer(table:String):Array {
+			var stmt1:SQLStatement = new SQLStatement();
+			stmt1.text = "SELECT * FROM "+table+" WHERE lastSync IS NULL";
+			stmt1.sqlConnection = BuyerAppModelLocator.getInstance().dbConn;
+			stmt1.addEventListener(SQLEvent.RESULT, openHandler);
+			stmt1.addEventListener(SQLErrorEvent.ERROR, errorHandler);
+			stmt1.execute();
+			
+			var result:SQLResult = stmt1.getResult();
+			if (result != null){
+				return result.data;
+			}
+			return [];
+		}
+		
+		
+		private function updateLastSyncTime(table:String,rowId:Number):void {
+			var stmt1:SQLStatement = new SQLStatement();
+			var uniqueId:int = DBUtils.getUniqueID();
+			
+			var now:String = BasicUtil.convertToSQLTimeStamp(new Date());
+			
+			stmt1.text = "update Chat set lastSync='"+now+"' where id=" + rowId;
+			stmt1.sqlConnection = BuyerAppModelLocator.getInstance().dbConn;
+			stmt1.addEventListener(SQLEvent.RESULT, openHandler);
+			stmt1.addEventListener(SQLErrorEvent.ERROR, errorHandler);
+			stmt1.execute();
+			
+			var result:SQLResult = stmt1.getResult();
+			if (result != null){
+				trace(result);
 			}
 		}
 		

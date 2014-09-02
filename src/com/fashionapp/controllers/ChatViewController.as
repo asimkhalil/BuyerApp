@@ -45,6 +45,7 @@ package com.fashionapp.controllers
 		}
 		
 		public function filterChatMsgs():void{
+			new DaoChat().getRecordsNeededToSyncOnLiveServer('Chat');
 			var chatList:ArrayCollection = new ArrayCollection();
 			for each(var chats:ArrayCollection in BuyerAppModelLocator.getInstance().chatCollection){
 				var chat:ChatData = chats.getItemAt(chats.length-1) as ChatData;
