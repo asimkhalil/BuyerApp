@@ -7,6 +7,18 @@
 		<![CDATA[
 			import com.fashionapp.model.LoginData;
 			import com.fashionapp.utils.BasicUtil;
+			
+			private function getGroupLabel():String {
+				if(data.groupID == 1) {
+					return 'Buyer';
+				}
+				
+				if(data.groupID == 2) {
+					return 'Staff';
+				}
+				
+				return 'VIP';
+			}
 		]]>
 	</fx:Script>
 	<s:states>
@@ -24,7 +36,7 @@
 			<s:layout>
 				<s:VerticalLayout gap="0"/>
 			</s:layout>
-			<s:Label text="{(data as LoginData).fullName}" 
+			<s:Label text="{(data as LoginData).fullName + ' - '+getGroupLabel()}" 
 					 width="100%" paddingLeft="{BasicUtil.getComponentPadding(24)}"
 					 paddingTop="{BasicUtil.getComponentPadding(20)}" paddingBottom="{BasicUtil.getComponentPadding(20)}"
 					 styleName="viewheader"
