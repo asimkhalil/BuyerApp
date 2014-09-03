@@ -13,6 +13,7 @@ package com.fashionapp.DAO
 	import flash.data.SQLResult;
 	import flash.data.SQLStatement;
 	import flash.display.DisplayObject;
+	import flash.events.Event;
 	import flash.events.SQLErrorEvent;
 	import flash.events.SQLEvent;
 	import flash.filesystem.File;
@@ -26,6 +27,7 @@ package com.fashionapp.DAO
 	{
 		public function DaoChat()
 		{
+			FlexGlobals.topLevelApplication.addEventListener(APIEvent.API_SEND_CHAT,sendCompleteHandler);
 		}
 		
 		public function getContactsFromDB():void{
@@ -43,14 +45,17 @@ package com.fashionapp.DAO
 		}
 		
 		private var chat:ChatData;
+		private var recordsToBeSync:Array;
+		private var currentIndex:int = 0;
+		
 		public function sendChat(chat:ChatData):void{
 			this.chat = chat;
 			var stmt1:SQLStatement = new SQLStatement();
 			var uniqueId:int = DBUtils.getUniqueID();
 			
 			var createdDate:String = BasicUtil.convertToSQLTimeStamp(chat.createDate);
-			
-			stmt1.text = "INSERT INTO Chat(id,toUserID,type, content,statusID,createBy,createDate,lastUpdate) VALUES("+uniqueId+","+chat.toUserId+",'"+chat.type+"','"+chat.content+"',"+chat.statusId+","+chat.createdBy+",'"+createdDate+"','"+createdDate+"')";
+			chat.id = Network.app_key+"-"+ new Date().time;
+			stmt1.text = "INSERT INTO Chat(id,toUserID,type, content,statusID,createBy,createDate,lastUpdate,lastSync) VALUES('"+chat.id+"',"+chat.toUserId+",'"+chat.type+"','"+chat.content+"',"+chat.statusId+","+chat.createdBy+",'"+createdDate+"','"+createdDate+"','"+createdDate+"')";
 			stmt1.sqlConnection = BuyerAppModelLocator.getInstance().dbConn;
 			stmt1.addEventListener(SQLEvent.RESULT, openHandler);
 			stmt1.addEventListener(SQLErrorEvent.ERROR, errorHandler);
@@ -58,7 +63,33 @@ package com.fashionapp.DAO
 			
 			var result:SQLResult = stmt1.getResult();
 			if (result != null){
-				trace(result);
+				if(Network.checkInterNetAvailability() == true) {
+					recordsToBeSync = getRecordsNeededToSyncOnLiveServer('Chat');
+					currentIndex = 0;
+					if(recordsToBeSync){
+						chat = recordsToBeSync[currentIndex] as ChatData;
+						sendChatToServer(chat);
+					}
+				}
+			}
+		}
+		
+		private function sendChatToServer(chat:ChatData):void{
+			var urlVariable:URLVariables  = new URLVariables;
+			urlVariable.session_id = Network.session_id;
+			urlVariable.chat_id  = chat.id;
+			urlVariable.to_user = chat.toUserId;
+			urlVariable.type = chat.type;
+			urlVariable.content = chat.content;
+			Network.call_API(null,"send_chat",urlVariable,"","get");
+		}
+		
+		private function sendCompleteHandler(event:Event):void{
+			updateLastSyncTime('Chat',chat.id);
+			currentIndex++;
+			if(currentIndex > recordsToBeSync.length){
+				chat = recordsToBeSync[currentIndex] as ChatData;
+				sendChatToServer(chat);
 			}
 		}
 		
@@ -105,7 +136,7 @@ package com.fashionapp.DAO
 			
 			var result:SQLResult = stmt1.getResult();
 			if (result != null){
-				Parser.parseChatMessagesForMeList(result);
+//				Parser.parseChatMessagesForMeList(result);
 			}
 		}
 		
@@ -141,7 +172,7 @@ package com.fashionapp.DAO
 		}
 		
 		
-		private function updateLastSyncTime(table:String,rowId:Number):void {
+		private function updateLastSyncTime(table:String,rowId:String):void {
 			var stmt1:SQLStatement = new SQLStatement();
 			var uniqueId:int = DBUtils.getUniqueID();
 			
@@ -156,6 +187,37 @@ package com.fashionapp.DAO
 			var result:SQLResult = stmt1.getResult();
 			if (result != null){
 				trace(result);
+			}
+		}
+		
+		public function updateLocalDBChatRow(rowId:String,data:Object):void {
+			
+			var stmt1:SQLStatement = new SQLStatement();
+			stmt1.text = "SELECT * FROM Chat WHERE id="+rowId;
+			stmt1.sqlConnection = BuyerAppModelLocator.getInstance().dbConn;
+			stmt1.addEventListener(SQLEvent.RESULT, openHandler);
+			stmt1.addEventListener(SQLErrorEvent.ERROR, errorHandler);
+			stmt1.execute();
+			
+			var result:SQLResult = stmt1.getResult();
+			if (result != null){
+				if(result.data && result.data.length > 0) {
+					
+					//Update
+					
+				} else {
+					//add new record
+					var chatdata:ChatData = new ChatData();
+					chatdata.id = data.id;
+					chatdata.content = data.content;
+					chatdata.createDate = new Date();
+					chatdata.createdBy = data.create_by;
+					chatdata.lastSync = new Date();
+					chatdata.statusId = data.status_id;
+					chatdata.toUserId = data.to_user;
+					chatdata.type = data.type;
+					sendChat(chatdata);
+				}
 			}
 		}
 		

@@ -119,8 +119,8 @@ package com.fashionapp.Parser
 			return false;
 		}
 		
-		public static function parseChatMessagesForMeList(results:SQLResult):void{
-			var arrChats:Array =  results.data;
+		public static function parseChatMessagesForMeList(results:Array):void{
+			var arrChats:Array =  results;
 			
 			//var newChatMessagesForMe:ArrayCollection = new ArrayCollection();
 			if(arrChats){

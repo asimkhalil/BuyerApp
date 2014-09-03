@@ -111,7 +111,7 @@
 			//CursorManager.removeBusyCursor();			
 		}
 		/*******************************************************************/ 
-		private static function callComplete(event:Event):void{						
+		private static function callComplete(event:Event):void{      
 			myURLLoader.removeEventListener(IOErrorEvent.IO_ERROR,IOErrorHanlder);
 			myURLLoader.removeEventListener(SecurityErrorEvent.SECURITY_ERROR,SECURITY_ERRORHanlder);
 			myURLLoader.removeEventListener(Event.COMPLETE, callComplete);
@@ -123,13 +123,15 @@
 					objParent.dispatchEvent(new APIEvent(APIEvent.API_COMPLETE_CONTACTS, jsonResult));
 				} else if(jsonResult.chat != undefined) {
 					objParent.dispatchEvent(new APIEvent(APIEvent.API_COMPLETE_CHATS, jsonResult));
-				} else {
+				} else if(jsonResult.status == "OK" && jsonResult.username != undefined){
 					objParent.dispatchEvent(new APIEvent(APIEvent.API_COMPLETE, jsonResult));
+				}else {
+					FlexGlobals.topLevelApplication.dispatchEvent(new APIEvent(APIEvent.API_SEND_CHAT, jsonResult));
 				}
 			}
 			//Alert.show(objParent,com.adobe.serialization.jsonv2.JSON.decode(_data));
 			//CursorManager.removeBusyCursor();
-		}	
+		}
 		
 		/*************************  Check internet  ******************************************/
 		public static function startMonitor(){

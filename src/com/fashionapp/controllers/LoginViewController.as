@@ -139,14 +139,29 @@ package com.fashionapp.controllers
 		
 		public function checkNewMessageForMe():void {
 			
-			var dc:DaoChat = new DaoChat();
+			/*var dc:DaoChat = new DaoChat();
 			
 			if(Network.checkInterNetAvailability() == true){
 				
 			}else{
 				dc.getChatsForMe();
 			}
-			dc.getChatsForMe();
+			dc.getChatsForMe();*/
+			
+			if(Network.checkInterNetAvailability() == true) {
+				var urlVariable:URLVariables  = new URLVariables;
+				urlVariable.last_update = "2014-01-01 00:00:00";
+				view.addEventListener(APIEvent.API_COMPLETE_CHATS, function(event:APIEvent):void {
+					var results:Array = event.data.chat;
+					Parser.parseChatMessagesForMeList(results);
+					for(var i :int = 0 ; i < results.length ; i++){
+						var daoChat:DaoChat = new DaoChat();
+						daoChat.updateLocalDBChatRow(results[i].id,results[i]);
+					}
+					
+				});
+				Network.call_API(view as LoginView,"receive_chat",urlVariable,"","get");
+			}
 		}
 		
 		private function loginClickEventListener(event:LoginClickEvent):void
