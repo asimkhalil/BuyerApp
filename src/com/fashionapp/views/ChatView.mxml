@@ -17,6 +17,7 @@
 			import com.fashionapp.views.components.NewBrand;
 			
 			import mx.collections.ArrayCollection;
+			import mx.core.FlexGlobals;
 			import mx.managers.PopUpManager;
 			
 			import spark.events.TextOperationEvent;
@@ -42,6 +43,7 @@
 				chat.createdBy = BuyerAppModelLocator.getInstance().loginData.id;
 				chat.toUserId = (list.selectedItem as LoginData).id;
 				navigator.pushView(CurrentChatView,chat);
+				FlexGlobals.topLevelApplication.dispatchEvent(new Event("RetrieveChatMessages",true));
 			}
 			
 		]]>

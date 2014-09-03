@@ -25,13 +25,13 @@
 						 smooth="true"/>
 			</s:HGroup>
 			<s:HGroup height="100%" width="100%" paddingBottom="20">
-				<s:Label  text="{data.message}" includeInLayout="{data.type == 'text'}" width="100%"
-						  visible="{data.type == 'text'}"
+				<s:Label  text="{data.message}" includeInLayout="{String(data.type).toUpperCase() == 'TEXT'}" width="100%"
+						  visible="{data.type == 'TEXT'}"
 						  styleName="viewheading"
 						  color="0xCCCCCC"
 						  fontSize="{BasicUtil.getFontSize(26)}"/>
-				<s:Image height="{BasicUtil.getComponentHeight(60)}" width="{BasicUtil.getComponentHeight(60)}"
-						 source="{Base64.decodeToByteArray(data.message)}" includeInLayout="{data.type == 'image'}" visible="{data.type == 'image'}"/>
+				<!--<s:Image height="{BasicUtil.getComponentHeight(60)}" width="{BasicUtil.getComponentHeight(60)}"
+						 source="{Base64.decodeToByteArray(data.content)}" includeInLayout="{data.type == 'IMAGE'}" visible="{data.type == 'image'}"/>-->
 			</s:HGroup>
 		</s:VGroup>
 		<!--<s:BorderContainer height="100%" width="{BasicUtil.getComponentHeight(100)}"

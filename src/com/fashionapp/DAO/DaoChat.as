@@ -114,6 +114,10 @@ package com.fashionapp.DAO
 				BuyerAppModelLocator.getInstance().chat = toChatData(BuyerAppModelLocator.getInstance().recordsToBeSync[BuyerAppModelLocator.getInstance().currentIndex]);
 				sendChatToServer(BuyerAppModelLocator.getInstance().chat);
 			}
+			else 
+			{
+				FlexGlobals.topLevelApplication.dispatchEvent(new Event("RetrieveChatMessages",true));
+			}
 		}
 		
 		public function getAllCurrentChats(username:String=""):void {

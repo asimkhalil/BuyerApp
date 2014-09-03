@@ -53,10 +53,31 @@
 		[Bindable]  
 		private static var isOnline: Boolean = true;
 
+		private static var _waitingForResponse:Boolean = false;
+		
+		private static var _serviceQueue:Array = [];
+		
 		public static function call_API(parentObj:DisplayObject,api_name:String,
-										variables:URLVariables,file:String="",method:String = "post"):void{
+										variables:URLVariables,file:String="",method:String = "post"):void {
+			
+			if(!_waitingForResponse) 
+			{
+				_waitingForResponse = true;	
+			}
+			else 
+			{
+				var serviceData:Object = {};
+				serviceData.parentObject = parentObj;
+				serviceData.api_name = api_name;
+				serviceData.variables = variables;
+				serviceData.file = file;
+				serviceData.method = method;
+				_serviceQueue.push(serviceData);	
+				return;
+			}
+			
 			objParent = parentObj;
-			//CursorManager.setBusyCursor();
+			CursorManager.setBusyCursor();
 			var myVariables:URLVariables = new URLVariables();
 			myVariables = variables;
 			myURLRequest = new URLRequest();
@@ -105,7 +126,7 @@
 			
 			objParent.dispatchEvent(new APIEvent(APIEvent.API_ERROR));			
 			//Alert.show(objParent,event.target.data);
-			//CursorManager.removeBusyCursor();			
+			CursorManager.removeBusyCursor();			
 		}
 		/*******************************************************************/ 
 		private static function SECURITY_ERRORHanlder(event:Event):void{						
@@ -115,10 +136,11 @@
 			
 			objParent.dispatchEvent(new APIEvent(APIEvent.API_ERROR));			
 			//Alert.show(objParent,event.target.data);
-			//CursorManager.removeBusyCursor();			
+			CursorManager.removeBusyCursor();			
 		}
 		/*******************************************************************/ 
-		private static function callComplete(event:Event):void{						
+		private static function callComplete(event:Event):void {	
+			CursorManager.removeBusyCursor();	
 			myURLLoader.removeEventListener(IOErrorEvent.IO_ERROR,IOErrorHanlder);
 			myURLLoader.removeEventListener(SecurityErrorEvent.SECURITY_ERROR,SECURITY_ERRORHanlder);
 			myURLLoader.removeEventListener(Event.COMPLETE, callComplete);
@@ -145,11 +167,19 @@
 				else {
 					objParent.dispatchEvent(new APIEvent(APIEvent.API_COMPLETE, jsonResult));
 				}
+				
+				_waitingForResponse = false;
+				
+				if(_serviceQueue.length > 0) 
+				{
+					var serviceData:Object = _serviceQueue.pop();
+					call_API(serviceData.parentObject,serviceData.api_name,serviceData.variables,serviceData.file,serviceData.method);
+				}
 			}
 		}	
 		
 		/*************************  Check internet  ******************************************/
-		public static function startMonitor(){
+		public static function startMonitor():void {
 			monitor = new URLMonitor( new URLRequest('http://www.google.com/')); 
 			monitor.addEventListener(StatusEvent.STATUS,announceStatus); 
 			monitor.start(); 

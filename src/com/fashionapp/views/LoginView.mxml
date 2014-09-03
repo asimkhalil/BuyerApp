@@ -38,13 +38,14 @@
 						 id="txt_username"
 						 styleName="viewtext"
 						 fontSize="{BasicUtil.getFontSize(26)}"
-						 height="{BasicUtil.getComponentHeight(60)}"/>
+						 height="{BasicUtil.getComponentHeight(60)}"
+						 needsSoftKeyboard="true"/>
 			<s:TextInput width="95%" prompt="{resourceManager.getString('resources','password')}" displayAsPassword="true"
-					
 						 id="txt_password"
 						 styleName="viewtext"
 						 fontSize="{BasicUtil.getFontSize(26)}"
-						 height="{BasicUtil.getComponentHeight(60)}"/>
+						 height="{BasicUtil.getComponentHeight(60)}"
+						 needsSoftKeyboard="true"/>
 			<s:VGroup width="100%" horizontalAlign="center"
 					  gap="25">
 				<s:Button label="{resourceManager.getString('resources','login')}" click="controller.doLogin(txt_username.text,txt_password.text)"

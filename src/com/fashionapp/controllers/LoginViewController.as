@@ -27,6 +27,7 @@ package com.fashionapp.controllers
 	import flash.filesystem.File;
 	import flash.net.URLVariables;
 	import flash.utils.Timer;
+	import flash.utils.setTimeout;
 	
 	import mx.collections.ArrayCollection;
 	import mx.core.FlexGlobals;
@@ -90,13 +91,7 @@ package com.fashionapp.controllers
 			var destination:File = File.applicationStorageDirectory.resolvePath(Utils.db_path);
 		}
 		
-		private function startTimerForRecievingChats():void{
-			var t:Timer = new Timer(10000);
-			t.addEventListener(TimerEvent.TIMER,chatCheckHandler);
-			//t.start();
-		}
-		
-		private function chatCheckHandler(event:TimerEvent):void{
+		private function startTimerForRecievingChats():void {
 			listenForNewMessage();
 		}
 		
@@ -114,7 +109,6 @@ package com.fashionapp.controllers
 				FlexGlobals.topLevelApplication.addEventListener('ChatListRecieved',chatListRecieved,false,0,true);
 			}
 			
-			
 			//add by JACK--------------------
 			if(FlexGlobals.topLevelApplication.hasEventListener('CheckAppKey')==false) {
 				FlexGlobals.topLevelApplication.addEventListener('CheckAppKey',CheckAppKeyRecieved,false,0,true);
@@ -123,6 +117,10 @@ package com.fashionapp.controllers
 			
 			if(FlexGlobals.topLevelApplication.hasEventListener(IntimateForNewChatMessagesForMeEvent.INTIMATE_FOR_NEW_MESSAGES)==false) {
 				FlexGlobals.topLevelApplication.addEventListener(IntimateForNewChatMessagesForMeEvent.INTIMATE_FOR_NEW_MESSAGES,chatMessagesForMeListRecieved,false,0,true);
+			}
+			
+			if(FlexGlobals.topLevelApplication.hasEventListener("RetrieveChatMessages")==false) {
+				FlexGlobals.topLevelApplication.addEventListener("RetrieveChatMessages",checkNewMessageForMe,false,0,true);
 			}
 		}
 		
@@ -137,38 +135,26 @@ package com.fashionapp.controllers
 		private function contactsRecieved(event:Event):void {
 			BuyerAppModelLocator.getInstance().users.refresh();
 			startTimerForRecievingChats();
-			/*if(Network.checkInterNetAvailability() == true) {
-				var urlVariable:URLVariables  = new URLVariables;
-				urlVariable.last_update = "2014-01-01 00:00:00";
-				view.addEventListener(APIEvent.API_COMPLETE_CHATS, function(event:APIEvent):void {
-					var results:Array = event.data.chat;
-					Parser.parseChatMessagesForMeList(results);
-				});
-				Network.call_API(view as LoginView,"receive_chat",urlVariable,"","get");
-			} else {
-				var dc:DaoChat = new DaoChat();
-				dc.getAllCurrentChats();
-			}*/
 		}
 		
 		private function chatMessagesForMeListRecieved(event:IntimateForNewChatMessagesForMeEvent):void {
-			/*if(event.newChatMessages.length > 0) {
-				//New chat messages are available		
-				var newMessages:ArrayCollection = new ArrayCollection(event.newChatMessages.source);
-				//intimate Views for new messages
-				FlexGlobals.topLevelApplication.dispatchEvent(new Event("NEW_MESSAGES_ARRIVED",true));
-			}*/
 			FlexGlobals.topLevelApplication.dispatchEvent(new Event("NEW_MESSAGES_ARRIVED",true));
 		}
 		
-		public function checkNewMessageForMe():void {
+		public function checkNewMessageForMe(event:Event = null):void {
 			
 			var dc:DaoChat = new DaoChat();
 			
 			if(Network.checkInterNetAvailability() == true){
 				var urlVariable:URLVariables  = new URLVariables;
 				urlVariable.last_update = "2014-01-01 00:00:00";
-				view.addEventListener(APIEvent.API_COMPLETE_CHATS, function(event:APIEvent):void {
+				
+				
+				if(view.hasEventListener(APIEvent.API_COMPLETE_CHATS)==false) {
+					view.addEventListener(APIEvent.API_COMPLETE_CHATS, onChatMessagesComplete);
+				}
+				
+				function onChatMessagesComplete(event:APIEvent):void {
 					var results:Array = event.data.chat;
 					if(results && results.length > 0) {
 						Parser.parseChatMessagesForMeList(results);
@@ -176,9 +162,11 @@ package com.fashionapp.controllers
 							var daoChat:DaoChat = new DaoChat();
 							daoChat.updateLocalDBChatRow(results[i].id,results[i]);
 						}
+						
+						setTimeout(checkNewMessageForMe,20000);
 					}
-					
-				});
+				}
+				
 				Network.call_API(view as LoginView,"receive_chat",urlVariable,"","get");
 				
 			}else{
@@ -249,14 +237,21 @@ package com.fashionapp.controllers
 				var dc:DaoChat = new DaoChat();
 				if(Network.checkInterNetAvailability() == true) {
 					var urlVariable:URLVariables  = new URLVariables;
+					
 					urlVariable.last_update = "2014-01-01 00:00:00";
-					view.addEventListener(APIEvent.API_COMPLETE_CONTACTS, function(event:APIEvent):void {
-						//view.removeEventListener(APIEvent.API_COMPLETE_CONTACTS, function(event:APIEvent):void{});
+					
+					if(view.hasEventListener(APIEvent.API_COMPLETE_CONTACTS)==false) 
+					{
+						view.addEventListener(APIEvent.API_COMPLETE_CONTACTS,onContactsRecievedHandler);
+					}
+					
+					function onContactsRecievedHandler(event:APIEvent):void {
 						if(event.data.users != undefined) {
 							var results:Array = event.data.users;
 							Parser.parseContactList(results);
 						}
-					});
+					}
+					
 					Network.call_API(view as LoginView,"contact",urlVariable,"","get");
 				}else{
 					dc.getContactsFromDB();
