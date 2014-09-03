@@ -53,6 +53,11 @@ package com.fashionapp.model
 		[Bindable]
 		public var chatMessagesForMe:ArrayCollection = new ArrayCollection();
 		
+		
+		public var chat:ChatData;
+		public var recordsToBeSync:Array;
+		public var currentIndex:int = 0;
+		
 		public var dbConn:SQLConnection;
 		public var dataFile:File  = new File();
 		

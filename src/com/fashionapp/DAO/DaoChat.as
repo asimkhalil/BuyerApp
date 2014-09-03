@@ -26,13 +26,15 @@ package com.fashionapp.DAO
 
 	public class DaoChat
 	{
-		private var chat:ChatData;
+		/*private var chat:ChatData;
 		private var recordsToBeSync:Array;
-		private var currentIndex:int = 0;
+		private var currentIndex:int = 0;*/
 		
 		public function DaoChat()
 		{
-			FlexGlobals.topLevelApplication.addEventListener(APIEvent.API_SEND_CHAT,sendCompleteHandler);
+			if(FlexGlobals.topLevelApplication.hasEventListener(APIEvent.API_SEND_CHAT)==false) {
+				FlexGlobals.topLevelApplication.addEventListener(APIEvent.API_SEND_CHAT,sendCompleteHandler);
+			}
 		}
 		
 		public function getContactsFromDB():void{
@@ -49,16 +51,15 @@ package com.fashionapp.DAO
 			}
 		}
 		
-		public function sendChat(chat:ChatData):void{
-			this.chat = chat;
+		public function sendChat(chat:ChatData):void {
+			// step 1: make chat row new entry in data base with last sync untouch
+			BuyerAppModelLocator.getInstance().chat = chat;
 			var stmt1:SQLStatement = new SQLStatement();
-			/*var uniqueId:int = DBUtils.getUniqueID();*/
 			
 			var createdDate:String = BasicUtil.convertToSQLTimeStamp(chat.createDate);
-			if(!chat.id && chat.id == "") {
-				chat.id = Network.app_key+"-"+ new Date().time;
-			}
-			stmt1.text = "INSERT INTO Chat(id,toUserID,type, content,statusID,createBy,createDate,lastUpdate,lastSync) VALUES('"+chat.id+"',"+chat.toUserId+",'"+chat.type+"','"+chat.content+"',"+chat.statusId+","+chat.createdBy+",'"+createdDate+"','"+createdDate+"','"+createdDate+"')";
+			chat.id = DBUtils.getUniqueID();
+			
+			stmt1.text = "INSERT INTO Chat(id,toUserID,type, content,statusID,createBy,createDate,lastUpdate) VALUES('"+chat.id+"',"+chat.toUserId+",'"+chat.type+"','"+chat.content+"',"+chat.statusId+","+chat.createdBy+",'"+createdDate+"','"+createdDate+"')";
 			stmt1.sqlConnection = BuyerAppModelLocator.getInstance().dbConn;
 			stmt1.addEventListener(SQLEvent.RESULT, openHandler);
 			stmt1.addEventListener(SQLErrorEvent.ERROR, errorHandler);
@@ -67,35 +68,52 @@ package com.fashionapp.DAO
 			var result:SQLResult = stmt1.getResult();
 			if (result != null) {
 				if(Network.checkInterNetAvailability() == true) {
-					recordsToBeSync = getRecordsNeededToSyncOnLiveServer('Chat');
-					currentIndex = 0;
-					if(recordsToBeSync){
-						chat = recordsToBeSync[currentIndex] as ChatData;
-						sendChatToServer(chat);
+					//Step 2: get all records from local data base which are required to be sent on live server have no sync.
+					BuyerAppModelLocator.getInstance().recordsToBeSync = getRecordsNeededToSyncOnLiveServer('Chat');
+					BuyerAppModelLocator.getInstance().currentIndex = 0;
+					if(BuyerAppModelLocator.getInstance().recordsToBeSync){
+						BuyerAppModelLocator.getInstance().chat = toChatData(BuyerAppModelLocator.getInstance().recordsToBeSync[BuyerAppModelLocator.getInstance().currentIndex]);
+						//step 3: send all record to live server one by one
+						sendChatToServer(BuyerAppModelLocator.getInstance().chat);
 					}
 				}
 			}
 		}
 		
+		private function toChatData(obj:Object):ChatData {
+			var chat:ChatData = new ChatData();
+			chat.content = obj.content;
+			chat.createDate = obj.createDate;
+			chat.createdBy = obj.createdBy;
+			chat.id = obj.id;
+			chat.lastSync = obj.lastSync;
+			chat.lastUpdate = obj.lastUpdate;
+			chat.statusId = obj.statusID;
+			chat.toUserId = obj.toUserID;
+			chat.type = obj.type;
+			return chat;
+		}
+		
 		private function sendChatToServer(chat:ChatData):void{
-			var urlVariable:URLVariables  = new URLVariables;
-			urlVariable.session_id = Network.session_id;
-			urlVariable.chat_id  = chat.id;
-			urlVariable.to_user = chat.toUserId;
-			urlVariable.type = chat.type;
-			urlVariable.content = chat.content;
-			Network.call_API(null,"send_chat",urlVariable,"","get");
+			var param:URLVariables  = new URLVariables;
+			param.to_user = chat.toUserId;
+			param.chat_id =  chat.id;
+			param.type = 'TEXT';
+			param.content = chat.content;
+			param.session_id = Network.session_id;
+			Network.call_API(FlexGlobals.topLevelApplication as DisplayObject,"send_chat",param);
 		}
 		
 		private function sendCompleteHandler(event:Event):void{
-			if(chat) {
-				updateLastSyncTime('Chat',chat.id);
+			if(BuyerAppModelLocator.getInstance().chat) {
+				//Update last synched time in local db for the record you just synched on live server
+				updateLastSyncTime('Chat',BuyerAppModelLocator.getInstance().chat.id);
 			}
-			currentIndex++;
-			/*if(currentIndex > recordsToBeSync.length){
-			chat = recordsToBeSync[currentIndex] as ChatData;
-			sendChatToServer(chat);
-			}*/
+			BuyerAppModelLocator.getInstance().currentIndex++;
+			if(BuyerAppModelLocator.getInstance().currentIndex < BuyerAppModelLocator.getInstance().recordsToBeSync.length){
+				BuyerAppModelLocator.getInstance().chat = toChatData(BuyerAppModelLocator.getInstance().recordsToBeSync[BuyerAppModelLocator.getInstance().currentIndex]);
+				sendChatToServer(BuyerAppModelLocator.getInstance().chat);
+			}
 		}
 		
 		public function getAllCurrentChats(username:String=""):void {
@@ -155,7 +173,7 @@ package com.fashionapp.DAO
 		}*/
 		
 		public function deleteChat(chat:ChatData):void{
-			this.chat = chat;
+			BuyerAppModelLocator.getInstance().chat = chat;
 			var stmt1:SQLStatement = new SQLStatement();
 			var uniqueId:String = DBUtils.getUniqueID();
 			
@@ -224,7 +242,7 @@ package com.fashionapp.DAO
 			
 			var now:String = BasicUtil.convertToSQLTimeStamp(new Date());
 			
-			stmt1.text = "update Chat set lastSync='"+now+"' where id=" + rowId;
+			stmt1.text = "update Chat set lastSync='"+now+"' where id='" + rowId+"'";
 			stmt1.sqlConnection = BuyerAppModelLocator.getInstance().dbConn;
 			stmt1.addEventListener(SQLEvent.RESULT, openHandler);
 			stmt1.addEventListener(SQLErrorEvent.ERROR, errorHandler);

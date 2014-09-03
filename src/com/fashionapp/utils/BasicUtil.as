@@ -1,8 +1,16 @@
 package com.fashionapp.utils
 {
+	import com.fashionapp.util.Base64;
+	
+	import flash.display.Bitmap;
+	import flash.display.BitmapData;
+	import flash.display.Loader;
+	import flash.events.Event;
+	import flash.geom.Matrix;
+	import flash.utils.ByteArray;
+	
 	import mx.core.FlexGlobals;
 	import mx.formatters.DateFormatter;
-	import com.fashionapp.util.Base64;
 
 	[Bindable]
 	public class BasicUtil

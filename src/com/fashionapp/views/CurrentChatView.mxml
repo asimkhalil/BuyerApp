@@ -12,10 +12,12 @@
 	</fx:Declarations>
 	<fx:Script>
 		<![CDATA[
+			import com.fashionapp.DAO.DaoImage;
 			import com.fashionapp.model.ChatData;
 			import com.fashionapp.renderers.ToMessageRenderer;
 			import com.fashionapp.util.Base64;
 			import com.fashionapp.utils.BasicUtil;
+			import com.fashionapp.utils.DBUtils;
 			
 			import mx.core.FlexGlobals;
 			
@@ -78,23 +80,74 @@
 				setImageContentToTextField(event.data.file.data);
 			}
 			
+			private function writeFileToLocal(bytes:ByteArray):void {
+				
+				var uniqueId:String = DBUtils.getUniqueID();
+				
+				var loader:Loader = new Loader();
+				
+				loader.contentLoaderInfo.addEventListener(Event.COMPLETE, function(event:Event):void {
+					
+					var content:* = loader.content;
+					
+					var scaleFactor:Number = 200/content.width;
+					
+					var scaledWidth:int = scaleFactor*content.width;
+					
+					var scaledHeight:int = scaleFactor*content.height;
+					
+					var bitmapData:BitmapData = new BitmapData(scaledWidth,scaledHeight,true,0x00000000);
+					
+					var matrix:Matrix = new Matrix();
+					
+					bitmapData.draw(content, matrix, null, null, null, true);
+					
+					var file:File = File.applicationStorageDirectory.resolvePath("images/photo/"+chat.toUserId+"/200/"+uniqueId+".jpg");
+					
+					var fileStream:FileStream = new FileStream();
+					
+					fileStream.open(file, FileMode.WRITE);
+					
+					fileStream.writeBytes(bytes);
+					
+					fileStream.close();
+					
+				});
+				loader.loadBytes(bytes);
+				
+				var file:File = File.applicationStorageDirectory.resolvePath("images/photo/"+chat.toUserId+"/"+uniqueId+".jpg");
+				
+				var fileStream:FileStream = new FileStream();
+				
+				fileStream.open(file, FileMode.WRITE);
+				
+				fileStream.writeBytes(bytes);
+				
+				fileStream.close();
+				
+				var daoImage:DaoImage = new DaoImage();
+				
+				daoImage.uploadImageToServer(bytes,file.nativePath,uniqueId);
+			}
+			
 			private function setImageContentToTextField(bytearray:ByteArray):void {
 				txtMsg.text = Base64.encodeByteArray(bytearray);
 				txtMsg.editable = false;
+				writeFileToLocal(bytearray);
 			}
 			
 			private function sendClick():void {
 				if(txtMsg.editable) {
 					chat.content = txtMsg.text;
 					chat.createDate = new Date();
-					chat.type = "text";
+					chat.type = "TEXT";
 					chat.statusId = 0;
 					controller.send(chat);
 					txtMsg.text = '';
 				} else {
 					chat.content = txtMsg.text;
 					chat.createDate = new Date();
-					chat.type = "image";
+					chat.type = "IMAGE";
 					chat.statusId = 0;
 					controller.send(chat);
 					txtMsg.text = '';

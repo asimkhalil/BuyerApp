@@ -83,7 +83,7 @@ package com.fashionapp.controllers
 				if(c.length > localChatCollection.length){
 					for(var i:int = localChatCollection.length ; i < c.length ; i++){
 						var chatObj:ChatData = c.getItemAt(i) as ChatData;
-						if(chatObj.type == "text" || chatObj.type == "image") {
+						if(chatObj.type.toUpperCase() == "TEXT" || chatObj.type == "image") {
 							if(chatObj.toUserId == BuyerAppModelLocator.getInstance().loginData.id){
 								var toMsg:ToMessageRenderer = new ToMessageRenderer();
 								currentChat.chatBox.addElement(toMsg);

@@ -11,6 +11,7 @@
 		public static var API_COMPLETE_CONTACTS:String = "API_COMPLETE_CONTACTS";
 		public static var API_COMPLETE_CHATS:String = "API_COMPLETE_CHATS";
 		public static var API_SEND_CHAT:String = "API_SEND_CHAT";
+		public static var API_IMAGE_UPLOAD_COMPLETE:String = "API_IMAGE_UPLOAD_COMPLETE";
 		public static var API_ERROR:String = "API_ERROR";
 		
 		public function APIEvent(type:String, _data:Object = "") {

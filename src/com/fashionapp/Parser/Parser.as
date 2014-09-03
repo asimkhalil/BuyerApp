@@ -155,14 +155,14 @@ package com.fashionapp.Parser
 				for(var i:int=0;i < arrChats.length; i++){
 					var chat:ChatData = new ChatData();
 					chat.id = arrChats[i].id;
-					chat.toUserId = arrChats[i].toUserID;
+					chat.toUserId = arrChats[i].to_user;
 					chat.type = arrChats[i].type;
 					chat.content = arrChats[i].content;
-					chat.statusId = arrChats[i].statusID;
-					chat.createdBy = arrChats[i].createBy;
-					chat.createDate = arrChats[i].createDate;
-					chat.lastUpdate = arrChats[i].lastUpdate;
-					chat.lastSync = arrChats[i].lastSync;
+					chat.statusId = arrChats[i].status_id;
+					chat.createdBy = arrChats[i].create_by;
+					chat.createDate = new Date();
+					chat.lastUpdate = new Date();
+					chat.lastSync = new Date();
 					
 					BuyerAppModelLocator.getInstance().chats.addItem(chat);
 					if(chat.toUserId == BuyerAppModelLocator.getInstance().loginData.id){
@@ -222,7 +222,15 @@ package com.fashionapp.Parser
 					
 					if(!chatMessageAlreadyExists(chat.id)) {
 						BuyerAppModelLocator.getInstance().chats.addItem(chat);
+						
 						//newChatMessagesForMe.addItem(chat);
+						if(BuyerAppModelLocator.getInstance().chatCollection[userId] == null){
+							var ch:ArrayCollection = new ArrayCollection();
+							ch.addItem(chat);
+							BuyerAppModelLocator.getInstance().chatCollection[userId] = ch;
+						}else{
+							(BuyerAppModelLocator.getInstance().chatCollection[userId] as ArrayCollection).addItem(chat);
+						}
 						
 					}else if(chat.type == "delete"){
 						var delArray:ArrayCollection = (BuyerAppModelLocator.getInstance().chatCollection[userId] as ArrayCollection);
@@ -233,13 +241,6 @@ package com.fashionapp.Parser
 						}
 					}
 					
-					if(BuyerAppModelLocator.getInstance().chatCollection[userId] == null){
-						var ch:ArrayCollection = new ArrayCollection();
-						ch.addItem(chat);
-						BuyerAppModelLocator.getInstance().chatCollection[userId] = ch;
-					}else{
-						(BuyerAppModelLocator.getInstance().chatCollection[userId] as ArrayCollection).addItem(chat);
-					}
 				}
 				FlexGlobals.topLevelApplication.dispatchEvent(new IntimateForNewChatMessagesForMeEvent(IntimateForNewChatMessagesForMeEvent.INTIMATE_FOR_NEW_MESSAGES,true));
 			}

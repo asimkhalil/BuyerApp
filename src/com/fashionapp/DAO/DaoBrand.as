@@ -123,7 +123,7 @@ package com.fashionapp.DAO
 			
 			var result:SQLResult = stmt1.getResult();
 			if (result != null){
-				Parser.parseChatsList(result.data);
+				//Parser.parseChatsList(result.data);
 			}
 		}
 		

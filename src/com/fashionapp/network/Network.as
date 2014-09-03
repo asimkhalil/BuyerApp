@@ -39,6 +39,7 @@
 	{
 		private static var objParent:DisplayObject;
 		private static var myURLLoader:URLLoader;
+		private static var myURLRequest:URLRequest;
 		
 		
 		public static var app_key:String = ''; 
@@ -58,7 +59,7 @@
 			//CursorManager.setBusyCursor();
 			var myVariables:URLVariables = new URLVariables();
 			myVariables = variables;
-			var myURLRequest:URLRequest = new URLRequest();
+			myURLRequest = new URLRequest();
 			myURLLoader = new URLLoader(); 
 			if(method == "get".toLocaleLowerCase()){
 				myURLRequest.method = URLRequestMethod.GET;
@@ -86,9 +87,15 @@
 				myURLRequest.url = "http://59.188.218.19/api/1-0/"+api_name+"/"+requestData;
 			}
 			myURLLoader.load(myURLRequest);
-			myURLLoader.addEventListener(IOErrorEvent.IO_ERROR,IOErrorHanlder);
-			myURLLoader.addEventListener(SecurityErrorEvent.SECURITY_ERROR,SECURITY_ERRORHanlder);
-			myURLLoader.addEventListener(Event.COMPLETE, callComplete);
+			if(myURLLoader.hasEventListener(IOErrorEvent.IO_ERROR)==false) {
+				myURLLoader.addEventListener(IOErrorEvent.IO_ERROR,IOErrorHanlder);
+			}
+			if(myURLLoader.hasEventListener(SecurityErrorEvent.SECURITY_ERROR)==false) {
+				myURLLoader.addEventListener(SecurityErrorEvent.SECURITY_ERROR,SECURITY_ERRORHanlder);
+			}
+			if(myURLLoader.hasEventListener(Event.COMPLETE)==false) {
+				myURLLoader.addEventListener(Event.COMPLETE, callComplete);
+			}
 		}
 		/*******************************************************************/
 		private static function IOErrorHanlder(event:Event):void{						
@@ -119,16 +126,26 @@
 			if(myURLLoader.data != undefined) {
 				var _data:String = BasicUtil.decrypt(myURLLoader.data);
 				var jsonResult:Object = com.adobe.serialization.jsonv2.JSON.decode(_data); 
-				if(jsonResult.users != undefined) {
+				if(myURLRequest.url.indexOf('contact') != -1) 
+				{
 					objParent.dispatchEvent(new APIEvent(APIEvent.API_COMPLETE_CONTACTS, jsonResult));
-				} else if(jsonResult.chat != undefined) {
+				} 
+				else if(myURLRequest.url.indexOf('receive_chat') != -1) 
+				{
 					objParent.dispatchEvent(new APIEvent(APIEvent.API_COMPLETE_CHATS, jsonResult));
-				} else {
+				} 
+				else if(myURLRequest.url.indexOf('send_chat') != -1) 
+				{
+					FlexGlobals.topLevelApplication.dispatchEvent(new APIEvent(APIEvent.API_SEND_CHAT, jsonResult));
+				} 
+				else if(myURLRequest.url.indexOf('upload_image') != -1) 
+				{
+					FlexGlobals.topLevelApplication.dispatchEvent(new APIEvent(APIEvent.API_IMAGE_UPLOAD_COMPLETE, jsonResult));
+				}
+				else {
 					objParent.dispatchEvent(new APIEvent(APIEvent.API_COMPLETE, jsonResult));
 				}
 			}
-			//Alert.show(objParent,com.adobe.serialization.jsonv2.JSON.decode(_data));
-			//CursorManager.removeBusyCursor();
 		}	
 		
 		/*************************  Check internet  ******************************************/

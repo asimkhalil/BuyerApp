@@ -51,7 +51,8 @@
 		]]>
 	</fx:Script>
 	<s:BorderContainer borderVisible="false" width="100%"
-					   height="100%">
+					   height="100%"
+					   backgroundColor="red">
 		<s:Group height="100%" width="100%">
 			<s:layout>
 				<s:HorizontalLayout verticalAlign="middle" paddingLeft="{BasicUtil.getComponentPadding(160)}"/>
@@ -59,7 +60,7 @@
 			<s:BorderContainer height="100%" width="2" 
 							   borderVisible="false"
 							   backgroundColor="0xCCCCCC"/>
-			<s:Group width="100%" height="100%" includeInLayout="{chat.type == 'text'}">
+			<s:Group width="100%" height="100%" includeInLayout="{chat.type.toUpperCase() == 'TEXT'}">
 				<s:layout>
 					<s:VerticalLayout  paddingTop="{BasicUtil.getComponentPadding(20)}"
 									   paddingBottom="{BasicUtil.getComponentPadding(20)}"/>

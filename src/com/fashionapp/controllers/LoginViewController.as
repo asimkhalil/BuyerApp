@@ -91,9 +91,9 @@ package com.fashionapp.controllers
 		}
 		
 		private function startTimerForRecievingChats():void{
-			var t:Timer = new Timer(2000);
+			var t:Timer = new Timer(10000);
 			t.addEventListener(TimerEvent.TIMER,chatCheckHandler);
-			t.start();
+			//t.start();
 		}
 		
 		private function chatCheckHandler(event:TimerEvent):void{
@@ -131,24 +131,24 @@ package com.fashionapp.controllers
 		} 
 		
 		private function chatListRecieved(event:Event):void {
-			startTimerForRecievingChats();
+			/*startTimerForRecievingChats();*/
 		}
 		
 		private function contactsRecieved(event:Event):void {
 			BuyerAppModelLocator.getInstance().users.refresh();
-			
-			if(Network.checkInterNetAvailability() == true) {
+			startTimerForRecievingChats();
+			/*if(Network.checkInterNetAvailability() == true) {
 				var urlVariable:URLVariables  = new URLVariables;
 				urlVariable.last_update = "2014-01-01 00:00:00";
 				view.addEventListener(APIEvent.API_COMPLETE_CHATS, function(event:APIEvent):void {
 					var results:Array = event.data.chat;
-					Parser.parseChatsList(results);
+					Parser.parseChatMessagesForMeList(results);
 				});
 				Network.call_API(view as LoginView,"receive_chat",urlVariable,"","get");
 			} else {
 				var dc:DaoChat = new DaoChat();
 				dc.getAllCurrentChats();
-			}
+			}*/
 		}
 		
 		private function chatMessagesForMeListRecieved(event:IntimateForNewChatMessagesForMeEvent):void {
@@ -170,14 +170,17 @@ package com.fashionapp.controllers
 				urlVariable.last_update = "2014-01-01 00:00:00";
 				view.addEventListener(APIEvent.API_COMPLETE_CHATS, function(event:APIEvent):void {
 					var results:Array = event.data.chat;
-					Parser.parseChatMessagesForMeList(results);
-					for(var i :int = 0 ; i < results.length ; i++){
-						var daoChat:DaoChat = new DaoChat();
-						daoChat.updateLocalDBChatRow(results[i].id,results[i]);
+					if(results && results.length > 0) {
+						Parser.parseChatMessagesForMeList(results);
+						for(var i :int = 0 ; i < results.length ; i++){
+							var daoChat:DaoChat = new DaoChat();
+							daoChat.updateLocalDBChatRow(results[i].id,results[i]);
+						}
 					}
 					
 				});
 				Network.call_API(view as LoginView,"receive_chat",urlVariable,"","get");
+				
 			}else{
 				dc.getChatsForMe();
 			}
