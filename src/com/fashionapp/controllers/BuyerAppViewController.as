@@ -25,7 +25,7 @@ package com.fashionapp.controllers
 		public function BuyerAppViewController()
 		{
 			super();
-			Network.startMonitor();
+			//Network.startMonitor();
 		}
 		
 		public function creationCompleteHandler() : void

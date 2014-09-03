@@ -5,6 +5,7 @@
 	import com.adobe.serialization.jsonv2.JSON;
 	import com.fashionapp.events.APIEvent;
 	import com.fashionapp.model.LoginData;
+	
 	import com.fashionapp.util.Test;
 	import com.fashionapp.util.Utils;
 	import com.fashionapp.utils.BasicUtil;
@@ -116,17 +117,9 @@
 			myURLLoader.removeEventListener(SecurityErrorEvent.SECURITY_ERROR,SECURITY_ERRORHanlder);
 			myURLLoader.removeEventListener(Event.COMPLETE, callComplete);
 			
-			if(myURLLoader.data != undefined) {
-				var _data:String = BasicUtil.decrypt(myURLLoader.data);
-				var jsonResult:Object = com.adobe.serialization.jsonv2.JSON.decode(_data); 
-				if(jsonResult.users != undefined) {
-					objParent.dispatchEvent(new APIEvent(APIEvent.API_COMPLETE_CONTACTS, jsonResult));
-				} else if(jsonResult.chat != undefined) {
-					objParent.dispatchEvent(new APIEvent(APIEvent.API_COMPLETE_CHATS, jsonResult));
-				} else {
-					objParent.dispatchEvent(new APIEvent(APIEvent.API_COMPLETE, jsonResult));
-				}
-			}
+			
+			var _data:String = BasicUtil.decrypt(myURLLoader.data);
+			objParent.dispatchEvent(new APIEvent(APIEvent.API_COMPLETE, com.adobe.serialization.jsonv2.JSON.decode(_data)));
 			//Alert.show(objParent,com.adobe.serialization.jsonv2.JSON.decode(_data));
 			//CursorManager.removeBusyCursor();
 		}	

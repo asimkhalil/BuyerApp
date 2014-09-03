@@ -40,6 +40,7 @@ package com.fashionapp.controllers
 		public function creationCompleteHandler():void 
 		{
 			toast('userID:'+BuyerAppModelLocator.getInstance().loginData.id);
+			toast('groupID:'+BuyerAppModelLocator.getInstance().loginData.groupID);
 			
 			//upload all my data lastupdate > lastSync
 			//upload Chat

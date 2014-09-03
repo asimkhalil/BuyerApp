@@ -26,21 +26,21 @@
 		<s:layout>
 			<s:VerticalLayout gap="0"/>
 		</s:layout>
-		<s:Group width="100%" height="100%">			
+		<s:Group width="100%" height="100%">
 			<s:layout>
 				<s:VerticalLayout paddingLeft="{BasicUtil.getComponentPadding(30)}" paddingRight="{BasicUtil.getComponentPadding(30)}" 
 								  paddingTop="{BasicUtil.getComponentPadding(30)}" paddingBottom="{BasicUtil.getComponentPadding(30)}"/>
 			</s:layout>
-			<s:Label text="BRAND TITLE"
+			<s:Label text="{data.title}"
 					 styleName="viewheading"
 					 fontSize="{BasicUtil.getFontSize(28)}"
 					 fontWeight="bold"/>
 			<s:Group width="100%">
-				<s:Label text="Season | Dept" fontSize="{BasicUtil.getFontSize(18)}"
+				<s:Label text="{data.season} | {data.dept}" fontSize="{BasicUtil.getFontSize(18)}"
 						 styleName="viewtext"/>
-				<s:Label text="197 Products" right="5" fontSize="{BasicUtil.getFontSize(26)}" styleName="viewtextitalic"/>
+				<s:Label text="{data.numProducts} Products" right="5" fontSize="{BasicUtil.getFontSize(26)}" styleName="viewtextitalic"/>
 			</s:Group>
-			<s:Label text="Date" fontSize="{BasicUtil.getFontSize(24)}"
+			<s:Label text="{data.date}" fontSize="{BasicUtil.getFontSize(24)}"
 					 styleName="viewtext"/>
 		</s:Group>
 		<s:BorderContainer width="100%" height="1" borderVisible="false" backgroundColor="0x000000"/>

@@ -32,14 +32,15 @@
 				<s:Label text="{resourceManager.getString('resources','title')}" fontSize="{BasicUtil.getFontSize(28)}"
 						 styleName="viewheading"/>
 			</s:VGroup>
+			<!-- com.fashionapp.skins.LoginTextInputSkin -->
 			<s:TextInput width="95%" prompt="{resourceManager.getString('resources','username')}"
-						 skinClass="com.fashionapp.skins.LoginTextInputSkin"
+						
 						 id="txt_username"
 						 styleName="viewtext"
 						 fontSize="{BasicUtil.getFontSize(26)}"
 						 height="{BasicUtil.getComponentHeight(60)}"/>
 			<s:TextInput width="95%" prompt="{resourceManager.getString('resources','password')}" displayAsPassword="true"
-						 skinClass="com.fashionapp.skins.LoginTextInputSkin"
+					
 						 id="txt_password"
 						 styleName="viewtext"
 						 fontSize="{BasicUtil.getFontSize(26)}"

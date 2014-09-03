@@ -15,7 +15,7 @@
 
 	<!-- A universally unique application identifier. Must be unique across all AIR applications.
 	Using a reverse DNS-style name as the id is recommended. (Eg. com.example.ExampleApplication.) Required. -->
-	<id>BuyerApp</id>
+	<id>com.joyce.buyer</id>
 
 	<!-- Used as the filename for the application. Required. -->
 	<filename>BuyerApp</filename>
@@ -263,6 +263,15 @@
 				<string>2</string>
 			</array>
 		]]></InfoAdditions>
+		<Entitlements>
+	    	<![CDATA[
+	            <key>aps-environment</key>
+	            <string>development</string>
+	    	]]>
+    	</Entitlements>
         <requestedDisplayResolution>high</requestedDisplayResolution>
     </iPhone>
+<extensions>
+        <extensionID>com.tree.ane.Message</extensionID>
+    </extensions>
 </application>

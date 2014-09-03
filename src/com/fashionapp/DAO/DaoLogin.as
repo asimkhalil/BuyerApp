@@ -108,7 +108,6 @@ package com.fashionapp.DAO
 					Network.app_key = result.data[0].value;
 				}
 			}
-			//Alert.show((FlexGlobals.topLevelApplication as DisplayObject),'getKey:'+Network.app_key); 
 			FlexGlobals.topLevelApplication.dispatchEvent(new APIEvent('CheckAppKey'));
 		}
 

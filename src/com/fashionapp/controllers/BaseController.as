@@ -3,6 +3,7 @@ package com.fashionapp.controllers
 	import flash.display.DisplayObject;
 	import com.fashionapp.network.Network;
 	import com.fashionapp.views.poups.Alert;
+	import com.tree.ext.*;
 	
 	//import com.tree.ane.Message.MessageQueue;
 	//import com.tree.ane.Event.LogEvent;;
@@ -13,6 +14,7 @@ package com.fashionapp.controllers
 			
 		public function BaseController()
 		{
+			
 		}
 		
 		//private var _controller:MessageQueue;

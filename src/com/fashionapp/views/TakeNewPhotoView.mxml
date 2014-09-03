@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <s:View xmlns:fx="http://ns.adobe.com/mxml/2009" 
 		xmlns:s="library://ns.adobe.com/flex/spark"
+		xmlns:controllers="com.fashionapp.controllers.*"
+		
 		title="BAND OR CHAT USER NAME"
 		actionBarVisible="false"
 		skinClass="assets.images.CustomViewWithBackButtonNoFooterSkin"
-		show="view1_showHandler(event)">
+		creationComplete="{controller.creationCompleteHandler()}">
 	<fx:Declarations>
 		<!-- Place non-visual elements (e.g., services, value objects) here -->
+		<controllers:ProductViewController id="controller" view="{this}"/>
 	</fx:Declarations>
 	<s:layout>
 		<s:VerticalLayout gap="0"/>
 	</s:layout>
 	<fx:Script>
 		<![CDATA[
-			import com.fashionapp.events.CameraEvent;
-			import com.fashionapp.events.ImageSelectedEvent;
-			import com.fashionapp.util.CameraUtil;
 			
 			import mx.core.FlexGlobals;
 			import mx.events.FlexEvent;
@@ -24,28 +24,9 @@
 			[Bindable]
 			private var CAPTURE_IMAGE:Class;
 			
-			private var cameraUtil:CameraUtil;
+
 			
-			public function initCamera():void {
-				cameraUtil = new CameraUtil();
-				cameraUtil.addEventListener(CameraEvent.FILE_READY,fileReadyHandler);
-			}
-			
-			private function fileReadyHandler(event:CameraEvent):void {
-				event.file.data;
-				FlexGlobals.topLevelApplication.dispatchEvent(new ImageSelectedEvent(ImageSelectedEvent.IMAGE_SELECTED,event.file.data));
-				this.navigator.popView();
-			}
-			
-			protected function image1_clickHandler(event:MouseEvent):void
-			{
-				cameraUtil.takePicture();
-			}
-			
-			protected function view1_showHandler(event:FlexEvent):void
-			{
-				initCamera();
-			}
+		
 			
 			protected function label1_clickHandler(event:MouseEvent):void
 			{
@@ -62,7 +43,7 @@
 					 height="100%"
 					 textAlign="center"
 					 focusAlpha="0"/>-->		
-	<!--</s:BorderContainer>-->
+	<!--</s:BorderContainer>--> 
 	<s:BorderContainer width="100%" height="50" 
 					   backgroundColor="0x000000">
 		<!--<s:HGroup horizontalAlign="center" verticalAlign="middle"
@@ -71,10 +52,11 @@
 			<s:Label text="{resourceManager.getString('resources','cancel')}" color="0xFFFFFF" textAlign="center" fontSize="11"
 					 verticalCenter="0" left="15"
 					 click="label1_clickHandler(event)"/>
+		
 			<s:Image source="{CAPTURE_IMAGE}"
 					 horizontalCenter="0" verticalCenter="0"
 					 scaleX="0.5" scaleY="0.5" scaleZ="0.5"
-					 click="image1_clickHandler(event)"/>
+					 click="{controller.takePhoto()}"/>
 			<!--<s:Label text="TAKE ANOTHER" maxDisplayedLines="2" color="0xFFFFFF" paddingLeft="0" paddingRight="5" width="100%" textAlign="center" fontSize="11"/>
 			<s:Label text="INPUT INFO" maxDisplayedLines="2" color="0xFFFFFF" paddingLeft="0" paddingRight="5" width="100%" textAlign="center" fontSize="11"/>-->
 		<!--</s:HGroup>-->

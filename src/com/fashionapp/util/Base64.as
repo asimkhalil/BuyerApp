@@ -73,11 +73,14 @@
 		public static function decodeToByteArray(data:String):ByteArray {
 			// Initialise output ByteArray for decoded data
 			var output:ByteArray = new ByteArray();
+			if (data == null) {
+				return output;
+			}
 			
 			// Create data and output buffers
 			var dataBuffer:Array = new Array(4);
 			var outputBuffer:Array = new Array(3);
-
+			
 			// While there are data bytes left to be processed
 			for (var i:uint = 0; i < data.length; i += 4) {
 				// Populate data buffer with position of Base64 characters for

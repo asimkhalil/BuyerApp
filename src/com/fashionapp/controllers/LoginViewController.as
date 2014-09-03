@@ -10,6 +10,7 @@ package com.fashionapp.controllers
 	import com.fashionapp.events.IntimateForNewChatMessagesForMeEvent;
 	import com.fashionapp.events.LoginClickEvent;
 	import com.fashionapp.model.BuyerAppModelLocator;
+	import com.fashionapp.model.ChatData;
 	import com.fashionapp.model.LoginData;
 	import com.fashionapp.network.Network;
 	import com.fashionapp.util.Utils;
@@ -18,6 +19,7 @@ package com.fashionapp.controllers
 	import com.fashionapp.views.MainMenuView;
 	import com.fashionapp.views.poups.Alert;
 	import com.fashionapp.vo.LoginVO;
+	import com.tree.ext.PushNotification;
 	
 	import flash.events.Event;
 	import flash.events.MouseEvent;
@@ -38,13 +40,35 @@ package com.fashionapp.controllers
 		
 		private var dl:DaoLogin = new DaoLogin();
 		
+		private var chat:ChatData;
+		private var recordsToBeSync:Array;
+		private var currentIndex:int = 0;
+		
 		public function LoginViewController()
 		{
 			super();
+			//setupDB();
+			
+		}
+		
+		private function setupDB():void
+		{
+			// check if db exists
+			var source:File = File.applicationDirectory.resolvePath(Utils.db_path);
+			source.addEventListener(Event.COMPLETE,copyDone);
+			var destination:File = File.applicationStorageDirectory.resolvePath(Utils.db_path);
+			if (! destination.exists)
+			{
+				source.copyTo(File.applicationStorageDirectory.resolvePath(Utils.db_path), true);
+			}
+		}
+		public function copyDone(e:Event):void{
+			toast("copyDone");
 		}
 		
 		public function creationCompleteHandler():void 
 		{
+			setupDB();
 			//toast(Network.checkInterNetAvailability().toString());
 			
 			usernameValidator = new Validator();
@@ -52,7 +76,7 @@ package com.fashionapp.controllers
 			
 			usernameValidator.source =  (view as LoginView).txt_username;
 			passwordValidator.source =  (view as LoginView).txt_password;
-			
+		
 			usernameValidator.property = "text";
 			passwordValidator.property = "text";
 			
@@ -63,7 +87,7 @@ package com.fashionapp.controllers
 			
 			var dl:DaoLogin = new DaoLogin();
 			dl.initDB();
-			
+			var destination:File = File.applicationStorageDirectory.resolvePath(Utils.db_path);
 		}
 		
 		private function startTimerForRecievingChats():void{
@@ -139,16 +163,9 @@ package com.fashionapp.controllers
 		
 		public function checkNewMessageForMe():void {
 			
-			/*var dc:DaoChat = new DaoChat();
+			var dc:DaoChat = new DaoChat();
 			
 			if(Network.checkInterNetAvailability() == true){
-				
-			}else{
-				dc.getChatsForMe();
-			}
-			dc.getChatsForMe();*/
-			
-			if(Network.checkInterNetAvailability() == true) {
 				var urlVariable:URLVariables  = new URLVariables;
 				urlVariable.last_update = "2014-01-01 00:00:00";
 				view.addEventListener(APIEvent.API_COMPLETE_CHATS, function(event:APIEvent):void {
@@ -161,7 +178,10 @@ package com.fashionapp.controllers
 					
 				});
 				Network.call_API(view as LoginView,"receive_chat",urlVariable,"","get");
+			}else{
+				dc.getChatsForMe();
 			}
+			dc.getChatsForMe();
 		}
 		
 		private function loginClickEventListener(event:LoginClickEvent):void
@@ -189,6 +209,7 @@ package com.fashionapp.controllers
 				var urlVariable:URLVariables  = new URLVariables;
 				urlVariable.username = (view as LoginView).txt_username.text;
 				urlVariable.password = (view as LoginView).txt_password.text;
+				urlVariable.apns_id = PushNotification.APN_ID;
 				urlVariable.type = "buyer";
 				
 				view.addEventListener(APIEvent.API_COMPLETE, onLoginComplete);
@@ -208,11 +229,13 @@ package com.fashionapp.controllers
 		
 		public function onLoginComplete(e:APIEvent):void 
 		{
+			view.removeEventListener(APIEvent.API_COMPLETE, onLoginComplete);
 			var status:String = e.data.status;	
 			toast(status);
 			if(status == "OK") {
 				Network.session_id = e.data.session_id;
 				Network.user_id = e.data.id;
+				toast('UserID:'+e.data.id);
 				Parser.parseLoginData([e.data]);
 				dl.writeLocalSession(e.data.session_id);
 				dl.getLocalAppKey();
@@ -220,12 +243,12 @@ package com.fashionapp.controllers
 				//delete by jack -------------
 				//FlexGlobals.topLevelApplication.navigator.pushView(HomeView);
 				// -------------------------
-				
 				var dc:DaoChat = new DaoChat();
 				if(Network.checkInterNetAvailability() == true) {
 					var urlVariable:URLVariables  = new URLVariables;
 					urlVariable.last_update = "2014-01-01 00:00:00";
 					view.addEventListener(APIEvent.API_COMPLETE_CONTACTS, function(event:APIEvent):void {
+						//view.removeEventListener(APIEvent.API_COMPLETE_CONTACTS, function(event:APIEvent):void{});
 						if(event.data.users != undefined) {
 							var results:Array = event.data.users;
 							Parser.parseContactList(results);
@@ -240,6 +263,7 @@ package com.fashionapp.controllers
 		}
 		
 		public function CheckAppKeyRecieved(e:APIEvent):void{
+
 			if (Network.app_key == '' || Network.app_key == null){
 				Network.app_key = Network.session_id;
 				dl.writeLocalAppKey(Network.session_id);

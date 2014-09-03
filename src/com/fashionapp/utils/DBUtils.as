@@ -8,9 +8,12 @@ package com.fashionapp.utils
 		{
 		}
 		
-		public static function getUniqueID():int {
+		public static function getUniqueID():String {
+			
 			var date:Date = new Date();
-			return date.time;
+			var unix:int = date.time;
+			
+			return Network.app_key.toString() + "-" + unix.toString();
 		}
 	}
 }

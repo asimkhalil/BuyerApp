@@ -3,30 +3,50 @@
 		xmlns:s="library://ns.adobe.com/flex/spark"
 		actionBarVisible="false"
 		title="{resourceManager.getString('resources','reservedproducts')}"
-		skinClass="assets.images.CustomViewWithBackButtonSkin" xmlns:skins="com.fashionapp.skins.*"
+		skinClass="assets.images.CustomViewWithBackButtonSkin" xmlns:skins="com.fashionapp.skins.*" 
+		xmlns:controllers="com.fashionapp.controllers.*"
 		creationComplete="view1_creationCompleteHandler(event)">
 	<fx:Script>
 		<![CDATA[
+			import com.fashionapp.events.ReservedProductDetailsListDataRefreshEvent;
 			import com.fashionapp.utils.BasicUtil;
 			
 			import mx.collections.ArrayCollection;
-			import mx.events.FlexEvent;
-			
+			import mx.events.FlexEvent;			
 			[Embed(source="assets/images/sampleproduct.jpg")]
 			[Bindable]
-			private var PROD:Class;
-			
+			private var PROD:Class;	
+			[Bindable]
+			private var _menuListDP:ArrayCollection;	
 			protected function view1_creationCompleteHandler(event:FlexEvent):void
 			{
+				var viewData:Object = this.data;
 				this.addEventListener("backClicked",onBackClick);
-			}
-			
+				this.addEventListener(ReservedProductDetailsListDataRefreshEvent.RESERVED_PRODUCT_DETAILS_LIST_DATA_REFRESH_EVENT,onViewChange);
+				controller.creationCompleteHandler();
+				controller.getReservedProductDetailViewData(data.entityID);
+			}			
 			private function onBackClick(event:Event):void {
 				this.navigator.popView();
+			}	
+			private function onViewChange(event:Event):void{
+				controller.getReservedProductDetailViewData(data.entityID);
+			}
+			public function showProductDetails(detailsList:Array):void
+			{
+				var tempDataProvider:ArrayCollection = new ArrayCollection(detailsList);
+				menuList.dataProvider = tempDataProvider;
 			}
 			
 		]]>
 	</fx:Script>
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+		<controllers:ReservedProductDetailViewController id="controller" view="{this}"/>
+	</fx:Declarations>
+	<fx:Metadata>
+		[ResourceBundle("resources")]
+	</fx:Metadata>
 	<!--<s:TextInput prompt="Search" width="100%"/>-->
 	<s:Group height="100%" width="100%">
 		<s:layout>
@@ -43,37 +63,37 @@
 				<s:Spacer width="{BasicUtil.getComponentPadding(30)}"/>
 				<s:VGroup width="100%" gap="{BasicUtil.getComponentPadding(4)}"
 						  paddingTop="{BasicUtil.getComponentPadding(40)}">
-					<s:Label text="FALL 2015 | WOMEN" 
+					<s:Label text="{data.brandName+'| |'+data.deptName}" 
 							 styleName="viewtext"
 							 fontSize="{BasicUtil.getFontSize(18)}"
 							 width="100%"/>
-					<s:Label text="Brand Name" 
+					<s:Label text="{data.productTitle}" 
 							 styleName="viewheading"
 							 fontWeight="bold"
 							 fontSize="{BasicUtil.getFontSize(28)}"
 							 width="100%"/>
-					<s:Label text="DESCRIPTION" 
+					<s:Label text="{data.productCaption}" 
 							 styleName="viewheading"
 							 fontSize="{BasicUtil.getFontSize(21)}"
 							 width="100%"/>
 					<s:Spacer height="{BasicUtil.getComponentPadding(10)}"/>
-					<s:Label text="SKU 0000122001"
-							 styleName="viewheading"
-							 fontSize="{BasicUtil.getFontSize(19)}"/>
-					<s:Spacer height="{BasicUtil.getComponentPadding(10)}"/>
+					<!--<s:Label text="SKU 0000122001"
+					styleName="viewheading"
+					fontSize="{BasicUtil.getFontSize(19)}"/>
+					<s:Spacer height="{BasicUtil.getComponentPadding(10)}"/>-->
 					<s:HGroup width="100%" gap="{BasicUtil.getComponentPadding(20)}">
 						<s:VGroup>
 							<s:Label text="Total Reserved Quantity" 
 									 styleName="viewtextitalic"
 									 fontSize="{BasicUtil.getFontSize(21)}"/>
-							<s:Label text="40"
+							<s:Label text="{data.Total_Reserved_Quantity}"
 									 styleName="viewtext"
 									 fontSize="{BasicUtil.getFontSize(25)}"/>
 						</s:VGroup>
 						<s:VGroup>
 							<s:Label text="Total Ordered Quantity" styleName="viewtextitalic"
 									 fontSize="{BasicUtil.getFontSize(21)}"/>
-							<s:Label text="38"
+							<s:Label text="{data.qty}"
 									 styleName="viewtext"
 									 fontSize="{BasicUtil.getFontSize(25)}"/>
 						</s:VGroup>
@@ -99,16 +119,6 @@
 		<s:Group height="100%" width="100%">
 			<s:List id="menuList"  width="100%" height="100%"
 					itemRenderer="com.fashionapp.renderers.ReservedListDetailItemRenderer">
-				<s:dataProvider>
-					<s:ArrayCollection>
-						<fx:Object brand="Brand" session="Session" dept="Dept" productName="Product Name 01" desc="Total Reserved Quantity" title="PO Quantity"/>
-						<fx:Object brand="Brand" session="Session" dept="Dept" productName="Product Name 01" desc="Total Reserved Quantity" title="PO Quantity"/>
-						<fx:Object brand="Brand" session="Session" dept="Dept" productName="Product Name 01" desc="Total Reserved Quantity" title="PO Quantity"/>
-						<fx:Object brand="Brand" session="Session" dept="Dept" productName="Product Name 01" desc="Total Reserved Quantity" title="PO Quantity"/>
-						<fx:Object brand="Brand" session="Session" dept="Dept" productName="Product Name 01" desc="Total Reserved Quantity" title="PO Quantity"/>
-						<fx:Object brand="Brand" session="Session" dept="Dept" productName="Product Name 01" desc="Total Reserved Quantity" title="PO Quantity"/>
-					</s:ArrayCollection>
-				</s:dataProvider>
 			</s:List>	
 			<s:BorderContainer width="100%" height="100%" 
 							   visible="{list_searchOptions.visible}"

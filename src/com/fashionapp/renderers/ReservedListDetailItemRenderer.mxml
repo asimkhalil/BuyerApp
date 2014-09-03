@@ -31,7 +31,7 @@
 		<s:VGroup width="100%" gap="{BasicUtil.getComponentPadding(4)}" left="{BasicUtil.getComponentPadding(20)}"
 				  paddingTop="{BasicUtil.getComponentPadding(40)}"
 				  paddingBottom="{BasicUtil.getComponentPadding(40)}">
-			<s:Label text="Product Name 01" 
+			<s:Label text="{data.productCaption}" 
 					 fontSize="{BasicUtil.getFontSize(28)}"
 					 styleName="viewheading" width="100%"/>
 			<s:HGroup paddingBottom="{BasicUtil.getComponentPadding(20)}"
@@ -40,7 +40,7 @@
 						 fontSize="{BasicUtil.getFontSize(21)}"
 						 styleName="viewtextitalic"
 						 />
-				<s:Label text="SKU 001122799"
+				<s:Label text="{data.createBy}"
 						 fontSize="{BasicUtil.getFontSize(21)}"
 						 styleName="viewtext"
 						 width="100%"/>
@@ -50,18 +50,18 @@
 				<s:Label text="Quantity" 
 						 styleName="viewtextitalic"
 						 fontSize="{BasicUtil.getFontSize(21)}"/>
-				<s:Label text="Blue"
+				<s:Label text="{data.qty}"
 						 styleName="viewtext"
 						 fontSize="{BasicUtil.getFontSize(21)}"/>				
 				<s:Label text="| Colour" 
 						 fontSize="{BasicUtil.getFontSize(21)}"
 						 styleName="viewtextitalic"/>
-				<s:Label text="Blue" fontSize="{BasicUtil.getFontSize(21)}"
+				<s:Label text="{data.color}" fontSize="{BasicUtil.getFontSize(21)}"
 						 styleName="viewtext"/>
 				<s:Label text="| Size" 
 						 fontSize="{BasicUtil.getFontSize(21)}"
 						 styleName="viewtextitalic"/>
-				<s:Label text="Blue"
+				<s:Label text="{data.size}"
 						 styleName="viewtext" fontSize="{BasicUtil.getFontSize(21)}"/>
 			</s:HGroup>
 			

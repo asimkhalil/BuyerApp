@@ -23,98 +23,50 @@ package com.tree.ext
 	import com.fashionapp.controllers.BaseController;
 	public class PushNotification
 	{
-		private var notiStyles:Vector.<String> = new Vector.<String>;;
-		private var tt:TextField = new TextField();
-		private var tf:TextFormat = new TextFormat();
+		private var notiStyles:Vector.<String> = new Vector.<String>;
 		private var subscribeOptions:RemoteNotifierSubscribeOptions = new RemoteNotifierSubscribeOptions();
 		private var preferredStyles:Vector.<String> = new Vector.<String>();
 		private var remoteNot:RemoteNotifier = new RemoteNotifier();
+		public static var APN_ID:String = "";
 		
 		//private var subsButton:CustomButton = new CustomButton("Subscribe");
 		//private var unSubsButton:CustomButton = new CustomButton("UnSubscribe");
 		//private var clearButton:CustomButton = new CustomButton("clearText");
 		
-		private var urlreq:URLRequest;
-		private var urlLoad:URLLoader = new URLLoader();
-		private var urlString:String;
-		
 		private var instance:BaseController;
 		public function init(_instance:BaseController)
 		{
 			instance = _instance;
-			//Multitouch.inputMode = MultitouchInputMode.TOUCH_POINT;
-			//stage.align = StageAlign.TOP_LEFT;
-			//stage.scaleMode = StageScaleMode.NO_SCALE;
 			
-			/*
-			tf.size = 20;
-			tf.bold = true;			
-			
-			tt.x=0;
-			tt.y =150;
-			tt.height = stage.stageHeight;
-			tt.width = stage.stageWidth;
-			tt.border = true;
-			tt.defaultTextFormat = tf;
-			
-			addChild(tt);
-			
-			subsButton.x = 150;
-			subsButton.y=10;
-			subsButton.addEventListener(MouseEvent.CLICK,subsButtonHandler);
-			stage.addChild(subsButton);
-			
-			unSubsButton.x = 300;
-			unSubsButton.y=10;
-			unSubsButton.addEventListener(MouseEvent.CLICK,unSubsButtonHandler);
-			stage.addChild(unSubsButton);
-			
-			clearButton.x = 450;
-			clearButton.y=10;
-			clearButton.addEventListener(MouseEvent.CLICK,clearButtonHandler);
-			stage.addChild(clearButton);
-			
-			
-			tt.text += "\n SupportedNotification Styles: " + RemoteNotifier.supportedNotificationStyles.toString() + "\n";
-			
-			tt.text += "\n Before Preferred notificationStyles: " + subscribeOptions.notificationStyles.toString() + "\n";
-			*/
-			preferredStyles.push(NotificationStyle.ALERT ,NotificationStyle.BADGE,NotificationStyle.SOUND );			
+			preferredStyles.push(NotificationStyle.ALERT ,NotificationStyle.BADGE,NotificationStyle.SOUND);			
 			subscribeOptions.notificationStyles= preferredStyles;
 			
 			// tt.text += "\n After Preferred notificationStyles:" + subscribeOptions.notificationStyles.toString() + "\n";
-			
 			
 			remoteNot.addEventListener(RemoteNotificationEvent.TOKEN,tokenHandler);
 			remoteNot.addEventListener(RemoteNotificationEvent.NOTIFICATION,notificationHandler);
 			remoteNot.addEventListener(StatusEvent.STATUS,statusHandler);
 			
-			// this.stage.addEventListener(Event.ACTIVATE,activateHandler);
-			
+			// this.stage.addEventListener(Event.ACTIVATE,activateHandler);			
 			
 			NativeApplication.nativeApplication.executeInBackground = true;
-			instance.toast("going subscribe");
+			//instance.toast("going subscribe");
 			if(RemoteNotifier.supportedNotificationStyles.toString() != " ")
 			{	
 				remoteNot.subscribe(subscribeOptions);		
-				instance.toast("finishing subscribe");
+				//instance.toast("finishing subscribe");
 			}
 			
 		}
 		
 		public function activateHandler(e:Event):void
-		{
-			
-			if(RemoteNotifier.supportedNotificationStyles.toString() != " ")
-			{	
-				remoteNot.subscribe(subscribeOptions);
-				
+		{	
+			if(RemoteNotifier.supportedNotificationStyles.toString() != " ") {	
+				remoteNot.subscribe(subscribeOptions);				
 			}
-			else{
+			else {
 				//tt.appendText("\n Remote Notifications not supported on this Platform !");
 			}
-			
-			
 		}
 		public function subsButtonHandler(e:MouseEvent):void{
 			remoteNot.subscribe(subscribeOptions);
@@ -133,16 +85,23 @@ package com.tree.ext
 			instance.toast("notificationHandler");
 			for (var x:String in e.data) {
 				//tt.text += "\n"+ x + ":  " + e.data[x];
+				
+				instance.toast(x + ":  " + e.data[x]);
 			}
-			
 		}
 		
+		
+		private var urlreq:URLRequest;
+		private var urlLoad:URLLoader = new URLLoader();
+		private var urlString:String;
 		public function tokenHandler(e:RemoteNotificationEvent):void
 		{
 			//tt.appendText("\nRemoteNotificationEvent type: "+e.type +"\nBubbles: "+ e.bubbles + "\ncancelable " +e.cancelable +"\ntokenID:\n"+ e.tokenId +"\n");
-			instance.toast("tokenHandler");
-			//urlString = new String("https://go.urbanairship.com/api/device_tokens/" + e.tokenId);
-			urlString = new String("http://www.infinmedia.net/apps_push_notification/register.php?action=register&os=ios&projectID=11&devID="+e.tokenId);
+			PushNotification.APN_ID = e.tokenId;
+			instance.toast("tokenHandler: " + e.tokenId);
+			
+			/*
+			urlString = new String("http://http://59.188.218.19/apns/admin.php?action=register&os=ios&projectID=12&devID="+e.tokenId);
 			
 			urlreq = new URLRequest(urlString);
 			
@@ -155,15 +114,18 @@ package com.tree.ext
 			urlLoad.addEventListener(IOErrorEvent.IO_ERROR,iohandler);
 			urlLoad.addEventListener(Event.COMPLETE,compHandler);
 			urlLoad.addEventListener(HTTPStatusEvent.HTTP_STATUS,httpHandler);
+			*/
 			
 		}
 		
 		private function iohandler(e:IOErrorEvent):void
 		{
+			instance.toast("In IOError handler" + e.errorID +" " +e.type);
 			//tt.appendText("\n In IOError handler" + e.errorID +" " +e.type);
 			
 		}
 		private function compHandler(e:Event):void{
+			instance.toast("In Complete handler,"+"status: " +e.type + "\n");
 			//tt.appendText("\n In Complete handler,"+"status: " +e.type + "\n");
 		}
 		

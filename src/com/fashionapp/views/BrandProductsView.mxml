@@ -1,11 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <s:View xmlns:fx="http://ns.adobe.com/mxml/2009" 
 		xmlns:s="library://ns.adobe.com/flex/spark"
+		xmlns:components="com.fashionapp.views.components.*"
+		xmlns:controllers="com.fashionapp.controllers.*"
+		
 		skinClass="assets.images.CustomViewWithBackButtonAndSubTitleNormalSkin"
 		actionBarVisible="false"
-		creationComplete="view1_creationCompleteHandler(event)" xmlns:components="com.fashionapp.views.components.*">
+		creationComplete="{controller.creationCompleteHandler();}">
 	<fx:Declarations>
 		<!-- Place non-visual elements (e.g., services, value objects) here -->
+		<controllers:ProductViewController id="controller" view="{this}"/>
 	</fx:Declarations>
 	<fx:Script>
 		<![CDATA[
@@ -25,18 +29,13 @@
 			[Bindable]
 			private var NEW_BRAND_ICON:Class;
 			
-			protected function view1_creationCompleteHandler(event:FlexEvent):void
-			{
-				(this.skin as CustomViewWithBackButtonAndSubTitleNormalSkin).subTitle.text = "FALL 2000 | WOMEN";
-				this.title = "ALEXENDER MCQUEEN";
-				/* this.addEventListener('openMenuClicked',openMenuClickHandler); */
-			}
+		
 			
 			/* private function openMenuClickHandler(event:Event):void {
 				list_menu.visible = !list_menu.visible;
 			} */
 			
-			protected function image1_clickHandler(event:MouseEvent):void
+			protected function image1_clickHandler(event:IndexChangeEvent):void
 			{
 				navigator.pushView(BrandProductInfo);
 			}
@@ -83,37 +82,11 @@
 					<s:TileLayout verticalAlign="middle" horizontalAlign="center"
 								  columnAlign="justifyUsingWidth"
 								  rowAlign="justifyUsingHeight"/>
-				</s:layout>
-				<s:Image source="{OPEN_MENU_LOGO}" 
-						 height="{BasicUtil.getComponentHeight(300)}" 
-						 width="{BasicUtil.getComponentHeight(300)}"
-						 horizontalCenter="0"
-						 verticalCenter="0"
-						 click="image1_clickHandler(event)"/>
-				<s:Image source="{OPEN_MENU_LOGO}" 
-						 height="{BasicUtil.getComponentHeight(300)}" 
-						 width="{BasicUtil.getComponentHeight(300)}"
-						 horizontalCenter="0"
-						 verticalCenter="0"
-						 click="image1_clickHandler(event)"/>
-				<s:Image source="{OPEN_MENU_LOGO}" 
-						 height="{BasicUtil.getComponentHeight(300)}" 
-						 width="{BasicUtil.getComponentHeight(300)}"
-						 horizontalCenter="0"
-						 verticalCenter="0"
-						 click="image1_clickHandler(event)"/>
-				<s:Image source="{OPEN_MENU_LOGO}" 
-						 height="{BasicUtil.getComponentHeight(300)}" 
-						 width="{BasicUtil.getComponentHeight(300)}"
-						 horizontalCenter="0"
-						 verticalCenter="0"
-						 click="image1_clickHandler(event)"/>
-				<s:Image source="{OPEN_MENU_LOGO}" 
-						 height="{BasicUtil.getComponentHeight(300)}" 
-						 width="{BasicUtil.getComponentHeight(300)}"
-						 horizontalCenter="0"
-						 verticalCenter="0"
-						 click="image1_clickHandler(event)"/>
+				</s:layout>	
+				<s:List width="100%" height="100%" id="list_product" visible="false"
+						itemRenderer="com.fashionapp.views.components.ProductItemRenderer"
+						change="image1_clickHandler(event)">
+				</s:List>
 				
 			</s:Group>		
 		</s:Scroller>

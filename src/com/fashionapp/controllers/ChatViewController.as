@@ -39,6 +39,7 @@ package com.fashionapp.controllers
 		{
 			if(String(item.fullName).toLowerCase().indexOf((view as ChatView).txt_search.text.toLowerCase()) >= 0) 
 			{
+				toast('true');
 				return true;
 			}
 			return false;

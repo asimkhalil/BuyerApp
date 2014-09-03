@@ -1,41 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!---
+	update by mark
+-->
 <s:View xmlns:fx="http://ns.adobe.com/mxml/2009" 
-		xmlns:s="library://ns.adobe.com/flex/spark" title="{resourceManager.getString('resources','brandtitle')}"
-		creationComplete="onCreComp()"
+		xmlns:s="library://ns.adobe.com/flex/spark" 
+		xmlns:controllers="com.fashionapp.controllers.*"
+		xmlns:components="com.fashionapp.views.components.*"
+		
+		title="{resourceManager.getString('resources','brandtitle')}"
 		skinClass="assets.images.CustomViewSkin"
-		actionBarVisible="false" xmlns:components="com.fashionapp.views.components.*">
-	
+		
+		creationComplete="{controller.creationCompleteHandler();}"
+		actionBarVisible="false">
 	<fx:Script>
 		<![CDATA[
+			//update by mark---------------
 			import com.fashionapp.utils.BasicUtil;
 			
 			import spark.events.IndexChangeEvent;
 			
 			[Embed(source="assets/images/searchicon.png")]
 			[Bindable]
-			private var SEARCH_ICON:Class;
+			private var SEARCH_ICON:Class; 
 			
 			[Embed(source="assets/images/addbrandicon.png")]
 			[Bindable]
 			private var NEW_BRAND_ICON:Class;
 			
-			import com.fashionapp.views.components.NewBrand;
+			import com.fashionapp.views.components.NewBrand;			
 			
-			import mx.collections.ArrayCollection;
-			import mx.managers.PopUpManager;
-			private function onCreComp():void {
-				list.dataProvider = loadData();
-			}
-			
-			private function loadData():ArrayCollection {
-				var listData:ArrayCollection = new ArrayCollection;
-				listData.addItem("Help");
-				listData.addItem("Support");
-				listData.addItem("About");
-				listData.addItem("Change Password");
-				listData.addItem("Logout");
-				return listData;
-			}
+			import mx.managers.PopUpManager;			
+			//-------------------------
 			
 			protected function button1_clickHandler(event:MouseEvent):void
 			{
@@ -55,11 +50,19 @@
 			
 			protected function list_changeHandler(event:IndexChangeEvent):void
 			{
+				// event.newIndex
 				navigator.pushView(BrandProductsView);
 			}
 			
 		]]>
 	</fx:Script>
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+		<controllers:BrandViewController id="controller" view="{this}"/>
+	</fx:Declarations>
+	<!--- //end  -->
+	
+	
 	<s:BorderContainer width="100%" height="100%"
 					   borderVisible="false">
 		<s:layout>
@@ -70,7 +73,7 @@
 				  gap="0">
 			<components:TopTabButton label="{resourceManager.getString('resources','newBrand')}" width="100%" click="button2_clickHandler(event)"
 									 icon="{NEW_BRAND_ICON}"
-									 height="{BasicUtil.getComponentHeight(100)}"/>
+									 height="{BasicUtil.getComponentHeight(100)}"/> 
 			<!--<s:BorderContainer width="1" height="100%" backgroundColor="0x000000"
 							   borderVisible="false"/>-->
 			<s:Spacer width="100%"/>
@@ -81,7 +84,7 @@
 		<s:BorderContainer width="100%" height="1" borderVisible="false" backgroundColor="0x000000"/>
 		<s:Group height="100%" width="100%">
 			<s:List id="list" width="100%" height="100%" skinClass="com.fashionapp.skins.MenuListSkin"
-					itemRenderer="com.fashionapp.views.components.BrandItemRenderer"
+					itemRenderer="com.fashionapp.views.components.BrandItemRenderer"			
 					change="list_changeHandler(event)">
 			</s:List>
 			<s:BorderContainer id="searchList" visible="false" width="100%"

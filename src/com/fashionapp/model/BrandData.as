@@ -8,30 +8,18 @@ package com.fashionapp.model
 		private var _title:String="";
 		private var _seasonId:int=0;
 		private var _deptId:int=0;
-		private var _numProducts:int=0;
-		private var _creatDate:Date=new Date();
-		private var _lastUpdate:Date=new Date();
+		private var _numProducts:int=0;		
 		
-		public function get lastUpdate():Date
-		{
-			return _lastUpdate;
-		}
-
-		public function set lastUpdate(value:Date):void
-		{
-			_lastUpdate = value;
-		}
-
-		public function get creatDate():Date
-		{
-			return _creatDate;
-		}
-
-		public function set creatDate(value:Date):void
-		{
-			_creatDate = value;
-		}
-
+		//update by mark---------------
+		public var statusId:Number;
+		public var createdBy:Number;
+		public var id:String;
+		public var createDate:String;
+		public var lastUpdate:String;
+		public var dept:String;
+		public var season:String;
+		//-------------------------
+		
 		public function get numProducts():int
 		{
 			return _numProducts;

@@ -11,6 +11,8 @@ package com.fashionapp.controllers
 	import com.fashionapp.util.Base64;
 	import com.fashionapp.views.CurrentChatView;
 	
+	import flash.net.URLVariables;
+	
 	import flash.events.Event;
 	import flash.utils.setTimeout;
 	
@@ -143,7 +145,7 @@ package com.fashionapp.controllers
 			// for testing
 			//dc.sendChat(chat);
 		}
-		
+
 		/*public function checkNewMessageForMe():void {
 			
 			var dc:DaoChat = new DaoChat();

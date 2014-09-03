@@ -29,6 +29,13 @@ package com.fashionapp.model
 		[Bindable]
 		public var users:ArrayCollection = new ArrayCollection();
 		
+		//update by mark
+		[Bindable]
+		public var brand:ArrayCollection = new ArrayCollection();
+		[Bindable]
+		public var product:ArrayCollection = new ArrayCollection();
+		//end
+		
 		[Bindable]
 		public var usersBuyer:ArrayCollection = new ArrayCollection();
 		
