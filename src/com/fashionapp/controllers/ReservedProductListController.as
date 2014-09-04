@@ -8,6 +8,7 @@ package com.fashionapp.controllers
 	import com.fashionapp.model.ReservedProductListData;
 	import com.fashionapp.network.Network;
 	import com.fashionapp.utils.BasicUtil;
+	import com.fashionapp.utils.DBUtils;
 	import com.fashionapp.views.ReservedProductsView;
 	
 	import flash.net.URLVariables;
@@ -57,7 +58,7 @@ package com.fashionapp.controllers
 			if(Network.checkInterNetAvailability() == true){
 				var urlVariable:URLVariables  = new URLVariables;
 				urlVariable.type = "buyer";
-				urlVariable.last_update = rpld.getLastdownloadTime();
+				urlVariable.last_update = DBUtils.getLastdownloadTime("ReserveEntity");
 				Network.call_API(view as ReservedProductsView ,"reserved_product",urlVariable);
 				status = true;
 			}

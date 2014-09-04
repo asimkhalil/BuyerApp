@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <actionScriptProperties analytics="false" mainApplicationPath="com/fashionapp/Parser/Parser.as" projectUUID="5a19432a-bb41-47b1-9a56-ac00ffd485dc" version="10">
-  <compiler additionalCompilerArguments="-locale en_US de_DE fr_FR ja_JP -source-path ./locale/{locale} -allow-source-path-overlap=true" autoRSLOrdering="true" copyDependentFiles="true" flexSDK="Apache Flex 4.11.0 FP 11.9 AIR 3.9 en_US" fteInMXComponents="false" generateAccessible="false" htmlExpressInstall="true" htmlGenerate="false" htmlHistoryManagement="false" htmlPlayerVersionCheck="true" includeNetmonSwc="false" outputFolderPath="bin-debug" removeUnusedRSL="true" sourceFolderPath="src" strict="true" targetPlayerVersion="0.0.0" useApolloConfig="true" useDebugRSLSwfs="true" verifyDigests="true" warn="true">
+  <compiler additionalCompilerArguments="-locale en_US de_DE fr_FR ja_JP -source-path ./locale/{locale} -allow-source-path-overlap=true" autoRSLOrdering="true" copyDependentFiles="true" flexSDK="Apache Flex 4.13.0 FP14.0 AIR14.0 en_US" fteInMXComponents="false" generateAccessible="false" htmlExpressInstall="true" htmlGenerate="false" htmlHistoryManagement="false" htmlPlayerVersionCheck="true" includeNetmonSwc="false" outputFolderPath="bin-debug" removeUnusedRSL="true" sourceFolderPath="src" strict="true" targetPlayerVersion="0.0.0" useApolloConfig="true" useDebugRSLSwfs="true" verifyDigests="true" warn="true">
     <compilerSourcePath/>
     <libraryPath defaultLinkType="0">
       <libraryPathEntry kind="4" path="">
