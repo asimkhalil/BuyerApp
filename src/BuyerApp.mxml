@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <s:ViewNavigatorApplication xmlns:fx="http://ns.adobe.com/mxml/2009" 
 							xmlns:s="library://ns.adobe.com/flex/spark" 
+							resizeForSoftKeyboard="true"
 							firstView="com.fashionapp.views.LoginView" applicationDPI="160" xmlns:controllers="com.fashionapp.controllers.*"
 							creationComplete="{controller.creationCompleteHandler();resourceManager.localeChain = ['fr_FR']}" xmlns:views="com.fashionapp.views.*">
 	<fx:Style source="assets/images/styles.css"/>

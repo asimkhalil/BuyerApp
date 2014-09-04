@@ -14,6 +14,7 @@ package com.fashionapp.controllers
 	import com.fashionapp.model.LoginData;
 	import com.fashionapp.network.Network;
 	import com.fashionapp.util.Utils;
+	import com.fashionapp.utils.*;
 	import com.fashionapp.views.HomeView;
 	import com.fashionapp.views.LoginView;
 	import com.fashionapp.views.MainMenuView;
@@ -147,7 +148,7 @@ package com.fashionapp.controllers
 			
 			if(Network.checkInterNetAvailability() == true){
 				var urlVariable:URLVariables  = new URLVariables;
-				urlVariable.last_update = "2014-01-01 00:00:00";
+				urlVariable.last_update = DBUtils.getLastdownloadTime('Chat');
 				
 				
 				if(view.hasEventListener(APIEvent.API_COMPLETE_CHATS)==false) {
@@ -162,11 +163,11 @@ package com.fashionapp.controllers
 							var daoChat:DaoChat = new DaoChat();
 							daoChat.updateLocalDBChatRow(results[i].id,results[i]);
 						}
-						
-						setTimeout(checkNewMessageForMe,20000);
+						DBUtils.updateLastdownloadTime('Chat');
+						setTimeout(checkNewMessageForMe,30000);
 					}
 				}
-				
+				 
 				Network.call_API(view as LoginView,"receive_chat",urlVariable,"","get");
 				
 			}else{
@@ -187,7 +188,7 @@ package com.fashionapp.controllers
 					dc.getContactsFromDB();
 				}
 			}else{
-				Alert.show(view as LoginView,"Please give correct username !");
+				toast("Invalid Username or Password!");
 			}
 		}
 		
@@ -204,8 +205,8 @@ package com.fashionapp.controllers
 				urlVariable.type = "buyer";
 				
 				view.addEventListener(APIEvent.API_COMPLETE, onLoginComplete);
-				// view.addEventListener(APIEvent.API_ERROR);
-				Network.call_API(view as LoginView,"login",urlVariable);
+				view.addEventListener(APIEvent.API_ERROR, onLoginFail);
+				Network.call_API((view as LoginView),"login",urlVariable,"","get");
 				//Network.call_API(view as LoginView,"http://smarttees.biz/build/products.php",urlVariable,"post");
 			}
 			else{
@@ -218,15 +219,18 @@ package com.fashionapp.controllers
 			dl.getLoginDataFromDB((view as LoginView).txt_username.text,(view as LoginView).txt_password.text);
 		}
 		
+		public function onLoginFail(e:APIEvent =null):void
+		{
+			toast("Invalid Username or Password!");
+		}
+		
 		public function onLoginComplete(e:APIEvent):void 
 		{
-			view.removeEventListener(APIEvent.API_COMPLETE, onLoginComplete);
 			var status:String = e.data.status;	
 			toast(status);
 			if(status == "OK") {
-				Network.session_id = e.data.session_id;
+				Network.session_id =e.data.session_id;
 				Network.user_id = e.data.id;
-				toast('UserID:'+e.data.id);
 				Parser.parseLoginData([e.data]);
 				dl.writeLocalSession(e.data.session_id);
 				dl.getLocalAppKey();
@@ -251,12 +255,16 @@ package com.fashionapp.controllers
 							Parser.parseContactList(results);
 						}
 					}
+					toast('getcontact');
 					
 					Network.call_API(view as LoginView,"contact",urlVariable,"","get");
 				}else{
 					dc.getContactsFromDB();
 				}
 				//(view as LoginView).navigator.pushView(HomeView);
+			}else{
+				
+				toast("Invalid Username or Password!");
 			}
 		}
 		
@@ -267,7 +275,6 @@ package com.fashionapp.controllers
 				dl.writeLocalAppKey(Network.session_id);
 			}
 			FlexGlobals.topLevelApplication.navigator.pushView(HomeView);
-			
 		}
 	}
 }

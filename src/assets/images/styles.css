@@ -19,3 +19,12 @@
 	fontFamily: TimesNewRomanItalic;
 }
 
+s|TextInput {
+	borderVisible:false;
+	focusColor:#FFFFFF;
+	focusAlpha:0;
+	textAlign:center;
+	contentBackgroundColor:#FFFFFF;
+	fontFamily:Times New Roman;
+}
+

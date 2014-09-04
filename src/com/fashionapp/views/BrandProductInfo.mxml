@@ -34,6 +34,12 @@
 			{
 				(this.skin as CustomViewWithBackButtonAndSubTitleSkin).subTitle.text = "FALL 2000 | WOMEN";
 				this.addEventListener('openMenuClicked',openMenuClickHandler);
+				
+				this.addEventListener("backClicked",onBackClicked);
+			}
+			
+			private function onBackClicked():void {
+				//Do your work here for back button
 			}
 			
 			private function openMenuClickHandler(event:Event):void {
@@ -76,49 +82,65 @@
 							 scaleMode="stretch"/>
 				</s:Group>
 			</s:HGroup>
-			<s:TextInput width="100%" height="{BasicUtil.getComponentHeight(80)}" skinClass="com.fashionapp.skins.ImageNameTextInputSkin"
+			<s:Group>
+				<s:BorderContainer height="100%" width="100%" borderColor="0x696969">
+			<s:TextInput width="100%" height="{BasicUtil.getComponentHeight(80)}"
 						 text="IMG_0123.png" textAlign="center"
 						 focusAlpha="0"
-						 styleName="viewheader" fontSize="{BasicUtil.getFontSize(26)}"/>
+						 fontSize="{BasicUtil.getFontSize(26)}"/>
+					</s:BorderContainer>
+				</s:Group>
 		</s:VGroup>
 		<s:BorderContainer width="100%" height="1" borderVisible="false" backgroundColor="0xCCCCCC"/>
 		<s:HGroup width="100%" verticalAlign="middle">
 			<s:Label text="CAPTION" width="{BasicUtil.getComponentHeight(130)}"
 					 styleName="viewheader"
 					 fontSize="{BasicUtil.getFontSize(21)}"/>
-			<s:TextInput skinClass="com.fashionapp.skins.ImageNameTextInputSkin" width="100%" text="Puffy Cost"
+			<s:Group>
+				<s:BorderContainer height="100%" width="100%" borderColor="0x696969">
+			<s:TextInput width="100%" text="Puffy Cost"
 						 height="{BasicUtil.getComponentHeight(80)}"
-						 styleName="viewheader"
 						 fontSize="{BasicUtil.getFontSize(26)}"/>
+					</s:BorderContainer>
+				</s:Group>
 		</s:HGroup>
 		<s:BorderContainer width="100%" height="1" borderVisible="false" backgroundColor="0xCCCCCC"/>
 		<s:HGroup width="100%" verticalAlign="middle">
 			<s:Label text="PRICE" width="{BasicUtil.getComponentHeight(130)}"
 					 styleName="viewheader"
 					 fontSize="{BasicUtil.getFontSize(21)}"/>
-			<s:TextInput skinClass="com.fashionapp.skins.ImageNameTextInputSkin" width="100%" text="HDK 200,000"
+			<s:Group>
+				<s:BorderContainer height="100%" width="100%" borderColor="0x696969">
+			<s:TextInput width="100%" text="HDK 200,000"
 						 height="{BasicUtil.getComponentHeight(80)}"
-						 styleName="viewheader"
 						 fontSize="{BasicUtil.getFontSize(26)}"/>
+					</s:BorderContainer>
+				</s:Group>
 		</s:HGroup>
 		<s:BorderContainer width="100%" height="1" borderVisible="false" backgroundColor="0xCCCCCC"/>
 		<s:HGroup width="100%" verticalAlign="middle">
 			<s:Label text="REMARKS" width="{BasicUtil.getComponentHeight(130)}"
 					 styleName="viewheader"
 					 fontSize="{BasicUtil.getFontSize(21)}"/>
-			<s:TextInput skinClass="com.fashionapp.skins.ImageNameTextInputSkin" width="100%" text="Sample Remarks"
+			<s:Group>
+				<s:BorderContainer height="100%" width="100%" borderColor="0x696969">
+			<s:TextInput width="100%" text="Sample Remarks"
 						 height="{BasicUtil.getComponentHeight(80)}"
-						 styleName="viewheader"
 						 fontSize="{BasicUtil.getFontSize(26)}"/>
+					</s:BorderContainer>
+				</s:Group>
 		</s:HGroup>
 		<s:HGroup width="100%" verticalAlign="middle">
 			<s:Label text="GROUPS" width="{BasicUtil.getComponentHeight(130)}"
 					 styleName="viewheader"
 					 fontSize="{BasicUtil.getFontSize(21)}"/>
+			<s:Group>
+				<s:BorderContainer height="100%" width="100%" borderColor="0x696969">
 			<s:TextInput skinClass="com.fashionapp.skins.ImageNameTextInputSkin" width="100%" text="RTV"
 						 height="{BasicUtil.getComponentHeight(80)}"
-						 styleName="viewheader"
 						 fontSize="{BasicUtil.getFontSize(26)}"/>
+					</s:BorderContainer>
+				</s:Group>
 		</s:HGroup>
 		<s:BorderContainer width="100%" height="1" borderVisible="false" backgroundColor="0xCCCCCC"/>	
 	</s:Group>

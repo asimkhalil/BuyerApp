@@ -22,7 +22,7 @@
 -->
 <s:Skin xmlns:fx="http://ns.adobe.com/mxml/2009" xmlns:s="library://ns.adobe.com/flex/spark" 
     xmlns:fb="http://ns.adobe.com/flashbuilder/2009" alpha.disabled="0.5"
-	height="100%" width="100%" xmlns:views="com.fashionapp.views.*">
+	height="100%" width="100%" xmlns:views="com.fashionapp.views.*" xmlns:components="com.fashionapp.views.components.*">
 	<fx:Metadata>[HostComponent("spark.components.View")]</fx:Metadata>
 
     <fx:Script fb:purpose="styling">
@@ -69,6 +69,7 @@
 				move.xTo = 0;
 				move.play([menu]);
 				menu.visible = true;
+				container_overlay.visible = true;
 			}
 			
         ]]>        
@@ -102,9 +103,11 @@
 					 verticalCenter="0" textAlign="center"
 					 paddingLeft="{BasicUtil.getFontSize(20)}" paddingRight="{BasicUtil.getFontSize(20)}" maxDisplayedLines="1"
 					 fontSize="{BasicUtil.getFontSize(36)}"/>
-			<s:Image source="{BG}" scaleMode="stretch" height="{BasicUtil.getComponentHeight(28)}" verticalCenter="0"
-					 right="10" click="{openMenu()}"
-					 width="{BasicUtil.getComponentHeight(30)}"/>
+			<components:ClickableImage source="{BG}" 
+									   buttonHeight="{BasicUtil.getComponentHeight(28)}" verticalCenter="0"
+					 right="10" click="{openMenu()}" top="10"
+					 buttonWidth="{BasicUtil.getComponentHeight(30)}"
+					 buttonMode="true"/>
 		</s:BorderContainer>
 		<s:Group id="contentGroup" height="100%" width="100%" minWidth="0" minHeight="0">
 			<s:layout>
@@ -114,7 +117,8 @@
 		<s:Image scaleMode="stretch" height="{BasicUtil.getComponentHeight(50)}" smooth="true" source="{FOOTER_BG}" width="100%"/>
 	</s:Group>
 	<!--<s:BorderContainer backgroundAlpha="0" borderVisible="false" width="100%" height="100%" >-->
-		<views:MainMenuView height="100%" width="100%" id="menu" visible="false"/>	
+	<s:BorderContainer id="container_overlay" height="100%" width="100%" backgroundAlpha="0.6" backgroundColor="0x000000" visible="false"/>
+		<views:MainMenuView height="100%" width="100%" id="menu" visible="false" onMenuClose="{container_overlay.visible = false}"/>	
 	<!--</s:BorderContainer>-->
     <!--- @copy spark.components.SkinnableContainer#contentGroup -->
 </s:Skin>
