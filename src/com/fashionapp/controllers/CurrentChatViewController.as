@@ -84,10 +84,11 @@ package com.fashionapp.controllers
 					for(var i:int = localChatCollection.length ; i < c.length ; i++){
 						var chatObj:ChatData = c.getItemAt(i) as ChatData;
 						if(chatObj.type.toUpperCase() == "TEXT" || chatObj.type == "image") {
-							if(chatObj.toUserId == BuyerAppModelLocator.getInstance().loginData.id){
+							if(chatObj.toUserId != BuyerAppModelLocator.getInstance().loginData.id){
 								var toMsg:ToMessageRenderer = new ToMessageRenderer();
 								currentChat.chatBox.addElement(toMsg);
 								toMsg.txtMsg.text = chatObj.content;
+								toMsg.time.text = chatObj.createDate.toString();
 								if(chatObj.type == "image") {
 									toMsg.image_photo.source = Base64.decodeToByteArray(chatObj.content);
 								}
@@ -97,6 +98,8 @@ package com.fashionapp.controllers
 								var fromMsg:FromMessageRenderer = new FromMessageRenderer();
 								currentChat.chatBox.addElement(fromMsg);
 								fromMsg.txtMsg.text = chatObj.content;
+								fromMsg.time.text = chatObj.createDate.toString();
+								fromMsg.fullname.text = currentChat.title;
 								if(chatObj.type == "image") {
 									fromMsg.image_photo.source = Base64.decodeToByteArray(chatObj.content);
 								}

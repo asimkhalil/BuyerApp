@@ -24,11 +24,15 @@ package com.fashionapp.DAO
 	import mx.charts.chartClasses.NumericAxis;
 	import mx.core.FlexGlobals;
 
+	import com.fashionapp.controllers.BaseController;
+	
 	public class DaoChat
 	{
 		/*private var chat:ChatData;
 		private var recordsToBeSync:Array;
 		private var currentIndex:int = 0;*/
+		
+		private var instance:BaseController;
 		
 		public function DaoChat()
 		{
@@ -266,16 +270,18 @@ package com.fashionapp.DAO
 			stmt1.addEventListener(SQLErrorEvent.ERROR, errorHandler);
 			stmt1.execute();
 			
+			
 			var result:SQLResult = stmt1.getResult();
 			if (result != null){
 				if(result.data && result.data.length > 0) {
 					//Update
 				} else {
+					
 					//add new record
 					var chatdata:ChatData = new ChatData();
 					chatdata.id = data.id;
 					chatdata.content = data.content;
-					chatdata.createDate = new Date();
+					chatdata.createDate = data.create_date;
 					chatdata.createdBy = data.create_by;
 					chatdata.lastSync = new Date();
 					chatdata.statusId = data.status_id;
@@ -289,6 +295,7 @@ package com.fashionapp.DAO
 					if(!chatdata.id && chatdata.id == "") {
 						chatdata.id = Network.app_key+"-"+ new Date().time;
 					}
+					
 					stmt1.text = "INSERT INTO Chat(id,toUserID,type, content,statusID,createBy,createDate,lastUpdate,lastSync) VALUES('"+chatdata.id+"',"+chatdata.toUserId+",'"+chatdata.type+"','"+chatdata.content+"',"+chatdata.statusId+","+chatdata.createdBy+",'"+createdDate+"','"+createdDate+"','"+createdDate+"')";
 					stmt1.sqlConnection = BuyerAppModelLocator.getInstance().dbConn;
 					stmt1.addEventListener(SQLEvent.RESULT, openHandler);

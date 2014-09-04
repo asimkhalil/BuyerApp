@@ -12,5 +12,7 @@ package com.fashionapp.model
 		public var createDate:Date;
 		public var lastUpdate:Date;
 		public var lastSync:Date;
+		//by jack
+		public var toUserName:String;
 	}
 }

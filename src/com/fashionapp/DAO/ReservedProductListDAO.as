@@ -61,14 +61,18 @@ package com.fashionapp.DAO
 		private var _reserverProductListdataFromServer:Array;
 		public function insertTheseValuesIntoDB(data:Array):void
 		{
-			if(data != null)
+			if(data != null && data.length>0)
 			{
 				_reserverProductListdataFromServer = data;
 				BuyerAppModelLocator.getInstance().dataFile = File.applicationStorageDirectory.resolvePath(Utils.db_path);
 				BuyerAppModelLocator.getInstance().dbConn = new SQLConnection();
 				BuyerAppModelLocator.getInstance().dbConn.addEventListener(SQLEvent.OPEN, DBOpenedFordataInsert);
 				BuyerAppModelLocator.getInstance().dbConn.open(BuyerAppModelLocator.getInstance().dataFile);
-			}			
+			}	
+			else
+			{
+				IntimateToViewToLoadDataFromDB();
+			}
 		}
 		private function DBOpenedFordataInsert(event:SQLEvent):void{
 			if (event.type == "open" && _reserverProductListdataFromServer.length>0){
@@ -91,12 +95,16 @@ package com.fashionapp.DAO
 					_sqlStatement.addEventListener(SQLErrorEvent.ERROR, errorHandlerToInsert);
 					_sqlStatement.execute();						
 				}
-				var statusUpdates:Boolean = updateLastdownloadTime();
+				var statusUpdates:Boolean = DBUtils.updateLastdownloadTime("ReserveEntity");
 				if(statusUpdates)
 				{
-					FlexGlobals.topLevelApplication.dispatchEvent(new IntimateToLoadReservedProductListEvent(IntimateToLoadReservedProductListEvent.INTIMATE_TO_LOAD_RESERVED_PRODUCT_LIST_EVENT));
+					IntimateToViewToLoadDataFromDB();
 				}
 			}
+		}
+		private function IntimateToViewToLoadDataFromDB():void
+		{
+			FlexGlobals.topLevelApplication.dispatchEvent(new IntimateToLoadReservedProductListEvent(IntimateToLoadReservedProductListEvent.INTIMATE_TO_LOAD_RESERVED_PRODUCT_LIST_EVENT));
 		}
 		private	function openHandlerToInsert(event:SQLEvent):void{
 			var result:SQLResult = _sqlStatement.getResult();
@@ -123,49 +131,6 @@ package com.fashionapp.DAO
 		private	function openHandlerToCheckRowExists(event:SQLEvent):void{			
 		}
 		private	function errorHandlerToCheckRowExists(event:SQLErrorEvent):void{
-		}	
-		
-		private function updateLastdownloadTime():Boolean
-		{
-			var lastdownloadTimeUpdated:Boolean = false;
-			var _sql:SQLStatement = new SQLStatement();
-			var lastDownloadDateTime:String = BasicUtil.convertToSQLTimeStamp(new Date());
-			_sql.text = "update lastDownload set time = '"+lastDownloadDateTime+"' where lastDownload.tablename = 'ReserveEntity'";
-			_sql.sqlConnection = BuyerAppModelLocator.getInstance().dbConn;
-			_sql.addEventListener(SQLEvent.RESULT, openHandlerToUpdateLastDownloadTime);
-			_sql.addEventListener(SQLErrorEvent.ERROR, errorHandlerToUpdateLastDownloadTime);
-			_sql.execute();
-			var result:SQLResult = _sql.getResult();
-			if (result != null){
-				lastdownloadTimeUpdated = true;
-			}
-			return lastdownloadTimeUpdated;			
-		}
-		private	function openHandlerToUpdateLastDownloadTime(event:SQLEvent):void{			
-		}
-		private	function errorHandlerToUpdateLastDownloadTime(event:SQLErrorEvent):void{
-		}
-		
-		public function getLastdownloadTime():String
-		{
-			var lastDownloadTime:String = null;
-			var _sql:SQLStatement = new SQLStatement();
-			_sql.text = "select DateTime(lastDownload.time) LastDownloadTime from lastDownload where lastDownload.tablename = 'ReserveEntity'";
-			_sql.sqlConnection = BuyerAppModelLocator.getInstance().dbConn;
-			_sql.addEventListener(SQLEvent.RESULT, openHandlerToGetLastDownloadTime);
-			_sql.addEventListener(SQLErrorEvent.ERROR, errorHandlerToGetLastDownloadTime);
-			_sql.execute();
-			var result:SQLResult = _sql.getResult();
-			if (result != null){
-				var tempDataObj:Object = result.data[0];
-				lastDownloadTime = tempDataObj.LastDownloadTime;	
-			}
-			return lastDownloadTime;			
-		}
-		private	function openHandlerToGetLastDownloadTime(event:SQLEvent):void{			
-		}
-		private	function errorHandlerToGetLastDownloadTime(event:SQLErrorEvent):void{
-		}
-		
+		}			
 	}
 }

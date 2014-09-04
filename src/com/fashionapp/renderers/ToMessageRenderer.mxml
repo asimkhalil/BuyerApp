@@ -69,7 +69,7 @@
 							 styleName="viewheading"
 							 fontWeight="bold"
 							 fontSize="{BasicUtil.getFontSize(21)}"/>
-					<s:Label text="2:07 PM" fontSize="{BasicUtil.getFontSize(18)}"
+					<s:Label id="time" text="2:07 PM" fontSize="{BasicUtil.getFontSize(18)}"
 							 styleName="viewheading"/>	
 				</s:HGroup>
 				<s:RichText id="txtMsg" width="100%" text="Hello World To"

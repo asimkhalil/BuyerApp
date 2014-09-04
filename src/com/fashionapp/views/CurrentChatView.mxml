@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <s:View xmlns:fx="http://ns.adobe.com/mxml/2009" 
-		xmlns:s="library://ns.adobe.com/flex/spark" title="ANN SMITH" 
+		xmlns:s="library://ns.adobe.com/flex/spark" title="{data.toUserName}" 
 		xmlns:components="com.fashionapp.views.components.*" 
 		xmlns:renderers="com.fashionapp.renderers.*"
 		actionBarVisible="false"
@@ -171,11 +171,11 @@
 					<s:SolidColor color="0x000000"/>
 				</s:fill>
 			</s:Rect>
-			<s:Label text="20 Aug, 2014" color="0xffffff"
+			<!-- <s:Label text="20 Aug, 2014" color="0xffffff"
 					 fontSize="{BasicUtil.getFontSize(18)}"
 					 styleName="viewtext"
 					 paddingLeft="{BasicUtil.getComponentPadding(10)}" paddingRight="{BasicUtil.getComponentPadding(10)}" 
-					 paddingTop="{BasicUtil.getComponentPadding(10)}" paddingBottom="{BasicUtil.getComponentPadding(10)}"/>
+					 paddingTop="{BasicUtil.getComponentPadding(10)}" paddingBottom="{BasicUtil.getComponentPadding(10)}"/> -->
 		</s:Group>
 		<s:Group width="100%" height="100%">
 			<s:Scroller height="100%" width="100%">
@@ -210,7 +210,7 @@
 					 height="{BasicUtil.getComponentHeight(36)}"
 					 width="{BasicUtil.getComponentHeight(36)}"
 					 click="button1_clickHandler(event)"/>
-			<s:TextInput id="txtMsg" width="100%" skinClass="com.fashionapp.skins.SendChatMessageTextInputSkin"
+			<s:TextInput id="txtMsg" width="100%"
 						 styleName="viewtext"
 						 fontSize="{BasicUtil.getFontSize(34)}"/>
 			<s:Label text="{resourceManager.getString('resources','send')}" click="sendClick()" fontSize="{BasicUtil.getFontSize(34)}"

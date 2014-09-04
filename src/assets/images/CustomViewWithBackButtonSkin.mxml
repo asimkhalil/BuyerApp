@@ -82,7 +82,7 @@
 		<s:layout>
 			<s:VerticalLayout gap="0"/>
 		</s:layout>
-		<s:BorderContainer borderVisible="false" height="{BasicUtil.getComponentHeight(60)}" width="100%"
+		<s:BorderContainer borderVisible="false" height="{BasicUtil.getComponentHeight(60)}"  width="100%"
 						   backgroundColor="0xffffff">
 			<s:Label width="100%" text="{this.hostComponent.title}"
 					 verticalCenter="0" textAlign="center"
@@ -91,9 +91,10 @@
 					 maxDisplayedLines="1"
 					 styleName="viewtext"
 					 fontSize="{BasicUtil.getFontSize(36)}"/>
-			<s:Image source="{BACK_ARROW}" scaleMode="stretch" height="{BasicUtil.getComponentHeight(30)}" width="{BasicUtil.getComponentHeight(17)}"
+			<s:Image source="{BACK_ARROW}" scaleMode="stretch" height="{BasicUtil.getComponentHeight(60)}" width="{BasicUtil.getComponentHeight(60)}"
 					 verticalCenter="0"
 					 click="{(this.hostComponent as View).navigator.popView()}"
+					 top="10"
 					 left="10"
 					 smooth="true"/>
 		</s:BorderContainer>

@@ -42,6 +42,8 @@
 				var chat:ChatData = new ChatData();
 				chat.createdBy = BuyerAppModelLocator.getInstance().loginData.id;
 				chat.toUserId = (list.selectedItem as LoginData).id;
+				chat.toUserName = (list.selectedItem as LoginData).fullName.toUpperCase();
+				
 				navigator.pushView(CurrentChatView,chat);
 				FlexGlobals.topLevelApplication.dispatchEvent(new Event("RetrieveChatMessages",true));
 			}

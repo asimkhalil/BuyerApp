@@ -36,50 +36,8 @@
 	
 	import spark.components.View;
 	
-	public class Network
+	public class GetChatNetwork
 	{
-		public static var app_key:String = ''; 
-		public static var session_id:String = '';
-		public static var user_id:String = ''; // you can use this for update the localDB of the create user id
-		
-		public static var ld:LoginData = new LoginData();
-		
-		// Internet related.
-		private static var monitor:URLMonitor; 
-		[Bindable]  
-		private static var isOnline: Boolean = true;
-	/*************************  Check internet  ******************************************/
-		public static function startMonitor():void {
-			monitor = new URLMonitor( new URLRequest('http://www.google.com/')); 
-			monitor.addEventListener(StatusEvent.STATUS,announceStatus); 
-			monitor.start(); 
-		}
-		
-		public static function checkInterNetAvailability():Boolean { 
-			return isOnline;			
-		} 
-		
-		private static function announceStatus(e:StatusEvent):void { 
-			if(monitor.available) { 
-				isOnline = true; 
-				/*
-					try to upload all data back to the server
-					select * from database
-					foreach table
-						select * from table where lastUpdate > lastSync
-						foreach row
-							send to the server
-							update table set lastSync = now where id = row.id
-						end					
-					end
-				*/
-			} else { 
-				isOnline = false; 
-			}
-		}
-		
-		/*******************************************************************/
-
 		private static var objParent:DisplayObject;
 		private static var myURLLoader:CustomURLLoader;
 		private static var myURLRequest:URLRequest;
@@ -207,7 +165,7 @@
 					call_API(serviceData.parentObject,serviceData.api_name,serviceData.variables,serviceData.file,serviceData.method);
 				}
 			}
-		}	
+		}			
 	}
 		
 }

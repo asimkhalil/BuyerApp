@@ -1,5 +1,8 @@
 package com.tree.ext
 {
+	import com.adobe.serialization.jsonv2.JSON;
+	import com.fashionapp.controllers.BaseController;
+	
 	import flash.desktop.NativeApplication;
 	import flash.display.MovieClip;
 	import flash.display.Sprite;
@@ -19,8 +22,6 @@ package com.tree.ext
 	import flash.text.TextFormat;
 	import flash.ui.Multitouch;
 	import flash.ui.MultitouchInputMode;
-	
-	import com.fashionapp.controllers.BaseController;
 	public class PushNotification
 	{
 		private var notiStyles:Vector.<String> = new Vector.<String>;
@@ -82,12 +83,23 @@ package com.tree.ext
 		
 		public function notificationHandler(e:RemoteNotificationEvent):void{
 			//tt.appendText("\nRemoteNotificationEvent type: " + e.type +"\nbubbles: "+ e.bubbles + "\ncancelable " +e.cancelable);
-			instance.toast("notificationHandler");
-			for (var x:String in e.data) {
-				//tt.text += "\n"+ x + ":  " + e.data[x];
-				
-				instance.toast(x + ":  " + e.data[x]);
-			}
+			//instance.toast("notificationHandler");
+			//var jsonResult:Object = com.adobe.serialization.jsonv2.JSON.decode(e.data['aps']); 
+			
+//			var tt:String;
+//			var ss:String = null;
+//			for (var x:String in e.data[0].data) {
+//				tt += "\n"+ x + ":  " + e.data[0].data[x];
+//				
+//				if (x == "alert"){
+//					ss= e.data[0].data[x];				
+//				}
+//			}
+//			if (ss != null){
+//				instance.toast(ss);
+//			}else{
+				instance.toast('New Message Arrived');
+			//}
 		}
 		
 		
@@ -98,7 +110,7 @@ package com.tree.ext
 		{
 			//tt.appendText("\nRemoteNotificationEvent type: "+e.type +"\nBubbles: "+ e.bubbles + "\ncancelable " +e.cancelable +"\ntokenID:\n"+ e.tokenId +"\n");
 			PushNotification.APN_ID = e.tokenId;
-			instance.toast("tokenHandler: " + e.tokenId);
+			//instance.toast("tokenHandler: " + e.tokenId);
 			
 			/*
 			urlString = new String("http://http://59.188.218.19/apns/admin.php?action=register&os=ios&projectID=12&devID="+e.tokenId);

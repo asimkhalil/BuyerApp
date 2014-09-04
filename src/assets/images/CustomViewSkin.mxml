@@ -102,9 +102,9 @@
 					 verticalCenter="0" textAlign="center"
 					 paddingLeft="{BasicUtil.getFontSize(20)}" paddingRight="{BasicUtil.getFontSize(20)}" maxDisplayedLines="1"
 					 fontSize="{BasicUtil.getFontSize(36)}"/>
-			<s:Image source="{BG}" scaleMode="stretch" height="{BasicUtil.getComponentHeight(28)}" verticalCenter="0"
-					 right="10" click="{openMenu()}"
-					 width="{BasicUtil.getComponentHeight(30)}"/>
+			<s:Image source="{BG}" scaleMode="stretch" height="{BasicUtil.getComponentHeight(60)}" verticalCenter="0"
+					 right="10" click="{openMenu()}" top="10"
+					 width="{BasicUtil.getComponentHeight(60)}"/>
 		</s:BorderContainer>
 		<s:Group id="contentGroup" height="100%" width="100%" minWidth="0" minHeight="0">
 			<s:layout>
