@@ -210,11 +210,21 @@
 					 height="{BasicUtil.getComponentHeight(36)}"
 					 width="{BasicUtil.getComponentHeight(36)}"
 					 click="button1_clickHandler(event)"/>
+			<s:Group>
+				<s:BorderContainer height="100%" width="100%" borderColor="0x696969">
 			<s:TextInput id="txtMsg" width="100%"
-						 styleName="viewtext"
 						 fontSize="{BasicUtil.getFontSize(34)}"/>
-			<s:Label text="{resourceManager.getString('resources','send')}" click="sendClick()" fontSize="{BasicUtil.getFontSize(34)}"
-					 styleName="viewtextitalic"/>
+					</s:BorderContainer>
+				</s:Group>
+			<s:Group height="100%">
+				<s:BorderContainer height="100%" width="100%"
+								   borderVisible="false">
+					<s:Label verticalCenter="0" text="{resourceManager.getString('resources','send')}" 
+							 click="sendClick()" 
+							 fontSize="{BasicUtil.getFontSize(34)}"
+							 styleName="viewtextitalic"/>
+				</s:BorderContainer>
+			</s:Group>
 		</s:HGroup>
 	</s:Group>
 </s:View>

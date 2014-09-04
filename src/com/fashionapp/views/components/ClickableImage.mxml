@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:BorderContainer xmlns:fx="http://ns.adobe.com/mxml/2009" 
+				   xmlns:s="library://ns.adobe.com/flex/spark"
+				   borderVisible="false"
+				   creationComplete="bordercontainer1_creationCompleteHandler(event)">
+	
+	<fx:Script>
+		<![CDATA[
+			import mx.events.FlexEvent;
+			[Bindable]
+			private var _source:Class;
+			
+			[Bindable]
+			private var PADDING_HEIGHT:int = 10;
+			
+			[Bindable]
+			private var PADDING_WIDTH:int = 16;
+			
+			public function set source(src:Class):void
+			{
+				_source = src;
+			}
+			
+			public function set buttonHeight(h:int):void {
+				this.height = h+PADDING_HEIGHT; 
+			}
+			
+			public function set buttonWidth(w:int):void {
+				this.width = w+PADDING_WIDTH;
+			}
+			
+			protected function bordercontainer1_creationCompleteHandler(event:FlexEvent):void
+			{
+				// TODO Auto-generated method stub
+				
+			}
+			
+		]]>
+	</fx:Script>
+	
+	<s:Image id="img" source="{_source}"
+			 horizontalCenter="0"
+			 verticalCenter="0"
+			 height="100%" width="100%"
+			 top="{PADDING_HEIGHT/2}"
+			 bottom="{PADDING_HEIGHT/2}"
+			 left="{PADDING_WIDTH/2}"
+			 right="{PADDING_WIDTH/2}"
+			 horizontalAlign="center" verticalAlign="middle"
+			 scaleMode="stretch" smooth="true" mouseChildren="false"/>
+</s:BorderContainer>

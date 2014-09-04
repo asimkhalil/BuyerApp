@@ -42,14 +42,14 @@
 					 height="{BasicUtil.getComponentHeight(44)}"/>
 			<!--<s:Label text="Search" fontSize="{BasicUtil.getFontSize(30)}" 
 					 styleName="viewtextitalic" width="100%"/>-->
+			<s:Group>
+				<s:BorderContainer height="100%" width="100%" borderVisible="false">
 			<s:TextInput width="100%" 
-						 skinClass="com.fashionapp.skins.SearchTextInputWithoutBordersSkin"
 						 height="100%"
-						 focusAlpha="0"
-						 focusColor="0xffffff"
 						 prompt="Search"
-						 fontSize="{BasicUtil.getFontSize(30)}" 
-						 styleName="viewtextitalic"/>
+						 fontSize="{BasicUtil.getFontSize(30)}"/>
+				</s:BorderContainer>
+			</s:Group>
 			<s:Image source="{OPEN_MENU_ICON}" scaleMode="stretch" 
 					 smooth="true" 
 					 visible="{showSearchOpener}"

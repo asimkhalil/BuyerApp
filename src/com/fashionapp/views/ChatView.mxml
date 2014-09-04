@@ -10,6 +10,11 @@
 	</fx:Declarations>
 	<fx:Script>
 		<![CDATA[
+			
+			[Embed(source="assets/images/searchicon.png")]
+			[Bindable]
+			private var SEARCH_ICON:Class;
+			
 			import com.fashionapp.model.BuyerAppModelLocator;
 			import com.fashionapp.model.ChatData;
 			import com.fashionapp.model.LoginData;
@@ -67,15 +72,24 @@
 										 height="{BasicUtil.getComponentHeight(100)}" 
 										 width="50%" click="button3_clickHandler(event)"/>
 			</s:HGroup>
-		<s:TextInput prompt="Search" width="100%" 
-					 id="txt_search"
-					 skinClass="com.fashionapp.skins.SearchTextInputSkin"
-					 height="{BasicUtil.getComponentHeight(100)}"
-					 focusAlpha="0"
-					 focusColor="0xffffff"
-					 fontSize="{BasicUtil.getFontSize(30)}" 
-					 styleName="viewtextitalic"
-					 change="controller.search_changeHandler(event)"/>
+		<s:Group>
+			<s:BorderContainer height="100%" width="100%" borderColor="0x696969">
+				<s:layout>
+					<s:HorizontalLayout paddingLeft="15" paddingRight="15" verticalAlign="middle"/>
+				</s:layout>
+			<s:Image source="{SEARCH_ICON}" scaleMode="stretch" 
+					 smooth="true"
+					 width="{BasicUtil.getComponentHeight(43)}"
+					 height="{BasicUtil.getComponentHeight(44)}"/>
+			<s:TextInput prompt="Search" width="100%" 
+						 height="{BasicUtil.getComponentHeight(70)}"
+						 id="txt_search"
+						 textAlign="left"
+						 fontStyle="italic"
+						 fontSize="{BasicUtil.getFontSize(30)}"
+						 change="controller.search_changeHandler(event)"/>
+			</s:BorderContainer>
+		</s:Group>
 		<s:Group height="100%" width="100%">
 			<s:Group width="100%" height="100%" id="contactsArea" visible="{!chatList.visible}">
 				<s:layout>

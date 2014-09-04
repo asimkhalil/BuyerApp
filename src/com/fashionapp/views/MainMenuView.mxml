@@ -7,6 +7,9 @@
 	<fx:Declarations>
 		<!-- Place non-visual elements (e.g., services, value objects) here -->
 	</fx:Declarations>
+	<fx:Metadata>
+		[Event(name="onMenuClose", type="flash.events.Event")]
+	</fx:Metadata>
 	<fx:Script>
 		<![CDATA[
 			import com.fashionapp.utils.BasicUtil;
@@ -75,6 +78,7 @@
 			protected function button1_clickHandler(event:MouseEvent):void
 			{
 				closeMenu();
+				this.dispatchEvent(new Event("onMenuClose",true));
 			}
 			
 			public function closeMenu(animate:Boolean = true):void {
@@ -84,6 +88,7 @@
 					move.xFrom = 0;
 					move.addEventListener(EffectEvent.EFFECT_END,function(event:EffectEvent):void {
 						this.visible = false;
+						
 					});
 					move.play([this]);
 				} else {
@@ -104,7 +109,7 @@
 					</s:layout>
 				</s:Group>
 			</s:Group>
-			<s:BorderContainer height="100%" width="100%" backgroundAlpha="0.6" backgroundColor="0x000000"
+			<s:BorderContainer height="100%" width="100%" backgroundAlpha="0"
 							   borderVisible="false"/>
 			<s:Button skinClass="com.fashionapp.skins.IconMenuButtonSkin"
 					  width="100%" click="button1_clickHandler(event)"/>

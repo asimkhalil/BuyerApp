@@ -23,19 +23,29 @@
 						  paddingRight="{BasicUtil.getComponentPadding(30)}"/>
 	</s:layout>
 	<s:Label text="Brand" fontSize="{BasicUtil.getFontSize(21)}" styleName="viewtext"/>
-	<s:TextInput id="txt_brand" skinClass="com.fashionapp.skins.LoginTextInputSkin" width="100%" styleName="viewtext"
+	<s:Group>
+		<s:BorderContainer height="100%" width="100%" borderColor="0x696969">
+	<s:TextInput id="txt_brand" width="100%"
 				 fontSize="{BasicUtil.getFontSize(26)}"
 				 height="{BasicUtil.getComponentHeight(60)}"/>
+			</s:BorderContainer>
+		</s:Group>
 	<s:Label text="Season"  fontSize="{BasicUtil.getFontSize(21)}" styleName="viewtext"/>
-	<s:TextInput id="txt_season" skinClass="com.fashionapp.skins.LoginTextInputSkin" width="100%"
-				 styleName="viewtext"
+	<s:Group>
+		<s:BorderContainer height="100%" width="100%" borderColor="0x696969">
+	<s:TextInput id="txt_season" width="100%"
 				 fontSize="{BasicUtil.getFontSize(26)}"
 				 height="{BasicUtil.getComponentHeight(60)}"/>
+			</s:BorderContainer>
+		</s:Group>
 	<s:Label text="Dept" fontSize="{BasicUtil.getFontSize(21)}" styleName="viewtext"/>
-	<s:TextInput id="txt_dept" skinClass="com.fashionapp.skins.LoginTextInputSkin" width="100%"
-				 styleName="viewtext"
+	<s:Group>
+		<s:BorderContainer height="100%" width="100%" borderColor="0x696969">
+	<s:TextInput id="txt_dept" width="100%"
 				 fontSize="{BasicUtil.getFontSize(26)}"
 				 height="{BasicUtil.getComponentHeight(60)}"/>
+			</s:BorderContainer>
+		</s:Group>
 	<s:Spacer height="{BasicUtil.getComponentPadding(40)}"/>
 	<s:Button width="100%" label="Create" click="{controller.createBrand(txt_brand.text, txt_season.text, txt_dept.text)}" 
 			  horizontalCenter="0"
