@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:View xmlns:fx="http://ns.adobe.com/mxml/2009" 
+			   xmlns:s="library://ns.adobe.com/flex/spark" 
+			   xmlns:controllers="com.fashionapp.controllers.*"
+			   title="Image Control" width="100%" height="100%"
+			   actionBarVisible="false" creationComplete="view1_creationCompleteHandler(event)">
+	
+	<fx:Script>
+		<![CDATA[
+			import com.fashionapp.utils.BasicUtil;
+			import com.fashionapp.utils.DBUtils;			
+			import mx.events.FlexEvent;			
+			public var entityID:String;			
+			[Embed(source="assets/images/No_image_available.png")]
+			[Bindable]
+			private var PROD:Class;				
+			protected function view1_creationCompleteHandler(event:FlexEvent):void
+			{
+				// TODO Auto-generated method stub
+				var imgPath:String = DBUtils.getImage(entityID,"brand",200);
+				img.source = imgPath
+			}
+			
+		]]>
+	</fx:Script>
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+		<controllers:ImageViewerViewController id="controller" view="{this}"/>
+	</fx:Declarations>
+	<s:Image id="img" height="{BasicUtil.getComponentHeight(this.height)}" width="{BasicUtil.getComponentHeight(this.width)}" 
+			 scaleMode="stretch" source="{PROD}" />
+</s:View>
